@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 //敵を管理するもの(ステータス/クリック検出)
 public class EnemyManager : MonoBehaviour
 {
+
+    Action tapAction; //クリックされた時に実行したい関数
     public new string name;
     public int hp;
     public int at;
@@ -19,10 +22,20 @@ public class EnemyManager : MonoBehaviour
     public void Damage(int damage)
     {
         hp -= damage;
-        Debug.Log(name + "に" + damage + "のダメージを与えた");
+        if (hp <= 0)
+        {
+            hp = 0;
+        }
     }
+
+    public void AddEventListenerOnTap(Action action)
+    {
+        tapAction += action;
+    }
+
     public void OnTap()
     {
         Debug.Log("クリックされた");
+        tapAction();
     }
 }
