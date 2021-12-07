@@ -126,6 +126,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14b01eb8a628d444cbdd051cd919e765, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  name: enemy
+  hp: 100
+  at: 56
 --- !u!61 &733700921035318125
 BoxCollider2D:
   m_ObjectHideFlags: 0
