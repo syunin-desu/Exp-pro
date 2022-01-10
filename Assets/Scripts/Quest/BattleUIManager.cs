@@ -12,6 +12,8 @@ public class BattleUIManager : MonoBehaviour
     public Button defenceButton;
     public Button itemButton;
 
+    public Image BattleWindow;
+
     // Start is called before the first frame update
     void Start()
     {

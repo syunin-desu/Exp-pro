@@ -10,12 +10,12 @@ public class PlayerUIManager : MonoBehaviour
 
     public void SetUpUI(PlayerManager player)
     {
-        hpText.text = string.Format("HP:{0}", player.hp);
-        atText.text = string.Format("AT:{0}", player.at);
+        hpText.text = string.Format("HP:{0}", player.HP);
+        atText.text = string.Format("AT:{0}", player.STRANGE);
     }
     public void UpdateUI(PlayerManager player)
     {
-        hpText.text = string.Format("HP:{0}", player.hp);
+        hpText.text = string.Format("HP:{0}", player.HP);
     }
 
 }

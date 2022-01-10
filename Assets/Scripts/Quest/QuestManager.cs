@@ -2,13 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class QuestManager : MonoBehaviour
 {
+
+
     //現在の階層
     public StageUIManager stageUI;
     public GameObject enemyPrefab;
     public BattleManager battleManager;
     public SceneTransitionManager sceneTransitionManager;
+
+    //シーンを切り替える変数(1:ダンジョンシーン 2:バトルシーン)
+    public int sceneSwitcher;
 
     //敵に遭遇するテーブル:-1なら遭遇しない 0なら遭遇する
     int[] encountTable = { -1, -1, 0, -1, 0, -1 };
@@ -17,6 +23,8 @@ public class QuestManager : MonoBehaviour
     private void Start()
     {
         stageUI.UpdateUI(currentStage);
+
+        sceneSwitcher = Const.CO.SCENE_QUEST;
     }
 
     public void OnNextButton()
@@ -42,7 +50,7 @@ public class QuestManager : MonoBehaviour
         GameObject enemyObj = Instantiate(enemyPrefab);
         EnemyManager enemy = enemyObj.GetComponent<EnemyManager>();
         battleManager.SetUp(enemy);
-
+        setSceneSwitcher(Const.CO.SCENE_BATTLE);
     }
 
     public void EndBattle()
@@ -54,5 +62,15 @@ public class QuestManager : MonoBehaviour
     {
         stageUI.ShowClearText();
         //sceneTransitionManager.LoadTo("Town");
+    }
+
+    public int getSceneSwitcher()
+    {
+        return this.sceneSwitcher;
+    }
+
+    public void setSceneSwitcher(int scene_switch)
+    {
+        this.sceneSwitcher = scene_switch;
     }
 }
