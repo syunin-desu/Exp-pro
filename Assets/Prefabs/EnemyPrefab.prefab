@@ -118,6 +118,7 @@ MonoBehaviour:
   HP: 100
   STRANGE: 5
   SPEED: 5
+  char_role: 2
 --- !u!61 &733700921035318125
 BoxCollider2D:
   m_ObjectHideFlags: 0
