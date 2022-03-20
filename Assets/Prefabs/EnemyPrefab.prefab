@@ -114,11 +114,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14b01eb8a628d444cbdd051cd919e765, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NAME: ENEMY
-  HP: 100
-  STRANGE: 5
-  SPEED: 5
   char_role: 2
+  enemyData: {fileID: 11400000, guid: 09581bac33a4493489f0ae4eb02e8cae, type: 2}
 --- !u!61 &733700921035318125
 BoxCollider2D:
   m_ObjectHideFlags: 0

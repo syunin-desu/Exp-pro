@@ -6,16 +6,16 @@ using UnityEngine.UI;
 public class PlayerUIManager : MonoBehaviour
 {
     public Text hpText;
-    public Text atText;
+    public Text charName;
 
     public void SetUpUI(PlayerManager player)
     {
-        hpText.text = string.Format("HP:{0}", player.HP);
-        atText.text = string.Format("AT:{0}", player.STRANGE);
+        charName.text = string.Format("{0}", player.GetName());
+        hpText.text = string.Format("{0} / {1}", player.GetHp(), player.GetMaxHp());
     }
     public void UpdateUI(PlayerManager player)
     {
-        hpText.text = string.Format("HP:{0}", player.HP);
+        hpText.text = string.Format("HP:{0}", player.GetHp());
     }
 
 }
