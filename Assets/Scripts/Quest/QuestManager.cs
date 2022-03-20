@@ -24,7 +24,7 @@ public class QuestManager : MonoBehaviour
     {
         stageUI.UpdateUI(currentStage);
 
-        sceneSwitcher = Const.CO.SCENE_QUEST;
+        sceneSwitcher = CONST.SCENE.SCENE_QUEST;
     }
 
     public void OnNextButton()
@@ -50,7 +50,7 @@ public class QuestManager : MonoBehaviour
         GameObject enemyObj = Instantiate(enemyPrefab);
         EnemyManager enemy = enemyObj.GetComponent<EnemyManager>();
         battleManager.SetUp(enemy);
-        setSceneSwitcher(Const.CO.SCENE_BATTLE);
+        setSceneSwitcher(CONST.SCENE.SCENE_BATTLE);
     }
 
     public void EndBattle()
