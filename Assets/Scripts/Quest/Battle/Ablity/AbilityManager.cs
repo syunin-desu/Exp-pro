@@ -6,7 +6,6 @@ using UnityEngine;
 public class AbilityManager : MonoBehaviour
 {
     private List<Ability_base> ability_list = new List<Ability_base>();
-    public EnemyUIManager enemyUI;
 
     // Start is called before the first frame update
     void Start()
@@ -55,9 +54,12 @@ public class AbilityManager : MonoBehaviour
 
         int performerInt = performChar.intelligence;
         int power = execAbilityData.power;
+        string Element = execAbilityData.Element;
 
-        // TODO 属性によってダメージが増減するように修正
-        targetChar.Damage(performerInt * power);
+        // TODO ダメージ計算用のファンクションを別のクラスで作成し、そこで行えるようにする
+        float elementDamageRate = this.calcElementDamageRate(Element, targetChar);
+
+        targetChar.Damage((int)((performerInt * power) * elementDamageRate));
     }
 
     /// <summary>
@@ -70,9 +72,12 @@ public class AbilityManager : MonoBehaviour
     {
         int performerInt = performChar.intelligence;
         int power = execAbilityData.power;
+        string Element = execAbilityData.Element;
 
-        // TODO 属性によってダメージが増減するように修正
-        targetChar.Damage(performerInt * power);
+        // TODO ダメージ計算用のファンクションを別のクラスで作成し、そこで行えるようにする
+        float elementDamageRate = this.calcElementDamageRate(Element, targetChar);
+
+        targetChar.Damage((int)((performerInt * power) * elementDamageRate));
     }
 
     /// <summary>
@@ -85,9 +90,12 @@ public class AbilityManager : MonoBehaviour
     {
         int performerInt = performChar.intelligence;
         int power = execAbilityData.power;
+        string Element = execAbilityData.Element;
 
-        // TODO 属性によってダメージが増減するように修正
-        targetChar.Damage(performerInt * power);
+        // TODO ダメージ計算用のファンクションを別のクラスで作成し、そこで行えるようにする
+        float elementDamageRate = this.calcElementDamageRate(Element, targetChar);
+
+        targetChar.Damage((int)((performerInt * power) * elementDamageRate));
     }
 
     //======================================
@@ -135,5 +143,29 @@ public class AbilityManager : MonoBehaviour
     private Ability_base getAbilityData(string abilityName)
     {
         return this.ability_list.Find(ability => ability.Name == abilityName);
+    }
+
+    /// <summary>
+    /// 属性によるダメージ率の増減を計算し返す
+    /// </summary>
+    /// <param name="weakElement">弱点属性</param>
+    /// <param name="strongElement">耐性属性</param>
+    /// <param name="targetChar">対象のキャラ</param>
+    /// <returns>ダメージ率</returns>
+    private float calcElementDamageRate(string Element, CharBase targetChar)
+    {
+        bool haveTargetCharWeakElement = targetChar.weakElement.Contains(Element);
+        bool haveTargetCharStrongElement = targetChar.strongElement.Contains(Element);
+        float elementDamageRate = 1;
+        if (haveTargetCharWeakElement)
+        {
+            elementDamageRate = haveTargetCharWeakElement ? CONST.BATTLE_RATE.RATE_WEAK_ELEMENT : 1;
+        }
+        else if (haveTargetCharStrongElement)
+        {
+            elementDamageRate = haveTargetCharStrongElement ? CONST.BATTLE_RATE.RATE_STRONG_ELEMENT : 1;
+
+        }
+        return elementDamageRate;
     }
 }

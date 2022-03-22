@@ -15,6 +15,9 @@ public class CharBase : MonoBehaviour
     public int speed;
     public int intelligence { get; set; }
 
+    public List<string> weakElement { get; set; }
+    public List<string> strongElement { get; set; }
+
     //防御フラグ
     private bool action_defence;
     //キャラロール
@@ -96,6 +99,8 @@ public class CharBase : MonoBehaviour
         this.char_role = charData.ROLE;
         this.HavingAbility = charData.HavingAbility;
         this.intelligence = charData.INT;
+        this.weakElement = charData.WeakElement;
+        this.strongElement = charData.StrongElement;
 
     }
 

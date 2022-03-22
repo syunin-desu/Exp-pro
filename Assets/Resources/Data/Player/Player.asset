@@ -24,3 +24,7 @@ MonoBehaviour:
   - burn
   - chill
   - volt
+  WeakElement:
+  - None
+  StrongElement:
+  - None

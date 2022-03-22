@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3434717988574027627}
   - component: {fileID: 3434717988574027629}
-  - component: {fileID: 3434717988574027628}
   m_Layer: 5
   m_Name: Ability_UI_Content
   m_TagString: Untagged
@@ -51,32 +50,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
   m_VerticalFit: 0
---- !u!114 &3434717988574027628
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3434717988574027626}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
-  m_ChildAlignment: 0
-  m_Spacing: 0
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
-  m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
 --- !u!1 &3434717988809244394
 GameObject:
   m_ObjectHideFlags: 0
@@ -267,8 +240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d451bccba912884087acc23ae2b7cae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 1239276398905058848, guid: 66a3c500c00a6964ca130b1463202751, type: 3}
-  ability_list: []
+  ability_contents: {fileID: 0}
 --- !u!1 &3434717988990008594
 GameObject:
   m_ObjectHideFlags: 0

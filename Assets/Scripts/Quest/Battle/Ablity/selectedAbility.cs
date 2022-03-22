@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class selectedAbility : MonoBehaviour
 {
 
@@ -27,5 +28,7 @@ public class selectedAbility : MonoBehaviour
 
         string selected_abilityName = this.abilityManager.getAbilityNameForDisplayName(selectedAbility_DisplayName);
         battleManager.setAction_Ability(playerManager, selected_abilityName);
+
+
     }
 }

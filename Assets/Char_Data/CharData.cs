@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
+using CONST;
 
 [CreateAssetMenu(menuName = "MyScriptable/Create CharData")]
 public class CharData : ScriptableObject
@@ -18,4 +19,11 @@ public class CharData : ScriptableObject
 
     public List<string> HavingAbility = new List<string>();
 
+    [ValueDropdown("elementList")]
+    public List<string> WeakElement = new List<string>();
+    [ValueDropdown("elementList")]
+
+    public List<string> StrongElement = new List<string>();
+
+    private static string[] elementList = CONST.CHARCTOR.ELEMENT_LIST;
 }
