@@ -17,12 +17,17 @@ public class AbilityScrollController : MonoBehaviour
     public delegate MonoBehaviour InstantiateItemViewDelegate();
     private InstantiateItemViewDelegate _instantiateItemViewDelegate;
 
+    void Start()
+    {
+        GameObject.Find("Ability_button").SetActive(false);
+    }
+
+
     /// <summary>
     /// アビリティのパラメータを設定する
     /// </summary>
     public void Setup_abilityUI(List<string> ability_List)
     {
-
         var content = GameObject.Find("Ability_UI_Content");
         foreach (string ability in ability_List)
         {
@@ -31,6 +36,7 @@ public class AbilityScrollController : MonoBehaviour
 
             var text = ability_content.GetComponentInChildren<Text>();
             text.text = this.abilityManager.getAbilityDisplayName(ability);
+            ability_content.gameObject.SetActive(true);
         }
     }
 }

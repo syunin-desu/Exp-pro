@@ -18,4 +18,11 @@ MonoBehaviour:
   STR: 5
   DEF: 5
   SPEED: 5
+  INT: 0
   ROLE: 2
+  HavingAbility:
+  - 
+  WeakElement:
+  - Ice
+  StrongElement:
+  - Fire

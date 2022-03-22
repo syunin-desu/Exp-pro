@@ -7,7 +7,6 @@ public class AbilityUIManager : MonoBehaviour
 {
     [SerializeField]
     public GameObject ability_contents;
-    public BattleManager battleManager;
     private List<string> ability_list = new List<string>();
     private RectTransform _contentArea;
     /// <summary>

@@ -295,6 +295,14 @@ public class BattleManager : MonoBehaviour
 
         setActionList_FOR_Role(character.char_role, act);
 
+        //表示しているボタンの削除
+        var clones = GameObject.FindGameObjectsWithTag("AbilityButton");
+        foreach (var clone in clones)
+        {
+            Destroy(clone);
+        }
+
+
         // アビリティウインドウを閉じる
         this.displayAbility_window(false);
 

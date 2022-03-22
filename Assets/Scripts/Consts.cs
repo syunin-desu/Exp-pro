@@ -8,6 +8,11 @@ namespace CONST
         public const int PLAYER = 1;
         public const int ENEMY = 2;
 
+        /// <summary>属性</summary>
+        public static string[] ELEMENT_LIST = {
+        "Fire", "Ice", "Thunder","None"
+    };
+
     }
     public static class SCENE
     {
@@ -26,6 +31,10 @@ namespace CONST
         public const float RATE_DEFAULT_DEFENCE = 1.0f;
         //防御時のダメージ減少倍率
         public const float RATE_DEFENCE = 2.0f;
+        //弱点属性で攻撃された場合のダメージ増加率
+        public const float RATE_WEAK_ELEMENT = 1.5f;
+        //耐性属性で攻撃された場合のダメージ増加率
+        public const float RATE_STRONG_ELEMENT = 0.5f;
     }
     public static class BATTLE_ACTION
     {
