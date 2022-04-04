@@ -26,3 +26,4 @@ MonoBehaviour:
   - Ice
   StrongElement:
   - Fire
+  HavingItem: []

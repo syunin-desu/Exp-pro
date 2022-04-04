@@ -3,6 +3,26 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
+// TODO しかるべきファイルにあとで格納する
+public class HavingItem
+{
+    private string _itemName;
+    private int _count;
+
+    public string ItemName
+    {
+        get { return _itemName; }
+        set { _itemName = value; }
+    }
+
+    public int ItemCount
+    {
+        get { return _count; }
+        set { _count = value; }
+    }
+
+}
+
 //敵や、プレイヤーなどのキャラの派生元
 public class CharBase : MonoBehaviour
 {
@@ -19,24 +39,28 @@ public class CharBase : MonoBehaviour
     public List<string> strongElement { get; set; }
 
     //防御フラグ
-    private bool action_defence;
+    private bool action_defense;
     //キャラロール
     public int char_role;
 
     // 所持アビリティ
     public List<string> HavingAbility = new List<string>();
 
+    //所持アイテム
+    // TODO 現状モックで実装する
+    public List<HavingItem> HavingItem = new List<HavingItem>();
+
 
 
     void Start()
     {
-        this.reset_defence_flag();
+        this.reset_defense_flag();
     }
 
     //ターン終了時の処理
     public void resetTurnEnd_char_parameter()
     {
-        this.reset_defence_flag();
+        this.reset_defense_flag();
     }
 
     //攻撃する
@@ -53,7 +77,7 @@ public class CharBase : MonoBehaviour
         //ダメージ計算
         // TODO ダメージ計算式を見直し
         //防御アクションによるダメージ減少率を設定
-        float defenceRate = this.action_defence ? CONST.BATTLE_RATE.RATE_DEFENCE : CONST.BATTLE_RATE.RATE_DEFAULT_DEFENCE;
+        float defenceRate = this.action_defense ? CONST.BATTLE_RATE.RATE_DEFENCE : CONST.BATTLE_RATE.RATE_DEFAULT_DEFENCE;
         this.hp -= (int)Math.Ceiling(damage / defenceRate);
 
         if (hp <= 0)
@@ -62,30 +86,47 @@ public class CharBase : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// HPを回復する
+    /// </summary>
+    /// <param name="healValue">回復量</param>
+    public void Heal(int healValue)
+    {
+
+        Debug.Log("beforeHp:" + this.hp);
+        this.hp += healValue;
+        if (this.hp > this.max_hp)
+        {
+            this.hp = this.max_hp;
+        }
+        Debug.Log("afterHp:" + this.hp);
+
+    }
+
     //バフのリセット
     public void resetBuff()
     {
         //防御をやめる
-        this.reset_defence_flag();
+        this.reset_defense_flag();
     }
 
     // 防御する
-    public void Defence()
+    public void Defense()
     {
-        this.action_defence = true;
+        this.action_defense = true;
     }
 
     //防御フラグをリセット
-    private void reset_defence_flag()
+    private void reset_defense_flag()
     {
-        this.action_defence = false;
+        this.action_defense = false;
 
     }
 
     //防御フラグを取得
-    public bool get_actionDefence()
+    public bool get_actionDefense()
     {
-        return this.action_defence;
+        return this.action_defense;
     }
 
     //パラメータセット
@@ -101,6 +142,13 @@ public class CharBase : MonoBehaviour
         this.intelligence = charData.INT;
         this.weakElement = charData.WeakElement;
         this.strongElement = charData.StrongElement;
+
+        // TODO Itemに関してはmockで実装
+        // アイテム所持データの周りが実装されたら消す
+        HavingItem mockHavingItem = new HavingItem();
+        mockHavingItem.ItemName = "BluePotion";
+        mockHavingItem.ItemCount = 4;
+        HavingItem.Add(mockHavingItem);
 
     }
 
@@ -141,5 +189,11 @@ public class CharBase : MonoBehaviour
     public List<string> GetHavingAbilities()
     {
         return this.HavingAbility;
+    }
+
+    //所持アイテム
+    public List<HavingItem> GetHavingItem()
+    {
+        return this.HavingItem;
     }
 }

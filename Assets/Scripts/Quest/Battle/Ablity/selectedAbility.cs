@@ -22,7 +22,6 @@ public class selectedAbility : MonoBehaviour
     {
         // TODO 引数CharBaseでパーティの誰かを特定できるようにする
 
-        //Unityを再起動するとこの部分が外れている
         GameObject selectedObj = eventSystem.currentSelectedGameObject.gameObject;
         string selectedAbility_DisplayName = selectedObj.GetComponentInChildren<Text>().text;
 
