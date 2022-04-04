@@ -7,15 +7,10 @@ public class AbilityScrollController : MonoBehaviour
 {
     [SerializeField]
     RectTransform ability_contents = null;
-    private List<string> ability_list = new List<string>();
     private RectTransform _contentArea;
 
     [SerializeField]
     private AbilityManager abilityManager;
-
-
-    public delegate MonoBehaviour InstantiateItemViewDelegate();
-    private InstantiateItemViewDelegate _instantiateItemViewDelegate;
 
     void Start()
     {

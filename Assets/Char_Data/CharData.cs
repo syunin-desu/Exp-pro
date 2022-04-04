@@ -22,8 +22,8 @@ public class CharData : ScriptableObject
     [ValueDropdown("elementList")]
     public List<string> WeakElement = new List<string>();
     [ValueDropdown("elementList")]
-
     public List<string> StrongElement = new List<string>();
 
-    private static string[] elementList = CONST.CHARCTOR.ELEMENT_LIST;
+    private static string[] elementList = CONST.UTILITY.ELEMENT;
+
 }

@@ -5,17 +5,16 @@ using UnityEngine;
 //Ability関係を管理
 public class AbilityManager : MonoBehaviour
 {
-    private List<Ability_base> ability_list = new List<Ability_base>();
+    private List<Ability_base> _abilityList = new List<Ability_base>();
 
     // Start is called before the first frame update
     void Start()
     {
-        Object[] Ability_objects = Resources.LoadAll("Data/ability/", typeof(Ability_base));
+        Object[] abilityObjects = Resources.LoadAll("Data/ability/", typeof(Ability_base));
 
-        foreach (Ability_base ability in Ability_objects)
+        foreach (Ability_base ability in abilityObjects)
         {
-            ability_list.Add(ability);
-
+            _abilityList.Add(ability);
         }
     }
 
@@ -109,7 +108,7 @@ public class AbilityManager : MonoBehaviour
     /// <returns>表示アビリティ名</returns>
     public string getAbilityDisplayName(string abilityName)
     {
-        Ability_base abilityDisplayName = this.ability_list.Find(ability => ability.Name == abilityName);
+        Ability_base abilityDisplayName = this._abilityList.Find(ability => ability.Name == abilityName);
         return abilityDisplayName.displayName;
     }
 
@@ -120,7 +119,7 @@ public class AbilityManager : MonoBehaviour
     /// <returns>アビリティ名</returns>
     public string getAbilityNameForDisplayName(string ability_DisplayName)
     {
-        Ability_base abilityName = this.ability_list.Find(ability => ability.displayName == ability_DisplayName);
+        Ability_base abilityName = this._abilityList.Find(ability => ability.displayName == ability_DisplayName);
         return abilityName.Name;
     }
 
@@ -131,7 +130,7 @@ public class AbilityManager : MonoBehaviour
     /// <returns>アビリティタイミング</returns>
     public string getAbilityTimingType(string abilityName)
     {
-        Ability_base ability = this.ability_list.Find(ability => ability.Name == abilityName);
+        Ability_base ability = this._abilityList.Find(ability => ability.Name == abilityName);
         return ability != null ? ability.timingType : "";
     }
 
@@ -142,7 +141,7 @@ public class AbilityManager : MonoBehaviour
     /// <returns>アビリティのデータ</returns>
     private Ability_base getAbilityData(string abilityName)
     {
-        return this.ability_list.Find(ability => ability.Name == abilityName);
+        return this._abilityList.Find(ability => ability.Name == abilityName);
     }
 
     /// <summary>

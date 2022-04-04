@@ -1,3 +1,7 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
 namespace CONST
 {
 
@@ -7,11 +11,6 @@ namespace CONST
         //キャラクタ識別
         public const int PLAYER = 1;
         public const int ENEMY = 2;
-
-        /// <summary>属性</summary>
-        public static string[] ELEMENT_LIST = {
-        "Fire", "Ice", "Thunder","None"
-    };
 
     }
     public static class SCENE
@@ -55,7 +54,7 @@ namespace CONST
         //防御
         public const string ABILITY = "Ability";
         //防御
-        public const string DEFENCE = "Defence";
+        public const string DEFENSE = "Defence";
         //防御
         public const string ITEM = "Item";
 
@@ -68,8 +67,25 @@ namespace CONST
 
     }
 
-    public static class ABILITY
+    public static class UTILITY
     {
+        /// <summary>
+        /// 行動タイプ(Attack, Baff, etc)
+        /// </summary>
+        public static string[] ACTION_TYPE_LIST = {
+            "Attack", "Buff", "deBuff", "heal"
+        };
+
+        /// <summary>範囲(単体、全体)</summary>
+        public static string[] RANGE = {
+            "Single", "All",
+        };
+
+        /// <summary>属性</summary>
+        public static string[] ELEMENT = {
+            "Fire", "Ice", "Thunder","None"
+        };
+
     }
 
 }
