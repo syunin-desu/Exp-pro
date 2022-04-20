@@ -323,16 +323,8 @@ public class BattleManager : MonoBehaviour
 
         setActionList_FOR_Role(character.char_role, act);
 
-        //表示しているボタンの削除
-        var clones = GameObject.FindGameObjectsWithTag("AbilityButton");
-        foreach (var clone in clones)
-        {
-            Destroy(clone);
-        }
-
-
         // アビリティウインドウを閉じる
-        this.displayAbility_window(false);
+        this.abilityUI.removeAbilityWindow();
 
     }
 
@@ -350,33 +342,28 @@ public class BattleManager : MonoBehaviour
 
         setActionList_FOR_Role(character.char_role, act);
 
-        //表示しているボタンの削除
-        var clones = GameObject.FindGameObjectsWithTag("ItemButton");
-        foreach (var clone in clones)
-        {
-            Destroy(clone);
-        }
-
-        // アビリティウインドウを閉じる
-        this.displayItem_window(false);
+        // アイテムウインドウを閉じる
+        this.itemUI.removeItemWindow();
 
     }
 
     /// <summary>アビリティウインドウを表示</summary>
+    /// アビリティボタンクリック時に呼び出される
     public void showAbility_window(CharBase charactor)
     {
         //アビリティメニューを作成
-        this.displayAbility_window(true);
+        this.abilityUI.manageShowAbilityWindow(true);
 
         //アビリティをコンテンツにセット
         this.abilityContents.Setup_abilityUI(charactor.GetHavingAbilities());
     }
 
     /// <summary>アイテムウインドウを表示</summary>
+    /// アイテムボタンクリック時に呼び出される
     public void showItem_window(CharBase charactor)
     {
         //アビリティメニューを作成
-        this.displayItem_window(true);
+        this.itemUI.manageShowItemWindow(true);
 
         //アビリティをコンテンツにセット
         this.itemContents.SetupItemUI(charactor.GetHavingItem());
@@ -431,34 +418,20 @@ public class BattleManager : MonoBehaviour
     }
 
     // バトルUIを表示または非表示
-    private void switchBattleUI(bool switcher)
+    private void switchBattleUI(bool isShowUI)
     {
-        enemyUI.gameObject.SetActive(switcher);
-        this.switchActionSelectUI(switcher);
-        playerUI.gameObject.SetActive(switcher);
-        battleWindow.gameObject.SetActive(switcher);
+        enemyUI.gameObject.SetActive(isShowUI);
+        this.switchActionSelectUI(isShowUI);
+        playerUI.gameObject.SetActive(isShowUI);
+        battleWindow.gameObject.SetActive(isShowUI);
 
 
         // アビリティ、アイテムリストはfalseの時の処理する
-        if (switcher != true)
+        if (isShowUI != true)
         {
-            this.displayAbility_window(switcher);
-            this.displayItem_window(switcher);
+            this.abilityUI.manageShowAbilityWindow(isShowUI);
+            this.itemUI.manageShowItemWindow(isShowUI);
         }
-    }
-
-    /// <summary> アビリティウインドウを表示、非表示を管理 </summary>
-    private void displayAbility_window(bool isShow)
-    {
-        abilityUI.gameObject.SetActive(isShow);
-
-    }
-
-    /// <summary> アイテムウインドウを表示、非表示を管理 </summary>
-    private void displayItem_window(bool isShow)
-    {
-        itemUI.gameObject.SetActive(isShow);
-
     }
 
     // アクション選択UIの表示,非表示
