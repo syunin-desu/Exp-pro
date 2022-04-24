@@ -47,6 +47,9 @@ public class ItemManager : MonoBehaviour
 
         performChar.Heal(healValue);
 
+        //アイテム数を減少させる
+        performChar.reduceItemCount(execItemData.Name, 1);
+
         //UI修正
         playerUI.UpdateUI(performChar);
 
