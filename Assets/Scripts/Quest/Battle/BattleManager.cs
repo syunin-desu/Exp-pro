@@ -55,6 +55,9 @@ public class BattleManager : MonoBehaviour
     //経過ターン
     private int turned;
 
+    // 実行中のコルーチン
+    private Coroutine _currentCoroutine;
+
 
     //プレイヤー行動リスト
     [SerializeField]
@@ -75,6 +78,7 @@ public class BattleManager : MonoBehaviour
         allActionList = this.setActionList<BattleAction>();
         // バトルUIを非表示にする
         this.switchBattleUI(false);
+
     }
 
 
@@ -93,60 +97,42 @@ public class BattleManager : MonoBehaviour
         turned = 0;
     }
 
-
-    void Update()
+    ///バトル
+    public IEnumerator battle()
     {
-
-        //バトルシーンの場合更新処理を行う
-        if (questManager.getSceneSwitcher() == CONST.SCENE.SCENE_BATTLE)
+        while (questManager.getSceneSwitcher() == CONST.SCENE.SCENE_BATTLE)
         {
-
             //アクション選択フェーズ
-            if (this.actionSelect() == true)
-            {
+            // 選択されるまで待つ
+            yield return StartCoroutine(this.actionSelect());
 
-                //アクション実行順などの処理
-                this.actionOrderSorting();
+            // アクション実行順などの処理
+            this.actionOrderSorting();
+            yield return null;
 
+            /// バトルが終わるまで待つ
+            yield return StartCoroutine(this.doAction());
 
-                if (this.doAction() == true)
-                {
-                    //バトル終了処理
-                    this.EndBattle();
-                    Destroy(enemy.gameObject);
-                }
-                else
-                {
-                    //ターン終了処理
-                    this.turnFinalize();
-                }
-            }
         }
     }
 
     //アクション選択フェーズ
-    bool actionSelect()
+    private IEnumerator actionSelect()
     {
+        yield return new WaitUntil(() => actionList.Count == char_Num);
         //人数分アクションが選択されたらバトルさせる
-        if (actionList.Count == char_Num)
-        {
-            //プレイヤーの動きを全体行動リストに登録
-            allActionList.AddRange(actionList);
+        //プレイヤーの動きを全体行動リストに登録
+        allActionList.AddRange(actionList);
 
-            //敵アクションの登録
-            this.setAction_Enemy((int)CONST.BATTLE_ACTION.COMMAND.Attack, this.enemy);
+        //敵アクションの登録
+        this.setAction_Enemy((int)CONST.BATTLE_ACTION.COMMAND.Attack, this.enemy);
 
-            //選択UIを削除し
-            this.switchActionSelectUI(false);
-            return true;
-        }
-
-        return false;
+        //選択UIを削除し
+        this.switchActionSelectUI(false);
     }
 
-
     //リストに登録されているアクションを実行する
-    bool doAction()
+    private IEnumerator doAction()
     {
         bool endBattle = false;
 
@@ -165,12 +151,13 @@ public class BattleManager : MonoBehaviour
                     //プレイヤーの場合
                     if (role == CONST.CHARCTOR.PLAYER)
                     {
-                        this.PlayerAttack(player);
+                        yield return StartCoroutine(this.PlayerAttack(player));
+
                     }
                     //敵の場合
                     else
                     {
-                        this.EnemyAttack(enemy);
+                        yield return StartCoroutine(this.EnemyAttack(enemy));
                     }
                     break;
 
@@ -180,12 +167,12 @@ public class BattleManager : MonoBehaviour
                     {
                         // TODO 使用者と対象のキャラ情報ははAllActionListに格納できるようにしたい
                         // 引数に指定しない
-                        abilityManager.execAbility(player, enemy, allAction.abilityName);
+                        yield return StartCoroutine(abilityManager.execAbility(player, enemy, allAction.abilityName));
                         enemyUI.UpdateUI(enemy);
                     }
                     else
                     {
-                        abilityManager.execAbility(enemy, player, allAction.abilityName);
+                        yield return StartCoroutine(abilityManager.execAbility(enemy, player, allAction.abilityName));
                         // TODO 一時的に記述 HPなどのUIへの反映を動的に監視できるようにしたい
 
                     }
@@ -199,18 +186,17 @@ public class BattleManager : MonoBehaviour
                 case CONST.BATTLE_ACTION.ITEM:
                     if (role == CONST.CHARCTOR.PLAYER)
                     {
-                        itemManager.ExecItem(player, enemy, allAction.itemName);
-                        // enemyUI.UpdateUI(enemy);
+                        yield return StartCoroutine(itemManager.ExecItem(player, enemy, allAction.itemName));
                     }
                     else
                     {
-                        itemManager.ExecItem(enemy, player, allAction.itemName);
+                        yield return StartCoroutine(itemManager.ExecItem(enemy, player, allAction.itemName));
                         // TODO 一時的に記述 HPなどのUIへの反映を動的に監視できるようにしたい
-
                     }
                     break;
                 default:
                     Debug.Log("不正なアクションが登録されました");
+                    yield return null;
                     break;
             }
 
@@ -221,41 +207,48 @@ public class BattleManager : MonoBehaviour
             }
 
         }
-        return endBattle;
+
+        if (endBattle)
+        {
+            //バトル終了処理
+            this.EndBattle();
+            Destroy(enemy.gameObject);
+            yield return null;
+
+        }
+        else
+        {
+            //ターン終了処理
+            this.turnFinalize();
+            yield return null;
+        }
     }
 
     //攻撃処理
-    public void PlayerAttack(PlayerManager player)
+    private IEnumerator PlayerAttack(PlayerManager player)
     {
         //Playerが攻撃
         player.Attack(enemy);
         enemyUI.UpdateUI(enemy);
+        yield return new WaitForSeconds(CONST.UTILITY.BATTLEACTION_DELAY);
 
     }
+
     //敵の攻撃
-    void EnemyAttack(EnemyManager enemy)
+    private IEnumerator EnemyAttack(EnemyManager enemy)
     {
         enemy.Attack(player);
-        playerUI.UpdateUI(player);
-    }
-
-    public void PlayerAttack(CharBase character)
-    {
-        //Playerが攻撃
-        player.Attack(enemy);
-        enemyUI.UpdateUI(enemy);
-
+        yield return new WaitForSeconds(CONST.UTILITY.BATTLEACTION_DELAY);
     }
 
     //防御
-    public void Defense(CharBase character)
+    private IEnumerator Defense(CharBase character)
     {
         //指定したキャラクタの防御フラグをtrueにする
         character.Defense();
 
+        yield return new WaitForSeconds(CONST.UTILITY.BATTLEACTION_DELAY);
     }
-
-
 
     //1ターンの終了処理
     void turnFinalize()
@@ -272,7 +265,7 @@ public class BattleManager : MonoBehaviour
 
         //ターンを追加
         this.turned++;
-        Debug.Log(this.turned);
+        Debug.Log("ターン:" + this.turned);
     }
 
     //バトル終了処理
@@ -323,16 +316,8 @@ public class BattleManager : MonoBehaviour
 
         setActionList_FOR_Role(character.char_role, act);
 
-        //表示しているボタンの削除
-        var clones = GameObject.FindGameObjectsWithTag("AbilityButton");
-        foreach (var clone in clones)
-        {
-            Destroy(clone);
-        }
-
-
         // アビリティウインドウを閉じる
-        this.displayAbility_window(false);
+        this.abilityUI.removeAbilityWindow();
 
     }
 
@@ -350,33 +335,28 @@ public class BattleManager : MonoBehaviour
 
         setActionList_FOR_Role(character.char_role, act);
 
-        //表示しているボタンの削除
-        var clones = GameObject.FindGameObjectsWithTag("ItemButton");
-        foreach (var clone in clones)
-        {
-            Destroy(clone);
-        }
-
-        // アビリティウインドウを閉じる
-        this.displayItem_window(false);
+        // アイテムウインドウを閉じる
+        this.itemUI.removeItemWindow();
 
     }
 
     /// <summary>アビリティウインドウを表示</summary>
+    /// アビリティボタンクリック時に呼び出される
     public void showAbility_window(CharBase charactor)
     {
         //アビリティメニューを作成
-        this.displayAbility_window(true);
+        this.abilityUI.manageShowAbilityWindow(true);
 
         //アビリティをコンテンツにセット
         this.abilityContents.Setup_abilityUI(charactor.GetHavingAbilities());
     }
 
     /// <summary>アイテムウインドウを表示</summary>
+    /// アイテムボタンクリック時に呼び出される
     public void showItem_window(CharBase charactor)
     {
         //アビリティメニューを作成
-        this.displayItem_window(true);
+        this.itemUI.manageShowItemWindow(true);
 
         //アビリティをコンテンツにセット
         this.itemContents.SetupItemUI(charactor.GetHavingItem());
@@ -431,34 +411,20 @@ public class BattleManager : MonoBehaviour
     }
 
     // バトルUIを表示または非表示
-    private void switchBattleUI(bool switcher)
+    private void switchBattleUI(bool isShowUI)
     {
-        enemyUI.gameObject.SetActive(switcher);
-        this.switchActionSelectUI(switcher);
-        playerUI.gameObject.SetActive(switcher);
-        battleWindow.gameObject.SetActive(switcher);
+        enemyUI.gameObject.SetActive(isShowUI);
+        this.switchActionSelectUI(isShowUI);
+        playerUI.gameObject.SetActive(isShowUI);
+        battleWindow.gameObject.SetActive(isShowUI);
 
 
         // アビリティ、アイテムリストはfalseの時の処理する
-        if (switcher != true)
+        if (isShowUI != true)
         {
-            this.displayAbility_window(switcher);
-            this.displayItem_window(switcher);
+            this.abilityUI.manageShowAbilityWindow(isShowUI);
+            this.itemUI.manageShowItemWindow(isShowUI);
         }
-    }
-
-    /// <summary> アビリティウインドウを表示、非表示を管理 </summary>
-    private void displayAbility_window(bool isShow)
-    {
-        abilityUI.gameObject.SetActive(isShow);
-
-    }
-
-    /// <summary> アイテムウインドウを表示、非表示を管理 </summary>
-    private void displayItem_window(bool isShow)
-    {
-        itemUI.gameObject.SetActive(isShow);
-
     }
 
     // アクション選択UIの表示,非表示

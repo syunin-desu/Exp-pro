@@ -152,6 +152,19 @@ public class CharBase : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// アイテム個数を減少させる
+    /// </summary>
+    /// <param name="itemName">対象アイテム名</param>
+    /// <param name="reduceItemCount">減少させる個数</param>
+    public void reduceItemCount(string itemName, int reduceItemCount)
+    {
+        var targetItem = GetHavingItem().Find(item => item.ItemName == itemName);
+
+        //アイテム数を減少させる
+        targetItem.ItemCount -= reduceItemCount;
+    }
+
     //=============
     // getter,setter
     //=============

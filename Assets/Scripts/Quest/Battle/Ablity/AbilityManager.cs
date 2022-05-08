@@ -19,23 +19,25 @@ public class AbilityManager : MonoBehaviour
     }
 
 #nullable enable
-    public void execAbility(CharBase performChar, CharBase? targetChar, string execAbilityName)
+    public IEnumerator execAbility(CharBase performChar, CharBase? targetChar, string execAbilityName)
     {
         switch (execAbilityName)
         {
             case "burn":
-                this.burn(performChar, targetChar, this.getAbilityData(execAbilityName));
+                yield return StartCoroutine(this.burn(performChar, targetChar, this.getAbilityData(execAbilityName)));
                 break;
             case "chill":
-                this.chill(performChar, targetChar, this.getAbilityData(execAbilityName));
+                yield return StartCoroutine(this.chill(performChar, targetChar, this.getAbilityData(execAbilityName)));
                 break;
             case "volt":
-                this.volt(performChar, targetChar, this.getAbilityData(execAbilityName));
+                yield return StartCoroutine(this.volt(performChar, targetChar, this.getAbilityData(execAbilityName)));
                 break;
             default:
                 Debug.Log("アビリティデータに登録されていないアビリティが指定されました");
+                yield return null;
                 break;
         }
+
     }
 #nullable disable
 
@@ -48,7 +50,7 @@ public class AbilityManager : MonoBehaviour
     /// </summary>
     /// <param name="performChar">実行キャラ</param>
     /// <param name="targetChar">対象キャラ</param>
-    private void burn(CharBase performChar, CharBase targetChar, Ability_base execAbilityData)
+    private IEnumerator burn(CharBase performChar, CharBase targetChar, Ability_base execAbilityData)
     {
 
         int performerInt = performChar.intelligence;
@@ -59,6 +61,8 @@ public class AbilityManager : MonoBehaviour
         float elementDamageRate = this.calcElementDamageRate(Element, targetChar);
 
         targetChar.Damage((int)((performerInt * power) * elementDamageRate));
+
+        yield return new WaitForSeconds(CONST.UTILITY.BATTLEACTION_DELAY);
     }
 
     /// <summary>
@@ -67,7 +71,7 @@ public class AbilityManager : MonoBehaviour
     /// <param name="performChar">実行キャラ</param>
     /// <param name="targetChar">対象キャラ</param>
     /// <param name="execAbilityData">実行するアビリティのデータ</param>
-    private void chill(CharBase performChar, CharBase targetChar, Ability_base execAbilityData)
+    private IEnumerator chill(CharBase performChar, CharBase targetChar, Ability_base execAbilityData)
     {
         int performerInt = performChar.intelligence;
         int power = execAbilityData.power;
@@ -77,6 +81,8 @@ public class AbilityManager : MonoBehaviour
         float elementDamageRate = this.calcElementDamageRate(Element, targetChar);
 
         targetChar.Damage((int)((performerInt * power) * elementDamageRate));
+
+        yield return new WaitForSeconds(CONST.UTILITY.BATTLEACTION_DELAY);
     }
 
     /// <summary>
@@ -85,7 +91,7 @@ public class AbilityManager : MonoBehaviour
     /// <param name="performChar">実行キャラ</param>
     /// <param name="targetChar">対象キャラ</param>
     /// <param name="execAbilityData">実行するアビリティのデータ</param>
-    private void volt(CharBase performChar, CharBase targetChar, Ability_base execAbilityData)
+    private IEnumerator volt(CharBase performChar, CharBase targetChar, Ability_base execAbilityData)
     {
         int performerInt = performChar.intelligence;
         int power = execAbilityData.power;
@@ -95,6 +101,8 @@ public class AbilityManager : MonoBehaviour
         float elementDamageRate = this.calcElementDamageRate(Element, targetChar);
 
         targetChar.Damage((int)((performerInt * power) * elementDamageRate));
+
+        yield return new WaitForSeconds(CONST.UTILITY.BATTLEACTION_DELAY);
     }
 
     //======================================

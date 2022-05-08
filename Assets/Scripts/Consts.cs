@@ -86,6 +86,8 @@ namespace CONST
             "Fire", "Ice", "Thunder","None"
         };
 
+        public static int BATTLEACTION_DELAY = 1;
+
     }
 
 }
