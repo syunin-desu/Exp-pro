@@ -51,6 +51,9 @@ public class QuestManager : MonoBehaviour
         EnemyManager enemy = enemyObj.GetComponent<EnemyManager>();
         battleManager.SetUp(enemy);
         setSceneSwitcher(CONST.SCENE.SCENE_BATTLE);
+
+        // バトルコルーチン
+        StartCoroutine(battleManager.battle());
     }
 
     public void EndBattle()

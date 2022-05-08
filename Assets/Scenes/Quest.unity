@@ -1643,6 +1643,7 @@ MonoBehaviour:
   hpText: {fileID: 1588789559}
   maxHpText: {fileID: 1357632262}
   charName: {fileID: 1114735365}
+  _playerManager: {fileID: 456461459}
 --- !u!1 &1114735364
 GameObject:
   m_ObjectHideFlags: 0

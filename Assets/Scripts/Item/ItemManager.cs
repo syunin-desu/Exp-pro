@@ -22,15 +22,16 @@ public class ItemManager : MonoBehaviour
     }
 
 #nullable enable
-    public void ExecItem(CharBase performChar, CharBase? targetChar, string execItemName)
+    public IEnumerator ExecItem(CharBase performChar, CharBase? targetChar, string execItemName)
     {
         switch (execItemName)
         {
             case "BluePotion":
-                this.BluePotion(performChar, this.GetItemData(execItemName));
+                yield return StartCoroutine(this.BluePotion(performChar, this.GetItemData(execItemName)));
                 break;
             default:
                 Debug.Log("アイテムデータに登録されていないアイテムが指定されました");
+                yield return null;
                 break;
         }
     }
@@ -41,7 +42,7 @@ public class ItemManager : MonoBehaviour
     /// </summary>
     /// <param name="performChar">対象キャラ</param>
     /// <param name="execItemData">実行するアイテムデータ</param>
-    public void BluePotion(CharBase performChar, createItemData execItemData)
+    public IEnumerator BluePotion(CharBase performChar, createItemData execItemData)
     {
         int healValue = execItemData.power;
 
@@ -51,7 +52,7 @@ public class ItemManager : MonoBehaviour
         performChar.reduceItemCount(execItemData.Name, 1);
 
         //UI修正
-        playerUI.UpdateUI(performChar);
+        yield return new WaitForSeconds(CONST.UTILITY.BATTLEACTION_DELAY);
 
 
     }
