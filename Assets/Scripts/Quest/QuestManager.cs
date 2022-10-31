@@ -53,7 +53,7 @@ public class QuestManager : MonoBehaviour
         setSceneSwitcher(CONST.SCENE.SCENE_BATTLE);
 
         // バトルコルーチン
-        StartCoroutine(battleManager.battle());
+        battleManager.battle();
     }
 
     public void EndBattle()

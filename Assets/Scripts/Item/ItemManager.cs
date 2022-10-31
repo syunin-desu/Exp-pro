@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class ItemManager : MonoBehaviour
@@ -12,7 +14,7 @@ public class ItemManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Object[] itemObjects = Resources.LoadAll("Data/Item/", typeof(createItemData));
+        UnityEngine.Object[] itemObjects = Resources.LoadAll("Data/Item/", typeof(createItemData));
 
         foreach (createItemData item in itemObjects)
         {
@@ -22,16 +24,15 @@ public class ItemManager : MonoBehaviour
     }
 
 #nullable enable
-    public IEnumerator ExecItem(CharBase performChar, CharBase? targetChar, string execItemName)
+    public async UniTask ExecItem(CharBase performChar, CharBase? targetChar, string execItemName)
     {
         switch (execItemName)
         {
             case "BluePotion":
-                yield return StartCoroutine(this.BluePotion(performChar, this.GetItemData(execItemName)));
+                await this.BluePotion(performChar, this.GetItemData(execItemName));
                 break;
             default:
                 Debug.Log("アイテムデータに登録されていないアイテムが指定されました");
-                yield return null;
                 break;
         }
     }
@@ -42,7 +43,7 @@ public class ItemManager : MonoBehaviour
     /// </summary>
     /// <param name="performChar">対象キャラ</param>
     /// <param name="execItemData">実行するアイテムデータ</param>
-    public IEnumerator BluePotion(CharBase performChar, createItemData execItemData)
+    public async UniTask BluePotion(CharBase performChar, createItemData execItemData)
     {
         int healValue = execItemData.power;
 
@@ -52,7 +53,7 @@ public class ItemManager : MonoBehaviour
         performChar.reduceItemCount(execItemData.Name, 1);
 
         //UI修正
-        yield return new WaitForSeconds(CONST.UTILITY.BATTLEACTION_DELAY);
+        await UniTask.Delay(TimeSpan.FromSeconds(CONST.UTILITY.BATTLEACTION_DELAY));
 
 
     }
