@@ -39,7 +39,7 @@ public class CharBase : MonoBehaviour
     public List<string> strongElement { get; set; }
 
     //防御フラグ
-    private bool action_defense;
+    private bool action_defense = false;
     //キャラロール
     public int char_role;
 
@@ -50,12 +50,6 @@ public class CharBase : MonoBehaviour
     // TODO 現状モックで実装する
     public List<HavingItem> HavingItem = new List<HavingItem>();
 
-
-
-    void Start()
-    {
-        this.reset_defense_flag();
-    }
 
     //ターン終了時の処理
     public void resetTurnEnd_char_parameter()
