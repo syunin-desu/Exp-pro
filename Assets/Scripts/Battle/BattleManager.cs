@@ -6,28 +6,49 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using CONST;
 
-// 戦闘に参加しているキャラのアクションクラス
+// 実行アクション情報クラス
 public class BattleAction
 {
-    public string action;
+    /// <summary>
+    /// 実行アクション
+    /// </summary>
+    public CONST.BATTLE_ACTION.COMMAND action;
 
+    /// <summary>
+    /// アクション名
+    /// </summary>
     public string abilityName = "";
 
+    /// <summary>
+    ///  アイテム名
+    /// </summary>
     public string itemName = "";
 
+    /// <summary>
+    /// 実行キャラクタ
+    /// </summary>
     public CharBase character;
 
 
-    public BattleAction(string action, CharBase character)
+    public BattleAction(CONST.BATTLE_ACTION.COMMAND action, CharBase character)
     {
         this.action = action;
         this.character = character;
     }
+
+    /// <summary>
+    /// アビリティ名を格納
+    /// </summary>
+    /// <param name="abilityName"></param>
     public void setAbilityName(string abilityName)
     {
         this.abilityName = abilityName;
     }
 
+    /// <summary>
+    /// アイテム名を設定
+    /// </summary>
+    /// <param name="itemName"></param>
     public void setItemName(string itemName)
     {
         this.itemName = itemName;
@@ -35,36 +56,87 @@ public class BattleAction
     }
 }
 
-//対戦を管理
+/// <summary>
+/// バトルシーン管理クラス
+/// </summary>
 public class BattleManager : MonoBehaviour
 {
+    /// <summary>
+    /// プレイヤー情報表示UI
+    /// </summary>
     public PlayerUIManager playerUI;
+
+    /// <summary>
+    /// プレイヤー
+    /// </summary>
     public PlayerManager player;
+
+    /// <summary>
+    /// 敵キャラ
+    /// </summary>
     EnemyManager enemy;
+
+    /// <summary>
+    /// 敵情報表示UI
+    /// </summary>
     public EnemyUIManager enemyUI;
+
+    /// <summary>
+    /// コマンド選択UI(名前を変える必要がある)
+    /// </summary>
     public BattleUIManager battleUI;
+    /// <summary>
+    /// ダンジョンシーン管理クラス
+    /// </summary>
     public QuestManager questManager;
+
+    /// <summary>
+    /// バトル時のプレイヤー側のステータス・コマンドウインドウ表示UI
+    /// </summary>
     public BattleUIWindow battleWindow;
+
+    /// <summary>
+    /// アイテム選択UI管理クラス
+    /// </summary>
     public ItemUIManager itemUI;
+
+    /// <summary>
+    /// アイテムウインドウの中身を管理するクラス
+    /// </summary>
     public ItemScrollController itemContents;
+
+    /// <summary>
+    /// アイテム実行クラス
+    /// </summary>
     public ItemManager itemManager;
+
+    /// <summary>
+    /// アビリティ選択UI管理クラス
+    /// </summary>
     public AbilityUIManager abilityUI;
+
+    /// <summary>
+    /// アビリティウインドウの中身を管理するクラス
+    /// </summary>
     public AbilityScrollController abilityContents;
+
+    /// <summary>
+    ///  アビリティ実行クラス
+    /// </summary>
     public AbilityManager abilityManager;
-
-
 
     //経過ターン
     private int turned;
 
-    // 実行中のコルーチン
-    private Coroutine _currentCoroutine;
-
-
-    //プレイヤー行動リスト
+    /// <summary>
+    /// プレイヤー行動リスト
+    /// </summary>
     [SerializeField]
     List<BattleAction> actionList;
-    //全体行動リスト
+
+    /// <summary>
+    /// 戦闘参加者全員の行動リスト
+    /// </summary>
     [SerializeField]
     public List<BattleAction> allActionList;
 
@@ -99,7 +171,10 @@ public class BattleManager : MonoBehaviour
         turned = 0;
     }
 
-    ///バトル
+    /// <summary>
+    /// バトル実行
+    /// </summary>
+    /// <returns></returns>
     public async void battle()
     {
         while (questManager.getSceneSwitcher() == CONST.SCENE.SCENE_BATTLE)
@@ -117,7 +192,10 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    //アクション選択フェーズ
+    /// <summary>
+    /// プレイヤーアクション選択待機およびリストへの登録
+    /// </summary>
+    /// <returns></returns>
     private async UniTask actionSelect()
     {
         await UniTask.WaitUntil(() => actionList.Count == char_Num);
@@ -132,7 +210,10 @@ public class BattleManager : MonoBehaviour
         this.switchActionSelectUI(false);
     }
 
-    //リストに登録されているアクションを実行する
+    /// <summary>
+    /// アクションリストに登録された行動を順番に実行する
+    /// </summary>
+    /// <returns></returns>
     private async UniTask doAction()
     {
         bool endBattle = false;
@@ -143,12 +224,13 @@ public class BattleManager : MonoBehaviour
             //キャラ識別
             int role = allAction.character.char_role;
 
+            // TODO: デバック用なのであとで消す
             Debug.Log(allAction.action);
             //アクションによって識別
             switch (allAction.action)
             {
                 //攻撃
-                case CONST.BATTLE_ACTION.ATTACK:
+                case CONST.BATTLE_ACTION.COMMAND.Attack:
                     //プレイヤーの場合
                     if (role == CONST.CHARCTOR.PLAYER)
                     {
@@ -163,7 +245,7 @@ public class BattleManager : MonoBehaviour
                     break;
 
                 // アビリティ
-                case CONST.BATTLE_ACTION.ABILITY:
+                case CONST.BATTLE_ACTION.COMMAND.Ability:
                     if (role == CONST.CHARCTOR.PLAYER)
                     {
                         // TODO 使用者と対象のキャラ情報ははAllActionListに格納できるようにしたい
@@ -180,11 +262,11 @@ public class BattleManager : MonoBehaviour
                     break;
 
                 // 防御
-                case CONST.BATTLE_ACTION.DEFENSE:
+                case CONST.BATTLE_ACTION.COMMAND.Defence:
                     await this.Defense(allAction.character);
                     break;
                 // アイテム
-                case CONST.BATTLE_ACTION.ITEM:
+                case CONST.BATTLE_ACTION.COMMAND.Item:
                     if (role == CONST.CHARCTOR.PLAYER)
                     {
                         await itemManager.ExecItem(player, enemy, allAction.itemName);
@@ -200,7 +282,9 @@ public class BattleManager : MonoBehaviour
                     break;
             }
 
-            if (this.updateBattleState(enemy) == true)
+            // 敵HPが尽きたとき
+            // TODO: 現在は1v1を想定して作られている
+            if (this.updateBattleState(enemy))
             {
                 endBattle = true;
                 break;
@@ -208,6 +292,7 @@ public class BattleManager : MonoBehaviour
 
         }
 
+        // 戦闘終了なら
         if (endBattle)
         {
             //バトル終了処理
@@ -222,7 +307,11 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    //攻撃処理
+    /// <summary>
+    /// プレイヤー攻撃コマンド処理
+    /// </summary>
+    /// <param name="player"></param>
+    /// <returns></returns>
     private async UniTask PlayerAttack(PlayerManager player)
     {
         //Playerが攻撃
@@ -233,7 +322,11 @@ public class BattleManager : MonoBehaviour
 
     }
 
-    //敵の攻撃
+    /// <summary>
+    /// 敵の攻撃処理
+    /// </summary>
+    /// <param name="enemy"></param>
+    /// <returns></returns>
     private async UniTask EnemyAttack(EnemyManager enemy)
     {
         enemy.Attack(player);
@@ -241,7 +334,11 @@ public class BattleManager : MonoBehaviour
 
     }
 
-    //防御
+    /// <summary>
+    /// 防御コマンド処理
+    /// </summary>
+    /// <param name="character"></param>
+    /// <returns></returns>
     private async UniTask Defense(CharBase character)
     {
         //指定したキャラクタの防御フラグをtrueにする
@@ -251,7 +348,9 @@ public class BattleManager : MonoBehaviour
 
     }
 
-    //1ターンの終了処理
+    /// <summary>
+    /// ターン終了処理
+    /// </summary>
     void turnFinalize()
     {
         //パラメータの初期化
@@ -269,7 +368,9 @@ public class BattleManager : MonoBehaviour
         Debug.Log("ターン:" + this.turned);
     }
 
-    //バトル終了処理
+    /// <summary>
+    /// バトル終了処理
+    /// </summary>
     void EndBattle()
     {
         this.switchBattleUI(false);
@@ -278,7 +379,11 @@ public class BattleManager : MonoBehaviour
         questManager.setSceneSwitcher(CONST.SCENE.SCENE_QUEST);
     }
 
-    //バトルの状態の処理
+    /// <summary>
+    /// 敵HPが尽きたときの処理
+    /// </summary>
+    /// <param name="enemy"></param>
+    /// <returns></returns>
     private bool updateBattleState(EnemyManager enemy)
     {
         //HP処理
@@ -296,14 +401,14 @@ public class BattleManager : MonoBehaviour
     //<summary>攻撃アクションを登録</summary>
     public void setAction_Attack(CharBase character)
     {
-        BattleAction act = new BattleAction(CONST.BATTLE_ACTION.ATTACK, character);
+        BattleAction act = new BattleAction(CONST.BATTLE_ACTION.COMMAND.Attack, character);
         setActionList_FOR_Role(character.char_role, act);
     }
 
     /// <summary>防御アクションを登録</summary>
     public void setAction_Defence(CharBase character)
     {
-        BattleAction act = new BattleAction(CONST.BATTLE_ACTION.DEFENSE, character);
+        BattleAction act = new BattleAction(CONST.BATTLE_ACTION.COMMAND.Defence, character);
         setActionList_FOR_Role(character.char_role, act);
 
     }
@@ -311,7 +416,7 @@ public class BattleManager : MonoBehaviour
     /// <summary>アビリティコマンドを登録</summary>
     public void setAction_Ability(CharBase character, string selectedAbilityName)
     {
-        BattleAction act = new BattleAction(CONST.BATTLE_ACTION.ABILITY, character);
+        BattleAction act = new BattleAction(CONST.BATTLE_ACTION.COMMAND.Ability, character);
         // アビリティ名を格納
         act.setAbilityName(selectedAbilityName);
 
@@ -329,7 +434,7 @@ public class BattleManager : MonoBehaviour
     /// <param name="selectedItemName">選択されたアイテム名</param>
     public void setAction_Item(CharBase character, string selectedItemName)
     {
-        BattleAction act = new BattleAction(CONST.BATTLE_ACTION.ITEM, character);
+        BattleAction act = new BattleAction(CONST.BATTLE_ACTION.COMMAND.Item, character);
 
         // アビリティ名を格納
         act.setItemName(selectedItemName);
@@ -363,6 +468,7 @@ public class BattleManager : MonoBehaviour
         this.itemContents.SetupItemUI(charactor.GetHavingItem());
     }
 
+    // TODO: 関数自体を見直す必要あり
     private void setActionList_FOR_Role(int character_role, BattleAction act)
     {
         if (character_role == CONST.CHARCTOR.PLAYER)
@@ -374,10 +480,6 @@ public class BattleManager : MonoBehaviour
             this.allActionList.Add(act);
         }
     }
-
-    //================
-    // Private メソッド
-    //================
 
     private List<BattleAction> setActionList<BattleAction>()
     {
@@ -460,15 +562,15 @@ public class BattleManager : MonoBehaviour
         {
             //防御、またはFAだった時は先頭に持ってくる(同値はSPD比較)
             // TODO DA条件式は必要になったときに追加
-            if (charAction.action == CONST.BATTLE_ACTION.DEFENSE ||
-             abilityManager.getAbilityTimingType(charAction.abilityName) == CONST.BATTLE_ACTION.ACTION_FAST)
+            if (charAction.action == CONST.BATTLE_ACTION.COMMAND.Defence ||
+             abilityManager.getAbilityTimingType(charAction.abilityName) == CONST.ACTION.Speed.Fast)
             {
                 FAlist.Add(charAction);
             }
             // TODO アイテムをNormalにするが将来的にはItemDataにTimingTypeを設定させたほうがいいと思う
-            else if (charAction.action == CONST.BATTLE_ACTION.ATTACK ||
-            charAction.action == CONST.BATTLE_ACTION.ITEM ||
-            abilityManager.getAbilityTimingType(charAction.abilityName) == CONST.BATTLE_ACTION.ACTION_NORMAL)
+            else if (charAction.action == CONST.BATTLE_ACTION.COMMAND.Attack ||
+            charAction.action == CONST.BATTLE_ACTION.COMMAND.Item ||
+            abilityManager.getAbilityTimingType(charAction.abilityName) == CONST.ACTION.Speed.Normal)
             {
                 NAlist.Add(charAction);
             }

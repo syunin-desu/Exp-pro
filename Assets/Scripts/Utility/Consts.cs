@@ -1,7 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
+/// <summary>
+///  不変値置き場
+/// </summary>
 namespace CONST
 {
 
@@ -11,6 +11,9 @@ namespace CONST
         //キャラクタ識別
         public const int PLAYER = 1;
         public const int ENEMY = 2;
+
+        // 属性
+
 
     }
     public static class SCENE
@@ -43,48 +46,61 @@ namespace CONST
         //Enemy要コマンドEnum
         public enum COMMAND
         {
-            Attack = 1,
+            Attack,
             Ability,
             Defence,
             Item
         }
 
-        //攻撃
-        public const string ATTACK = "Attack";
-        //防御
-        public const string ABILITY = "Ability";
-        //防御
-        public const string DEFENSE = "Defence";
-        //防御
-        public const string ITEM = "Item";
+    }
 
-        //==================
-        //アクションタイミング
-        //==================
-        public const string ACTION_FAST = "Fast";
-        public const string ACTION_NORMAL = "Normal";
-        public const string ACTION_DELAY = "Delay";
+    // アクション
+    namespace ACTION
+    {
+        /// <summary>
+        ///  アクションの種類
+        /// </summary>
+        public enum TYPE
+        {
+            Attack,
+            Buff,
+            DeBuff,
+            Heal
+        }
 
+        /// <summary>
+        ///  アクションの発動速度の種類
+        /// </summary>
+        public enum Speed
+        {
+            Fast,
+            Normal,
+            Delay
+        }
+
+        /// <summary>
+        ///  アクションの対象範囲
+        /// </summary>
+        public enum Range
+        {
+            Single,
+            All,
+        }
     }
 
     public static class UTILITY
     {
+
         /// <summary>
-        /// 行動タイプ(Attack, Baff, etc)
+        ///  属性の種類
         /// </summary>
-        public static string[] ACTION_TYPE_LIST = {
-            "Attack", "Buff", "deBuff", "heal"
-        };
-
-        /// <summary>範囲(単体、全体)</summary>
-        public static string[] RANGE = {
-            "Single", "All",
-        };
-
-        /// <summary>属性</summary>
-        public static string[] ELEMENT = {
-            "Fire", "Ice", "Thunder","None"
-        };
+        public enum Element
+        {
+            Fire,
+            Ice,
+            Thunder,
+            None
+        }
 
         public static int BATTLEACTION_DELAY = 1;
 

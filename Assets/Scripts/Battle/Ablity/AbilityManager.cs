@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-//Ability関係を管理
+//Ability実行管理
 public class AbilityManager : MonoBehaviour
 {
     private List<Ability_base> _abilityList = new List<Ability_base>();
@@ -12,6 +12,7 @@ public class AbilityManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Data/abilityディレクトリからデマスターデータを配列に格納する
         UnityEngine.Object[] abilityObjects = Resources.LoadAll("Data/ability/", typeof(Ability_base));
 
         foreach (Ability_base ability in abilityObjects)
@@ -22,6 +23,13 @@ public class AbilityManager : MonoBehaviour
     }
 
 #nullable enable
+    /// <summary>
+    /// アビリティを実行する
+    /// </summary>
+    /// <param name="performChar">実行キャラ</param>
+    /// <param name="targetChar">対象</param>
+    /// <param name="execAbilityName">実行アビリティ名</param>
+    /// <returns></returns>
     public async UniTask execAbility(CharBase performChar, CharBase? targetChar, string execAbilityName)
     {
         switch (execAbilityName)
@@ -57,7 +65,7 @@ public class AbilityManager : MonoBehaviour
 
         int performerInt = performChar.intelligence;
         int power = execAbilityData.power;
-        string Element = execAbilityData.Element;
+        CONST.UTILITY.Element Element = execAbilityData.Element;
 
         // TODO ダメージ計算用のファンクションを別のクラスで作成し、そこで行えるようにする
         float elementDamageRate = this.calcElementDamageRate(Element, targetChar);
@@ -77,7 +85,7 @@ public class AbilityManager : MonoBehaviour
     {
         int performerInt = performChar.intelligence;
         int power = execAbilityData.power;
-        string Element = execAbilityData.Element;
+        CONST.UTILITY.Element Element = execAbilityData.Element;
 
         // TODO ダメージ計算用のファンクションを別のクラスで作成し、そこで行えるようにする
         float elementDamageRate = this.calcElementDamageRate(Element, targetChar);
@@ -97,7 +105,7 @@ public class AbilityManager : MonoBehaviour
     {
         int performerInt = performChar.intelligence;
         int power = execAbilityData.power;
-        string Element = execAbilityData.Element;
+        CONST.UTILITY.Element Element = execAbilityData.Element;
 
         // TODO ダメージ計算用のファンクションを別のクラスで作成し、そこで行えるようにする
         float elementDamageRate = this.calcElementDamageRate(Element, targetChar);
@@ -138,10 +146,10 @@ public class AbilityManager : MonoBehaviour
     /// </summary>
     /// <param name="abilityName">アビリティ名</param>
     /// <returns>アビリティタイミング</returns>
-    public string getAbilityTimingType(string abilityName)
+    public CONST.ACTION.Speed getAbilityTimingType(string abilityName)
     {
         Ability_base ability = this._abilityList.Find(ability => ability.Name == abilityName);
-        return ability != null ? ability.timingType : "";
+        return ability != null ? ability.timingType : CONST.ACTION.Speed.Normal;
     }
 
     /// <summary>
@@ -161,7 +169,7 @@ public class AbilityManager : MonoBehaviour
     /// <param name="strongElement">耐性属性</param>
     /// <param name="targetChar">対象のキャラ</param>
     /// <returns>ダメージ率</returns>
-    private float calcElementDamageRate(string Element, CharBase targetChar)
+    private float calcElementDamageRate(CONST.UTILITY.Element Element, CharBase targetChar)
     {
         bool haveTargetCharWeakElement = targetChar.weakElement.Contains(Element);
         bool haveTargetCharStrongElement = targetChar.strongElement.Contains(Element);

@@ -35,8 +35,8 @@ public class CharBase : MonoBehaviour
     public int speed;
     public int intelligence { get; set; }
 
-    public List<string> weakElement { get; set; }
-    public List<string> strongElement { get; set; }
+    public List<CONST.UTILITY.Element> weakElement { get; set; }
+    public List<CONST.UTILITY.Element> strongElement { get; set; }
 
     //防御フラグ
     private bool action_defense = false;

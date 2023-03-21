@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// アビリティウインドウUI管理クラス
+/// </summary>
 public class AbilityUIManager : MonoBehaviour
 {
-    // TODO UI共通処理を持つ親クラスを作成し、それを継承するような構造にする
 
     void Update()
     {

@@ -17,6 +17,6 @@ MonoBehaviour:
   Type: Attack
   timingType: Fast
   Range: Single
-  requiredMp: 2
+  requiredMp: 3
   Element: Fire
   power: 2

@@ -3,12 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// バトル時のアビリティ選択画面の中身を管理
+/// </summary>
+// TODO: 名前を後で帰る(AbilityScrollContentsManager)
 public class AbilityScrollController : MonoBehaviour
 {
+    /// <summary>
+    /// テスト用に指定(本実装では複数中に入ることになる)
+    /// </summary>
     [SerializeField]
     RectTransform ability_contents = null;
     private RectTransform _contentArea;
 
+    /// <summary>
+    /// アビリティ実行クラス
+    /// </summary>
     [SerializeField]
     private AbilityManager abilityManager;
 
