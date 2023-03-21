@@ -24,8 +24,5 @@ MonoBehaviour:
   - burn
   - chill
   - volt
-  WeakElement:
-  - None
-  StrongElement:
-  - None
-  HavingItem: []
+  WeakElement: 03000000
+  StrongElement: 03000000
