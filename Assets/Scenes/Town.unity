@@ -240,7 +240,7 @@ RectTransform:
   - {fileID: 572747174}
   - {fileID: 1518701473}
   m_Father: {fileID: 707742541}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -845,7 +845,7 @@ RectTransform:
   - {fileID: 68514022}
   - {fileID: 1654421397}
   m_Father: {fileID: 707742541}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1435,6 +1435,7 @@ GameObject:
   - component: {fileID: 707742544}
   - component: {fileID: 707742543}
   - component: {fileID: 707742542}
+  - component: {fileID: 707742545}
   m_Layer: 0
   m_Name: SellOrhHasItemList
   m_TagString: Untagged
@@ -1453,6 +1454,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 1221397702}
   - {fileID: 47213511}
   - {fileID: 468558823}
   m_Father: {fileID: 1177167873}
@@ -1524,6 +1526,19 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &707742545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 707742540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ef1b7c256bdcea4a87294f14e8d1b65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shopActions: {fileID: 1060269241}
 --- !u!1 &715056610
 GameObject:
   m_ObjectHideFlags: 0
@@ -2030,6 +2045,7 @@ GameObject:
   - component: {fileID: 841296850}
   - component: {fileID: 841296849}
   - component: {fileID: 841296848}
+  - component: {fileID: 841296851}
   m_Layer: 5
   m_Name: QuitButton
   m_TagString: Untagged
@@ -2101,9 +2117,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: SceneTransitionManager, Assembly-CSharp
-        m_MethodName: 
+      - m_Target: {fileID: 841296851}
+        m_TargetAssemblyTypeName: QuitButtonView, Assembly-CSharp
+        m_MethodName: quitButtonClickedAction
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2112,7 +2128,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 0
+        m_CallState: 1
 --- !u!114 &841296849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2151,6 +2167,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 841296846}
   m_CullTransparentMesh: 1
+--- !u!114 &841296851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 841296846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cb23261af61123468c1c0e60f595424, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shopMenu: {fileID: 1177167868}
+  prepareMainMenu: {fileID: 1325331397}
 --- !u!1 &855354966
 GameObject:
   m_ObjectHideFlags: 0
@@ -2277,6 +2307,7 @@ GameObject:
   - component: {fileID: 1005324522}
   - component: {fileID: 1005324521}
   - component: {fileID: 1005324520}
+  - component: {fileID: 1005324523}
   m_Layer: 5
   m_Name: BuyButon
   m_TagString: Untagged
@@ -2348,9 +2379,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: SceneTransitionManager, Assembly-CSharp
-        m_MethodName: 
+      - m_Target: {fileID: 1005324523}
+        m_TargetAssemblyTypeName: BuyButtonView, Assembly-CSharp
+        m_MethodName: onSelectedBuyButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2359,7 +2390,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 0
+        m_CallState: 1
 --- !u!114 &1005324521
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2398,6 +2429,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1005324518}
   m_CullTransparentMesh: 1
+--- !u!114 &1005324523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1005324518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38531fbd36e2fd94399cf347834158be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sellItem: {fileID: 707742545}
+  shopActions: {fileID: 1060269241}
 --- !u!1 &1060269236
 GameObject:
   m_ObjectHideFlags: 0
@@ -2410,6 +2455,7 @@ GameObject:
   - component: {fileID: 1060269240}
   - component: {fileID: 1060269239}
   - component: {fileID: 1060269238}
+  - component: {fileID: 1060269241}
   m_Layer: 0
   m_Name: shopActionCanvas
   m_TagString: Untagged
@@ -2500,6 +2546,18 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &1060269241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1060269236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 679079acd5f1579419344e8eadb8db40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1092907058
 GameObject:
   m_ObjectHideFlags: 0
@@ -2884,7 +2942,6 @@ RectTransform:
   m_Children:
   - {fileID: 1060269237}
   - {fileID: 707742541}
-  - {fileID: 1221397702}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3007,18 +3064,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1221397701}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1553672850}
-  m_Father: {fileID: 1177167873}
-  m_RootOrder: 2
+  m_Father: {fileID: 707742541}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 185, y: -375}
-  m_SizeDelta: {x: -470, y: -850}
+  m_AnchoredPosition: {x: 0, y: -492.4975}
+  m_SizeDelta: {x: 0, y: -514.995}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1221397703
 MonoBehaviour:
@@ -3418,6 +3475,7 @@ GameObject:
   - component: {fileID: 1441884700}
   - component: {fileID: 1441884699}
   - component: {fileID: 1441884698}
+  - component: {fileID: 1441884701}
   m_Layer: 5
   m_Name: SellButton
   m_TagString: Untagged
@@ -3489,9 +3547,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: SceneTransitionManager, Assembly-CSharp
-        m_MethodName: 
+      - m_Target: {fileID: 1441884701}
+        m_TargetAssemblyTypeName: SellButtonView, Assembly-CSharp
+        m_MethodName: onSelectedSellButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3500,7 +3558,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 0
+        m_CallState: 1
 --- !u!114 &1441884699
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3539,6 +3597,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1441884696}
   m_CullTransparentMesh: 1
+--- !u!114 &1441884701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1441884696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 788e11020e1a15b4fbb7ec73141fb2f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sellItem: {fileID: 707742545}
+  shopActions: {fileID: 1060269241}
 --- !u!1 &1486138122
 GameObject:
   m_ObjectHideFlags: 0
