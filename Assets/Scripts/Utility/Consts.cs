@@ -88,6 +88,22 @@ namespace CONST
         }
     }
 
+    // アイテム
+    namespace ITEM
+    {
+
+        // 全アイテム名のリスト
+        public enum AllItemNames
+        {
+            BluePotion,
+            BluePotionEx,
+            NeoBluePotion,
+            EnagyDrink,
+            EnergyDrinkEx,
+            EnergyDrinkNeo
+        }
+    }
+
     public static class UTILITY
     {
 

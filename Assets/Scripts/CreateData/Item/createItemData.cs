@@ -15,15 +15,17 @@ public class createItemData : ScriptableObject
 
     [ValueDropdown("itemType")]
 
-    public string Type;
+    public CONST.ACTION.TYPE Type;
 
     [ValueDropdown("itemRange")]
-    public string Range;
+    public CONST.ACTION.Range Range;
 
     [ValueDropdown("element")]
-    public string Element;
+    public CONST.UTILITY.Element Element;
 
-    public int power;
+    public int value;
+
+    public int price;
 
 
     private static List<CONST.ACTION.TYPE> itemType = Enum.GetValues(typeof(CONST.ACTION.TYPE))

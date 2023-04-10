@@ -22,8 +22,5 @@ MonoBehaviour:
   ROLE: 2
   HavingAbility:
   - 
-  WeakElement:
-  - Ice
-  StrongElement:
-  - Fire
-  HavingItem: []
+  WeakElement: 00000000
+  StrongElement: 00000000

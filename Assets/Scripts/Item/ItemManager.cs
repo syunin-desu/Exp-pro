@@ -45,7 +45,7 @@ public class ItemManager : MonoBehaviour
     /// <param name="execItemData">実行するアイテムデータ</param>
     public async UniTask BluePotion(CharBase performChar, createItemData execItemData)
     {
-        int healValue = execItemData.power;
+        int healValue = execItemData.value;
 
         performChar.Heal(healValue);
 

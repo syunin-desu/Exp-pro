@@ -7,7 +7,7 @@ using System;
 using System.Linq;
 using CONST;
 
-[CreateAssetMenu(menuName = "MyScriptable/Create CharData")]
+[CreateAssetMenu(menuName = "CreateData/Create CharData")]
 public class CharData : ScriptableObject
 {
     public string Name;
@@ -19,6 +19,7 @@ public class CharData : ScriptableObject
     public int INT;
     public int ROLE;
 
+    // TODO: StringからEnum型にする
     public List<string> HavingAbility = new List<string>();
 
     [ValueDropdown("elementList")]
