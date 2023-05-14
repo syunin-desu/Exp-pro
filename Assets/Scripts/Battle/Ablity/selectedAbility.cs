@@ -25,7 +25,7 @@ public class selectedAbility : MonoBehaviour
     /// <summary>
     /// プレイヤー管理クラス
     /// </summary>
-    public PlayerManager playerManager;
+    public PartyMember playerManager;
 
     /// <summary>
     /// アビリティが選択されたときの処理

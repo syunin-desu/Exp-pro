@@ -10,7 +10,7 @@ public class SelectedItem : MonoBehaviour
     [SerializeField] EventSystem eventSystem;
     public ItemManager _itemManager;
     public BattleManager _battleManager;
-    public PlayerManager _playerManager;
+    public PartyMember _playerManager;
 
 
     /// <summary>

@@ -67,9 +67,9 @@ public class BattleManager : MonoBehaviour
     public PlayerUIManager playerUI;
 
     /// <summary>
-    /// プレイヤー
+    /// パーティーメンバー
     /// </summary>
-    public PlayerManager player;
+    public PartyMember partyMember;
 
     /// <summary>
     /// 敵キャラ
@@ -165,7 +165,7 @@ public class BattleManager : MonoBehaviour
 
         enemy = enemyManager;
         enemyUI.SetUpUI(enemy);
-        playerUI.SetUpUI(player);
+        playerUI.SetUpUI(partyMember);
 
         //経過ターンをリセット
         turned = 0;
@@ -234,7 +234,7 @@ public class BattleManager : MonoBehaviour
                     //プレイヤーの場合
                     if (role == CONST.CHARCTOR.PLAYER)
                     {
-                        await this.PlayerAttack(player);
+                        await this.PlayerAttack(partyMember);
 
                     }
                     //敵の場合
@@ -250,12 +250,12 @@ public class BattleManager : MonoBehaviour
                     {
                         // TODO 使用者と対象のキャラ情報ははAllActionListに格納できるようにしたい
                         // 引数に指定しない
-                        await abilityManager.execAbility(player, enemy, allAction.abilityName);
+                        await abilityManager.execAbility(partyMember, enemy, allAction.abilityName);
                         enemyUI.UpdateUI(enemy);
                     }
                     else
                     {
-                        await abilityManager.execAbility(enemy, player, allAction.abilityName);
+                        await abilityManager.execAbility(enemy, partyMember, allAction.abilityName);
                         // TODO 一時的に記述 HPなどのUIへの反映を動的に監視できるようにしたい
 
                     }
@@ -269,11 +269,11 @@ public class BattleManager : MonoBehaviour
                 case CONST.BATTLE_ACTION.COMMAND.Item:
                     if (role == CONST.CHARCTOR.PLAYER)
                     {
-                        await itemManager.ExecItem(player, enemy, allAction.itemName);
+                        await itemManager.ExecItem(partyMember, enemy, allAction.itemName);
                     }
                     else
                     {
-                        await itemManager.ExecItem(enemy, player, allAction.itemName);
+                        await itemManager.ExecItem(enemy, partyMember, allAction.itemName);
                         // TODO 一時的に記述 HPなどのUIへの反映を動的に監視できるようにしたい
                     }
                     break;
@@ -312,7 +312,7 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     /// <param name="player"></param>
     /// <returns></returns>
-    private async UniTask PlayerAttack(PlayerManager player)
+    private async UniTask PlayerAttack(PartyMember player)
     {
         //Playerが攻撃
         player.Attack(enemy);
@@ -329,7 +329,7 @@ public class BattleManager : MonoBehaviour
     /// <returns></returns>
     private async UniTask EnemyAttack(EnemyManager enemy)
     {
-        enemy.Attack(player);
+        enemy.Attack(partyMember);
         await UniTask.Delay(TimeSpan.FromSeconds(CONST.UTILITY.BATTLEACTION_DELAY));
 
     }

@@ -6,21 +6,14 @@ using UnityEngine;
 
 public class ItemManager : MonoBehaviour
 {
+    private List<ItemData> _itemList = new List<ItemData>();
 
-    private List<createItemData> _itemList = new List<createItemData>();
     public PlayerUIManager playerUI;
-
 
     // Start is called before the first frame update
     void Start()
     {
-        UnityEngine.Object[] itemObjects = Resources.LoadAll("Data/Item/", typeof(createItemData));
-
-        foreach (createItemData item in itemObjects)
-        {
-            _itemList.Add(item);
-        }
-
+        _itemList = MasterData.instance.masterItemList;
     }
 
 #nullable enable
@@ -43,7 +36,7 @@ public class ItemManager : MonoBehaviour
     /// </summary>
     /// <param name="performChar">対象キャラ</param>
     /// <param name="execItemData">実行するアイテムデータ</param>
-    public async UniTask BluePotion(CharBase performChar, createItemData execItemData)
+    public async UniTask BluePotion(CharBase performChar, ItemData execItemData)
     {
         int healValue = execItemData.value;
 
@@ -55,7 +48,6 @@ public class ItemManager : MonoBehaviour
         //UI修正
         await UniTask.Delay(TimeSpan.FromSeconds(CONST.UTILITY.BATTLEACTION_DELAY));
 
-
     }
 
     /// <summary>
@@ -65,7 +57,7 @@ public class ItemManager : MonoBehaviour
     /// <returns>表示アイテム名</returns>
     public string getItemDisplayName(string itemName)
     {
-        createItemData selectedItem = this._itemList.Find(ability => ability.Name == itemName);
+        ItemData selectedItem = this._itemList.Find(ability => ability.Name == itemName);
         return selectedItem.displayName;
     }
 
@@ -76,7 +68,7 @@ public class ItemManager : MonoBehaviour
     /// <returns>アイテム名</returns>
     public string getItemNameForDisplayName(string itemDisplayName)
     {
-        createItemData item = this._itemList.Find(ability => ability.displayName == itemDisplayName);
+        ItemData item = this._itemList.Find(ability => ability.displayName == itemDisplayName);
         return item.Name;
     }
 
@@ -85,7 +77,7 @@ public class ItemManager : MonoBehaviour
     /// </summary>
     /// <param name="itemName">アイテム名</param>
     /// <returns>アイテムデータ</returns>
-    private createItemData GetItemData(string itemName)
+    private ItemData GetItemData(string itemName)
     {
         return this._itemList.Find(item => item.Name == itemName);
 

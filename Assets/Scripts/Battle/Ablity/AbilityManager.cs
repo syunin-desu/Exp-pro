@@ -12,14 +12,7 @@ public class AbilityManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // Data/abilityディレクトリからデマスターデータを配列に格納する
-        UnityEngine.Object[] abilityObjects = Resources.LoadAll("Data/ability/", typeof(Ability_base));
-
-        foreach (Ability_base ability in abilityObjects)
-        {
-            _abilityList.Add(ability);
-        }
-
+        _abilityList = MasterData.instance.masterAbilityList;
     }
 
 #nullable enable

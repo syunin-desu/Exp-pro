@@ -10,7 +10,7 @@ public class PlayerUIManager : MonoBehaviour
 
     public Text charName;
 
-    public PlayerManager _playerManager;
+    public PartyMember _playerManager;
 
     void Update()
     {

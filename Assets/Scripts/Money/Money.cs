@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using CONST;
 
-public class Money : MonoBehaviour
+public class Money
 {
     /// <summary>
     ///  所持金
     /// </summary>
     /// <value></value>
-    private int hasMoney { get; set; }
+    private int hasMoney { get; set; } = 0;
 
     /// <summary>
     /// 現在の所持金を取得
@@ -18,6 +18,11 @@ public class Money : MonoBehaviour
     public int getHasMoney()
     {
         return this.hasMoney;
+    }
+
+    public void InitializeMoney(int hasMoney)
+    {
+        this.hasMoney = hasMoney;
     }
 
     /// <summary>
