@@ -9,13 +9,6 @@ using Sirenix.OdinInspector;
 /// </summary>
 public class MasterData : SerializedMonoBehaviour
 {
-    private enum Ability
-    {
-        burn,
-
-    }
-
-
     /// <summary>
     /// マスターデータシングルトン
     /// </summary>
@@ -47,6 +40,8 @@ public class MasterData : SerializedMonoBehaviour
         {
             Destroy(this.gameObject);
         }
+
+        this.InitializeMasterData();
     }
 
     /// <summary>

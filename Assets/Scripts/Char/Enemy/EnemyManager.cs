@@ -11,13 +11,15 @@ public class EnemyManager : CharBase
     // Attackメソッドをオーバーライドし、その中でUIの値の更新も行う
     Action tapAction; //クリックされた時に実行したい関数
 
+    /// <summary>
+    /// 敵のマスターデータ
+    /// </summary>
     public CharData enemyData;
 
-    void Awake()
+    private void Awake()
     {
-        this.SetParameter(this.enemyData);
+        this.SetParameter(enemyData);
     }
-
 
     void Start()
     {

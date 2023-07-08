@@ -18,9 +18,16 @@ namespace CONST
     }
     public static class SCENE
     {
-        //シーン関係
-        public const int SCENE_QUEST = 1;
-        public const int SCENE_BATTLE = 2;
+        /// <summary>
+        ///  シーン
+        /// </summary>
+        public enum Scene
+        {
+            Title,
+            Town,
+            Quest,
+            Battle
+        }
 
     }
     public static class BATTLE_RATE

@@ -1,10 +1,10 @@
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
-using Sirenix.OdinInspector;
 using UnityEngine;
-using CONST;
+using UnityEngine.SceneManagement;
+using System.Linq;
 
 // 実行アクション情報クラス
 public class BattleAction
@@ -74,21 +74,12 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// 敵キャラ
     /// </summary>
-    EnemyManager enemy;
-
-    /// <summary>
-    /// 敵情報表示UI
-    /// </summary>
-    public EnemyUIManager enemyUI;
+    private EnemyManager enemy;
 
     /// <summary>
     /// コマンド選択UI(名前を変える必要がある)
     /// </summary>
     public BattleUIManager battleUI;
-    /// <summary>
-    /// ダンジョンシーン管理クラス
-    /// </summary>
-    public QuestManager questManager;
 
     /// <summary>
     /// バトル時のプレイヤー側のステータス・コマンドウインドウ表示UI
@@ -121,11 +112,13 @@ public class BattleManager : MonoBehaviour
     public AbilityScrollController abilityContents;
 
     /// <summary>
-    ///  アビリティ実行クラス
+    /// アビリティ実行クラス
     /// </summary>
     public AbilityManager abilityManager;
 
-    //経過ターン
+    /// <summary>
+    /// 経過ターン
+    /// </summary>
     private int turned;
 
     /// <summary>
@@ -144,28 +137,34 @@ public class BattleManager : MonoBehaviour
     // TODO あとでパーティ情報はクラスなどにまとめる
     private int char_Num = 1;
 
+    private bool endBattle = false;
+
 
     void Start()
     {
+
         //リストのセット
-        actionList = this.setActionList<BattleAction>();
-        allActionList = this.setActionList<BattleAction>();
+        actionList = setActionList<BattleAction>();
+        allActionList = setActionList<BattleAction>();
+
         // バトルUIを非表示にする
-        this.switchBattleUI(false);
+        switchBattleUI(false);
+
+        // セットアップ
+        SetUp();
 
     }
 
-
-    public void SetUp(EnemyManager enemyManager)
+    public void SetUp()
     {
         //行動リストの初期化
-        this.clear_actionList();
+        clear_actionList();
         //バトルUIの表示
-        this.switchBattleUI(true);
-
-        enemy = enemyManager;
-        enemyUI.SetUpUI(enemy);
+        switchBattleUI(true);
         playerUI.SetUpUI(partyMember);
+
+        // 敵オブジェクトを生成
+        CreateEnemyObjects(new string[] { CONST.ENEMY_NAMES.TEST });
 
         //経過ターンをリセット
         turned = 0;
@@ -177,28 +176,23 @@ public class BattleManager : MonoBehaviour
     /// <returns></returns>
     public async void battle()
     {
-        while (questManager.getSceneSwitcher() == CONST.SCENE.SCENE_BATTLE)
-        {
-            //アクション選択フェーズ
-            // 選択されるまで待つ
-            await this.actionSelect();
+        //アクション選択フェーズ
+        // 選択されるまで待つ
+        this.actionSelect();
 
-            // アクション実行順などの処理
-            this.actionOrderSorting();
+        // アクション実行順などの処理
+        this.actionOrderSorting();
 
-            /// バトルが終わるまで待つ
-            await this.doAction();
-
-        }
+        /// バトルが終わるまで待つ
+        await this.doAction();
     }
 
     /// <summary>
     /// プレイヤーアクション選択待機およびリストへの登録
     /// </summary>
     /// <returns></returns>
-    private async UniTask actionSelect()
+    private void actionSelect()
     {
-        await UniTask.WaitUntil(() => actionList.Count == char_Num);
         //人数分アクションが選択されたらバトルさせる
         //プレイヤーの動きを全体行動リストに登録
         allActionList.AddRange(actionList);
@@ -216,9 +210,6 @@ public class BattleManager : MonoBehaviour
     /// <returns></returns>
     private async UniTask doAction()
     {
-        bool endBattle = false;
-
-
         foreach (BattleAction allAction in allActionList)
         {
             //キャラ識別
@@ -251,7 +242,6 @@ public class BattleManager : MonoBehaviour
                         // TODO 使用者と対象のキャラ情報ははAllActionListに格納できるようにしたい
                         // 引数に指定しない
                         await abilityManager.execAbility(partyMember, enemy, allAction.abilityName);
-                        enemyUI.UpdateUI(enemy);
                     }
                     else
                     {
@@ -284,7 +274,7 @@ public class BattleManager : MonoBehaviour
 
             // 敵HPが尽きたとき
             // TODO: 現在は1v1を想定して作られている
-            if (this.updateBattleState(enemy))
+            if (updateBattleState(enemy))
             {
                 endBattle = true;
                 break;
@@ -297,8 +287,9 @@ public class BattleManager : MonoBehaviour
         {
             //バトル終了処理
             this.EndBattle();
-            Destroy(enemy.gameObject);
 
+            // クエストシーンに遷移する 
+            this.LoadQuestScene();
         }
         else
         {
@@ -316,10 +307,8 @@ public class BattleManager : MonoBehaviour
     {
         //Playerが攻撃
         player.Attack(enemy);
-        enemyUI.UpdateUI(enemy);
+        Debug.Log($"{enemy.enemyData.name}:HP={enemy.hp}");
         await UniTask.Delay(TimeSpan.FromSeconds(CONST.UTILITY.BATTLEACTION_DELAY));
-
-
     }
 
     /// <summary>
@@ -374,9 +363,6 @@ public class BattleManager : MonoBehaviour
     void EndBattle()
     {
         this.switchBattleUI(false);
-        questManager.EndBattle();
-
-        questManager.setSceneSwitcher(CONST.SCENE.SCENE_QUEST);
     }
 
     /// <summary>
@@ -403,6 +389,11 @@ public class BattleManager : MonoBehaviour
     {
         BattleAction act = new BattleAction(CONST.BATTLE_ACTION.COMMAND.Attack, character);
         setActionList_FOR_Role(character.char_role, act);
+
+        if (actionList.Count == char_Num && character.char_role == CONST.CHARCTOR.PLAYER)
+        {
+            this.battle();
+        }
     }
 
     /// <summary>防御アクションを登録</summary>
@@ -411,6 +402,10 @@ public class BattleManager : MonoBehaviour
         BattleAction act = new BattleAction(CONST.BATTLE_ACTION.COMMAND.Defence, character);
         setActionList_FOR_Role(character.char_role, act);
 
+        if (actionList.Count == char_Num)
+        {
+            this.battle();
+        }
     }
 
     /// <summary>アビリティコマンドを登録</summary>
@@ -424,6 +419,10 @@ public class BattleManager : MonoBehaviour
 
         // アビリティウインドウを閉じる
         this.abilityUI.removeAbilityWindow();
+        if (actionList.Count == char_Num)
+        {
+            this.battle();
+        }
 
     }
 
@@ -443,6 +442,11 @@ public class BattleManager : MonoBehaviour
 
         // アイテムウインドウを閉じる
         this.itemUI.removeItemWindow();
+
+        if (actionList.Count == char_Num)
+        {
+            this.battle();
+        }
 
     }
 
@@ -516,7 +520,6 @@ public class BattleManager : MonoBehaviour
     // バトルUIを表示または非表示
     private void switchBattleUI(bool isShowUI)
     {
-        enemyUI.gameObject.SetActive(isShowUI);
         this.switchActionSelectUI(isShowUI);
         playerUI.gameObject.SetActive(isShowUI);
         battleWindow.gameObject.SetActive(isShowUI);
@@ -604,8 +607,30 @@ public class BattleManager : MonoBehaviour
             //バフのリセット
             allAction.character.resetBuff();
         }
-
     }
 
+    /// <summary>
+    /// 敵オブジェクトを生成する
+    /// </summary>
+    private void CreateEnemyObjects(string[] enemyNames)
+    {
+        // TODO: 現状敵は一体のみなので敵オブジェクト一つを対象にしている)
+        foreach (var enemyName in enemyNames)
+        {
+            var targetPrefab = (GameObject)Resources.Load($"Prefabs/Enemy/{enemyName}");
+            Instantiate(targetPrefab, new Vector3((float)0.05, (float)0.16, 0), Quaternion.identity);
+            
+            // 敵情報を取得する
+            // TODO: 現状敵は一体のみなので敵オブジェクト一つを対象にしている
+            enemy = GameObject.FindGameObjectWithTag("Enemy").GetComponent<EnemyManager>();
+        }
+    }
 
+    /// <summary>
+    /// クエストシーンに遷移する
+    /// </summary>
+    private void LoadQuestScene()
+    {
+        SceneManager.LoadScene(CONST.SCENE.Scene.Quest.ToString());
+    }
 }

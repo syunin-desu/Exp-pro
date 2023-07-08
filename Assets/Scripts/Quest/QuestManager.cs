@@ -1,79 +1,60 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 
 public class QuestManager : MonoBehaviour
 {
 
-
-    //現在の階層
+    // 現在の階層
     public StageUIManager stageUI;
     public GameObject enemyPrefab;
-    public BattleManager battleManager;
     public SceneTransitionManager sceneTransitionManager;
-
-    //シーンを切り替える変数(1:ダンジョンシーン 2:バトルシーン)
-    public int sceneSwitcher;
 
     //敵に遭遇するテーブル:-1なら遭遇しない 0なら遭遇する
     int[] encountTable = { -1, -1, 0, -1, 0, -1 };
-    int currentStage = 0; //現在の階層
+
+    private int currentFloor = 0; //現在の階層
 
     private void Start()
     {
-        stageUI.UpdateUI(currentStage);
+        // QuestDataから現在の階層を読み込む
+        currentFloor = QuestData.instance.currentFloor;
 
-        sceneSwitcher = CONST.SCENE.SCENE_QUEST;
+        stageUI.UpdateUI(currentFloor);
     }
 
     public void OnNextButton()
     {
-        currentStage++;
+        currentFloor++;
         //進行度をUIに反映
-        stageUI.UpdateUI(currentStage);
+        stageUI.UpdateUI(currentFloor);
 
-        if (encountTable.Length <= currentStage)
+        if (encountTable.Length <= currentFloor)
         {
             Debug.Log("クエストクリア");
-            QuestClear();
+            stageUI.ShowClearText();
+
         }
-        else if (encountTable[currentStage] == 0)
+        else if (encountTable[currentFloor] == 0)
         {
             EncountEnemy();
         }
     }
 
+    /// <summary>
+    /// 町へ帰る
+    /// </summary>
+    public void ReturnTown()
+    {
+        sceneTransitionManager.LoadTo(CONST.SCENE.Scene.Town);
+    }
+
     void EncountEnemy()
     {
-        stageUI.HideButtons();
-        GameObject enemyObj = Instantiate(enemyPrefab);
-        EnemyManager enemy = enemyObj.GetComponent<EnemyManager>();
-        battleManager.SetUp(enemy);
-        setSceneSwitcher(CONST.SCENE.SCENE_BATTLE);
+        // シーン遷移するため
+        // ダンジョンの進捗状態、パーティー状態を保存する(Autoセーブ的な)
+        QuestData.instance.currentFloor = currentFloor;
 
-        // バトルコルーチン
-        battleManager.battle();
-    }
-
-    public void EndBattle()
-    {
-        stageUI.showButtons();
-    }
-
-    void QuestClear()
-    {
-        stageUI.ShowClearText();
-        //sceneTransitionManager.LoadTo("Town");
-    }
-
-    public int getSceneSwitcher()
-    {
-        return this.sceneSwitcher;
-    }
-
-    public void setSceneSwitcher(int scene_switch)
-    {
-        this.sceneSwitcher = scene_switch;
+        // バトルシーンをロードする
+        SceneManager.LoadScene(CONST.SCENE.Scene.Battle.ToString());
     }
 }

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - AbilityButton
   - ItemButton
+  - Enemy
   layers:
   - Default
   - TransparentFX

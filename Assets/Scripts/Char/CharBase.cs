@@ -46,6 +46,7 @@ public class CharBase : MonoBehaviour
     // 所持アビリティ
     public List<string> HavingAbility = new List<string>();
 
+
     //所持アイテム
     // TODO 現状モックで実装する
     public List<HavingItem> HavingItem = new List<HavingItem>();
