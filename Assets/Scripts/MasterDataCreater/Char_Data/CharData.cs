@@ -11,6 +11,8 @@ using CONST;
 public class CharData : ScriptableObject
 {
     public string Name;
+    public int currentHP;
+    public int currentMP;
     public int maxHp;
     public int maxMp;
     public int STR;
@@ -18,6 +20,7 @@ public class CharData : ScriptableObject
     public int SPEED;
     public int INT;
     public int ROLE;
+    public int countOfActions;
 
     // TODO: StringからEnum型にする
     public List<string> HavingAbility = new List<string>();

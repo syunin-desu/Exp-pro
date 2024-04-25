@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: chill
   displayName: "\u30C1\u30EB"
-  Type: Attack
-  timingType: Fast
-  Range: Single
+  Type: 0
+  timingType: 0
+  Range: 0
   requiredMp: 2
-  Element: Ice
+  Element: 1
   power: 2
+  executeActionList: 00000000

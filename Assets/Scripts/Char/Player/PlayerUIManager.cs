@@ -7,6 +7,7 @@ public class PlayerUIManager : MonoBehaviour
 {
     public Text hpText;
     public Text maxHpText;
+    public Text mpText;
 
     public Text charName;
 
@@ -16,6 +17,7 @@ public class PlayerUIManager : MonoBehaviour
     {
         hpText.text = string.Format("{0}", _playerManager.GetHp());
         maxHpText.text = string.Format("{0}", _playerManager.GetMaxHp());
+        mpText.text = string.Format("{0}", _playerManager.GetMp());
     }
 
     public void SetUpUI(CharBase player)
@@ -23,6 +25,7 @@ public class PlayerUIManager : MonoBehaviour
         charName.text = string.Format("{0}", player.GetName());
         hpText.text = string.Format("{0}", player.GetHp());
         maxHpText.text = string.Format("{0}", player.GetMaxHp());
+        mpText.text = string.Format("{0}", player.GetMp());
     }
 
 }

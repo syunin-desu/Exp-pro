@@ -18,5 +18,6 @@ MonoBehaviour:
   timingType: 0
   Range: 0
   requiredMp: 2
-  Element: 0
+  Element: 2
   power: 2
+  executeActionList: 00000000

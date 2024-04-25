@@ -32,6 +32,8 @@ MonoBehaviour:
     assemblyNames:
     - Assembly-CSharp
     - Assembly-CSharp-firstpass
+    - SingularityGroup.HotReload.Runtime
+    - SingularityGroup.HotReload.Runtime.Public
     - Sirenix.OdinInspector.CompatibilityLayer
     - UniRx
     - UniRx.Examples

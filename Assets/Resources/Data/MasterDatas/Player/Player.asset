@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a7e0847e2cc15a4b931dcdcdf0d8946, type: 3}
   m_Name: Player
   m_EditorClassIdentifier: 
-  Name: Player
+  Name: TEST
+  currentHP: 999
+  currentMP: 99
   maxHp: 999
   maxMp: 99
   STR: 20
@@ -20,6 +22,7 @@ MonoBehaviour:
   SPEED: 20
   INT: 10
   ROLE: 1
+  countOfActions: 1
   HavingAbility:
   - burn
   - chill

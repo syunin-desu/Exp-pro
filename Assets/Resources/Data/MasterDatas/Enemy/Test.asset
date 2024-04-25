@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Test
   m_EditorClassIdentifier: 
   Name: test
+  currentHP: 30
+  currentMP: 99
   maxHp: 50
   maxMp: 99
   STR: 5
@@ -20,7 +22,8 @@ MonoBehaviour:
   SPEED: 5
   INT: 0
   ROLE: 2
+  countOfActions: 1
   HavingAbility:
   - 
-  WeakElement: 00000000
+  WeakElement: 01000000
   StrongElement: 00000000

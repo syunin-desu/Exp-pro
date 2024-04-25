@@ -2,12 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using Sirenix.Utilities;
 using UnityEngine;
 
 //Ability実行管理
 public class AbilityManager : MonoBehaviour
 {
     private List<Ability_base> _abilityList = new List<Ability_base>();
+
+    private Calc_Battle_Manager calc_battle = new Calc_Battle_Manager();
 
     // Start is called before the first frame update
     void Start()
@@ -23,85 +26,51 @@ public class AbilityManager : MonoBehaviour
     /// <param name="targetChar">対象</param>
     /// <param name="execAbilityName">実行アビリティ名</param>
     /// <returns></returns>
-    public async UniTask execAbility(CharBase performChar, CharBase? targetChar, string execAbilityName)
+    public async UniTask execAbility(CharBase performChar, CharBase? targetChar, string execAbilityName, List<CONST.ACTION.Ability_Action_Cell> execAbilityAction)
     {
-        switch (execAbilityName)
+        // アビリティの実行に必要なMPを消費する
+        if(performChar.ConsumeMP(this.getAbilityData(execAbilityName).requiredMp))
         {
-            case "burn":
-                await this.burn(performChar, targetChar, this.getAbilityData(execAbilityName));
-                break;
-            case "chill":
-                await this.chill(performChar, targetChar, this.getAbilityData(execAbilityName));
-                break;
-            case "volt":
-                await this.volt(performChar, targetChar, this.getAbilityData(execAbilityName));
-                break;
-            default:
-                Debug.Log("アビリティデータに登録されていないアビリティが指定されました");
-                break;
+            foreach(CONST.ACTION.Ability_Action_Cell action in execAbilityAction)
+            {
+                switch (action)
+                {
+                    case CONST.ACTION.Ability_Action_Cell.MagicSingleAttack:
+                        await this.MagicSingleAttack(performChar, targetChar, this.getAbilityData(execAbilityName));
+                        break;
+                    default:
+                        Debug.Log("アクションとして登録されていないアクションが指定されました");
+                        break;
+                }
+            }
+        }else
+        {
+            Debug.Log("MPが足りず、実行できませんでした。");
         }
 
     }
 #nullable disable
 
     //======================================
-    // アビリティの内容
+    // アクションの内容
     //======================================
 
     /// <summary>
-    /// バーン(炎属性 魔法攻撃)
+    /// 魔法単体攻撃アクション
     /// </summary>
-    /// <param name="performChar">実行キャラ</param>
-    /// <param name="targetChar">対象キャラ</param>
-    private async UniTask burn(CharBase performChar, CharBase targetChar, Ability_base execAbilityData)
+    /// <param name="performChar"></param>
+    /// <param name="targetChar"></param>
+    /// <param name="execAbilityData"></param>
+    /// <returns></returns>
+    private async UniTask MagicSingleAttack(CharBase performChar, CharBase targetChar, Ability_base execAbilityData)
     {
 
-        int performerInt = performChar.intelligence;
+        int performerInt = performChar.GetInteli();
         int power = execAbilityData.power;
         CONST.UTILITY.Element Element = execAbilityData.Element;
 
         // TODO ダメージ計算用のファンクションを別のクラスで作成し、そこで行えるようにする
-        float elementDamageRate = this.calcElementDamageRate(Element, targetChar);
-
-        targetChar.Damage((int)((performerInt * power) * elementDamageRate));
-
-        await UniTask.Delay(TimeSpan.FromSeconds(CONST.UTILITY.BATTLEACTION_DELAY));
-    }
-
-    /// <summary>
-    /// チル(氷属性 魔法攻撃)
-    /// </summary>
-    /// <param name="performChar">実行キャラ</param>
-    /// <param name="targetChar">対象キャラ</param>
-    /// <param name="execAbilityData">実行するアビリティのデータ</param>
-    private async UniTask chill(CharBase performChar, CharBase targetChar, Ability_base execAbilityData)
-    {
-        int performerInt = performChar.intelligence;
-        int power = execAbilityData.power;
-        CONST.UTILITY.Element Element = execAbilityData.Element;
-
-        // TODO ダメージ計算用のファンクションを別のクラスで作成し、そこで行えるようにする
-        float elementDamageRate = this.calcElementDamageRate(Element, targetChar);
-
-        targetChar.Damage((int)((performerInt * power) * elementDamageRate));
-
-        await UniTask.Delay(TimeSpan.FromSeconds(CONST.UTILITY.BATTLEACTION_DELAY));
-    }
-
-    /// <summary>
-    /// ボルト (雷属性 魔法攻撃)
-    /// </summary>
-    /// <param name="performChar">実行キャラ</param>
-    /// <param name="targetChar">対象キャラ</param>
-    /// <param name="execAbilityData">実行するアビリティのデータ</param>
-    private async UniTask volt(CharBase performChar, CharBase targetChar, Ability_base execAbilityData)
-    {
-        int performerInt = performChar.intelligence;
-        int power = execAbilityData.power;
-        CONST.UTILITY.Element Element = execAbilityData.Element;
-
-        // TODO ダメージ計算用のファンクションを別のクラスで作成し、そこで行えるようにする
-        float elementDamageRate = this.calcElementDamageRate(Element, targetChar);
+        float elementDamageRate = this.calc_battle.calcElementDamageRate(Element, targetChar);
 
         targetChar.Damage((int)((performerInt * power) * elementDamageRate));
 
@@ -135,6 +104,17 @@ public class AbilityManager : MonoBehaviour
     }
 
     /// <summary>
+    /// 表示アビリティ名からアビリティ名を取得する
+    /// </summary>
+    /// <param name="ability_DisplayName">表示アビリティ名</param>
+    /// <returns>アビリティ名</returns>
+    public List<CONST.ACTION.Ability_Action_Cell> getAbilityActionsForDisplayName(string ability_DisplayName)
+    {
+        Ability_base abilityName = this._abilityList.Find(ability => ability.displayName == ability_DisplayName);
+        return abilityName.executeActionList;
+    }
+
+    /// <summary>
     /// アビリティ名からアビリティのアクションタイミングを取得
     /// </summary>
     /// <param name="abilityName">アビリティ名</param>
@@ -153,29 +133,5 @@ public class AbilityManager : MonoBehaviour
     private Ability_base getAbilityData(string abilityName)
     {
         return this._abilityList.Find(ability => ability.Name == abilityName);
-    }
-
-    /// <summary>
-    /// 属性によるダメージ率の増減を計算し返す
-    /// </summary>
-    /// <param name="weakElement">弱点属性</param>
-    /// <param name="strongElement">耐性属性</param>
-    /// <param name="targetChar">対象のキャラ</param>
-    /// <returns>ダメージ率</returns>
-    private float calcElementDamageRate(CONST.UTILITY.Element Element, CharBase targetChar)
-    {
-        bool haveTargetCharWeakElement = targetChar.weakElement.Contains(Element);
-        bool haveTargetCharStrongElement = targetChar.strongElement.Contains(Element);
-        float elementDamageRate = 1;
-        if (haveTargetCharWeakElement)
-        {
-            elementDamageRate = haveTargetCharWeakElement ? CONST.BATTLE_RATE.RATE_WEAK_ELEMENT : 1;
-        }
-        else if (haveTargetCharStrongElement)
-        {
-            elementDamageRate = haveTargetCharStrongElement ? CONST.BATTLE_RATE.RATE_STRONG_ELEMENT : 1;
-
-        }
-        return elementDamageRate;
     }
 }

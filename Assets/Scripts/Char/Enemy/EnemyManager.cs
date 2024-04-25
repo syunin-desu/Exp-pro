@@ -18,7 +18,7 @@ public class EnemyManager : CharBase
 
     private void Awake()
     {
-        this.SetParameter(enemyData);
+        this.SetParameter(ConvertCharDataToParameter(enemyData));
     }
 
     void Start()
@@ -34,5 +34,32 @@ public class EnemyManager : CharBase
     {
         Debug.Log("クリックされた");
         tapAction();
+    }
+
+    /// <summary>
+    /// マスタデータを内部パラメータクラスに変換する
+    /// </summary>
+    /// <param name="charData"></param>
+    /// <returns></returns>
+    private CharParameter ConvertCharDataToParameter(CharData charData)
+    {
+        return new CharParameter()
+        {
+            Name = charData.Name,
+            currentHP = charData.currentHP,
+            currentMP = charData.currentMP,
+            maxHp = charData.maxHp,
+            maxMp = charData.maxMp,
+            STR = charData.STR,
+            DEF = charData.DEF,
+            SPEED = charData.SPEED,
+            INT = charData.INT,
+            ROLE = charData.ROLE,
+            countOfActions = charData.countOfActions,
+            WeakElement = charData.WeakElement,
+            StrongElement = charData.StrongElement,
+            HavingAbility = charData.HavingAbility,
+
+        };
     }
 }

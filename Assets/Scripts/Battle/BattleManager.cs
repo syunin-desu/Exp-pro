@@ -29,6 +29,11 @@ public class BattleAction
     /// </summary>
     public CharBase character;
 
+    /// <summary>
+    /// アビリティ発動時に実行するアクション
+    /// </summary>
+    public List<CONST.ACTION.Ability_Action_Cell> abilityActions = new List<CONST.ACTION.Ability_Action_Cell>();
+
 
     public BattleAction(CONST.BATTLE_ACTION.COMMAND action, CharBase character)
     {
@@ -43,6 +48,15 @@ public class BattleAction
     public void setAbilityName(string abilityName)
     {
         this.abilityName = abilityName;
+    }
+
+    /// <summary>
+    /// アビリティアクションを格納
+    /// </summary>
+    /// <param name="abilityName"></param>
+    public void setAbilityAction(List<CONST.ACTION.Ability_Action_Cell> abilityActions)
+    {
+        this.abilityActions = abilityActions;
     }
 
     /// <summary>
@@ -241,11 +255,11 @@ public class BattleManager : MonoBehaviour
                     {
                         // TODO 使用者と対象のキャラ情報ははAllActionListに格納できるようにしたい
                         // 引数に指定しない
-                        await abilityManager.execAbility(partyMember, enemy, allAction.abilityName);
+                        await abilityManager.execAbility(partyMember, enemy, allAction.abilityName, allAction.abilityActions);
                     }
                     else
                     {
-                        await abilityManager.execAbility(enemy, partyMember, allAction.abilityName);
+                        await abilityManager.execAbility(enemy, partyMember, allAction.abilityName, allAction.abilityActions);
                         // TODO 一時的に記述 HPなどのUIへの反映を動的に監視できるようにしたい
 
                     }
@@ -307,7 +321,7 @@ public class BattleManager : MonoBehaviour
     {
         //Playerが攻撃
         player.Attack(enemy);
-        Debug.Log($"{enemy.enemyData.name}:HP={enemy.hp}");
+        Debug.Log($"{enemy.GetName()}:HP={enemy.GetHp()}");
         await UniTask.Delay(TimeSpan.FromSeconds(CONST.UTILITY.BATTLEACTION_DELAY));
     }
 
@@ -362,6 +376,9 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     void EndBattle()
     {
+        // プレイヤーサイドのステータスを更新する
+        PlayerData.instance.UpdatePlayerData(this.partyMember.GetCharParameters());
+        // UIを非表示にする
         this.switchBattleUI(false);
     }
 
@@ -409,11 +426,12 @@ public class BattleManager : MonoBehaviour
     }
 
     /// <summary>アビリティコマンドを登録</summary>
-    public void setAction_Ability(CharBase character, string selectedAbilityName)
+    public void setAction_Ability(CharBase character, string selectedAbilityName, List<CONST.ACTION.Ability_Action_Cell> ability_Actions)
     {
         BattleAction act = new BattleAction(CONST.BATTLE_ACTION.COMMAND.Ability, character);
         // アビリティ名を格納
         act.setAbilityName(selectedAbilityName);
+        act.setAbilityAction(ability_Actions);
 
         setActionList_FOR_Role(character.char_role, act);
 

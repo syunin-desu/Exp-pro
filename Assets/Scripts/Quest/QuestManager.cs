@@ -54,6 +54,10 @@ public class QuestManager : MonoBehaviour
         // ダンジョンの進捗状態、パーティー状態を保存する(Autoセーブ的な)
         QuestData.instance.currentFloor = currentFloor;
 
+        // マスターに現在のプレイヤーデータを保存する
+        // プレイヤーサイドのステータスを更新する
+        //PlayerData.instance.UpdatePlayerData(this.partyMember.GetCharParameters());
+
         // バトルシーンをロードする
         SceneManager.LoadScene(CONST.SCENE.Scene.Battle.ToString());
     }

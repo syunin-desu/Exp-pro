@@ -187,7 +187,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519420028
 GameObject:
@@ -414,7 +414,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &799454759
 MonoBehaviour:
@@ -561,7 +561,8 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  PartyMember: []
+  PartyMember:
+  - {fileID: 11400000, guid: cc778cd62d98e924691e3cfa6aa27eb8, type: 2}
   MockCharData:
   - {fileID: 11400000, guid: cc778cd62d98e924691e3cfa6aa27eb8, type: 2}
 --- !u!1 &817643627
@@ -605,7 +606,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &899432021 stripped
 MonoBehaviour:
@@ -629,6 +630,53 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e5d416127ce8f743ab78d613490e78f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1424915013
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1424915014}
+  - component: {fileID: 1424915015}
+  m_Layer: 0
+  m_Name: W_PlayerData
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1424915014
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1424915013}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 961.2733, y: 636.3144, z: -232.65569}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1424915015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1424915013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 055240f54d5319347b3d451bcd0ea320, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  char_role: 0
+  countActionATurn: 0
+  HavingAbility:
+  - 
 --- !u!1 &2099441576
 GameObject:
   m_ObjectHideFlags: 0
@@ -658,7 +706,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2099441578
 MonoBehaviour:
@@ -689,6 +737,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1895794545704822041, guid: 91be3edaf500a85418e2712d62e15c25, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 77.1754
+      objectReference: {fileID: 0}
+    - target: {fileID: 1895794545704822041, guid: 91be3edaf500a85418e2712d62e15c25, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -498.9123
+      objectReference: {fileID: 0}
+    - target: {fileID: 4571666099894652695, guid: 91be3edaf500a85418e2712d62e15c25, type: 3}
+      propertyPath: _playerManager
+      value: 
+      objectReference: {fileID: 1424915015}
     - target: {fileID: 5369080845807291922, guid: 91be3edaf500a85418e2712d62e15c25, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -812,6 +872,18 @@ PrefabInstance:
     - target: {fileID: 5369080847043662466, guid: 91be3edaf500a85418e2712d62e15c25, type: 3}
       propertyPath: m_Text
       value: "0\u968E"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7386544438373357027, guid: 91be3edaf500a85418e2712d62e15c25, type: 3}
+      propertyPath: m_FontData.m_MaxSize
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 7386544438373357027, guid: 91be3edaf500a85418e2712d62e15c25, type: 3}
+      propertyPath: m_FontData.m_MinSize
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7386544438373357027, guid: 91be3edaf500a85418e2712d62e15c25, type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 35
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 91be3edaf500a85418e2712d62e15c25, type: 3}

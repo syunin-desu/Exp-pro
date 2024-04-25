@@ -93,6 +93,15 @@ namespace CONST
             Single,
             All,
         }
+
+        /// <summary>
+        /// アビリティ発動時に実行されるアクション
+        /// アビリティは基本的に子アクションを順番に実行していく形で実装する
+        /// </summary>
+        public enum Ability_Action_Cell
+        {
+            MagicSingleAttack,
+        }
     }
 
     // アイテム

@@ -26,3 +26,5 @@ public enum Ability_Element_Type{
     Thunder,
     None
 }
+
+

@@ -27,21 +27,15 @@ public class HavingItem
 public class CharBase : MonoBehaviour
 {
 
-    public string char_name;
-    public int hp;
-    public int max_hp;
-
-    public int strange;
-    public int speed;
-    public int intelligence { get; set; }
-
-    public List<CONST.UTILITY.Element> weakElement { get; set; }
-    public List<CONST.UTILITY.Element> strongElement { get; set; }
+    // キャラのパラメーター
+    private CharParameter charParameters;
 
     //防御フラグ
     private bool action_defense = false;
     //キャラロール
     public int char_role;
+    // 1ターン中の行動回数
+    public int countActionATurn;
 
     // 所持アビリティ
     public List<string> HavingAbility = new List<string>();
@@ -62,7 +56,7 @@ public class CharBase : MonoBehaviour
     public virtual void Attack(CharBase character)
     {
 
-        character.Damage(this.strange);
+        character.Damage(this.charParameters.STR);
 
     }
 
@@ -73,11 +67,14 @@ public class CharBase : MonoBehaviour
         // TODO ダメージ計算式を見直し
         //防御アクションによるダメージ減少率を設定
         float defenceRate = this.action_defense ? CONST.BATTLE_RATE.RATE_DEFENCE : CONST.BATTLE_RATE.RATE_DEFAULT_DEFENCE;
-        this.hp -= (int)Math.Ceiling(damage / defenceRate);
+        int result_damage = (int)Math.Ceiling(damage / defenceRate);
+        this.charParameters.currentHP -= result_damage;
 
-        if (hp <= 0)
+        Debug.Log($"Damage ={result_damage}");
+
+        if (this.charParameters.currentHP <= 0)
         {
-            hp = 0;
+            this.charParameters.currentHP = 0;
         }
     }
 
@@ -88,14 +85,34 @@ public class CharBase : MonoBehaviour
     public void Heal(int healValue)
     {
 
-        Debug.Log("beforeHp:" + this.hp);
-        this.hp += healValue;
-        if (this.hp > this.max_hp)
+        Debug.Log("beforeHp:" + this.charParameters.currentHP);
+        this.charParameters.currentHP += healValue;
+        if (this.charParameters.currentHP > this.charParameters.maxHp)
         {
-            this.hp = this.max_hp;
+            this.charParameters.currentHP = this.charParameters.maxHp;
         }
-        Debug.Log("afterHp:" + this.hp);
+        Debug.Log("afterHp:" + this.charParameters.currentHP);
 
+    }
+
+    /// <summary>
+    /// MPが消費できれば消費、できなければfalseを返す
+    /// </summary>
+    /// <param name="ConsumeValue"></param>
+    public bool ConsumeMP(int ConsumeValue)
+    {
+        Debug.Log("beforeMp:" + this.charParameters.currentMP);
+        if (this.charParameters.currentMP > ConsumeValue)
+        {
+            this.charParameters.currentMP -= ConsumeValue;
+            Debug.Log("AfterMp:" + this.charParameters.currentMP);
+            return true;
+        }
+        else
+        {
+            // MPが足りていなかったためfalseを返す
+            return false;
+        }
     }
 
     //バフのリセット
@@ -125,18 +142,9 @@ public class CharBase : MonoBehaviour
     }
 
     //パラメータセット
-    public void SetParameter(CharData charData)
+    public void SetParameter(CharParameter charParameter)
     {
-        this.char_name = charData.Name;
-        this.hp = charData.maxHp;
-        this.max_hp = charData.maxHp;
-        this.strange = charData.STR;
-        this.speed = charData.SPEED;
-        this.char_role = charData.ROLE;
-        this.HavingAbility = charData.HavingAbility;
-        this.intelligence = charData.INT;
-        this.weakElement = charData.WeakElement;
-        this.strongElement = charData.StrongElement;
+        this.charParameters = charParameter;
 
         // TODO Itemに関してはmockで実装
         // アイテム所持データの周りが実装されたら消す
@@ -164,44 +172,84 @@ public class CharBase : MonoBehaviour
     // getter,setter
     //=============
 
+    // charParameter
+    public CharParameter GetCharParameters()
+    {
+        return this.charParameters;
+    }
+
     //name
     public string GetName()
     {
-        return this.char_name;
+        return this.charParameters.Name;
     }
 
     //hp
     public int GetHp()
     {
-        return this.hp;
+        return this.charParameters.currentHP;
     }
 
     public int GetMaxHp()
     {
-        return this.max_hp;
+        return this.charParameters.maxHp;
+    }
+
+    public int GetMp()
+    {
+        return this.charParameters.currentMP;
+    }
+
+    public int GetMaxMp()
+    {
+        return this.charParameters.maxMp;
     }
 
     //speed
     public int GetSpeed()
     {
-        return this.speed;
+        return this.charParameters.SPEED;
+    }
+
+    // INT
+    public int GetInteli()
+    {
+        return this.charParameters.INT;
     }
 
     //strange
     public int GetStrange()
     {
-        return this.strange;
+        return this.charParameters.STR;
     }
 
     //所持アビリティ
     public List<string> GetHavingAbilities()
     {
-        return this.HavingAbility;
+        return this.charParameters.HavingAbility;
     }
 
     //所持アイテム
     public List<HavingItem> GetHavingItem()
     {
         return this.HavingItem;
+    }
+
+    // 弱点属性
+    public List<CONST.UTILITY.Element> GetWeakElement()
+    {
+        return this.charParameters.WeakElement;
+    }
+
+    // 耐性属性
+    public List<CONST.UTILITY.Element> GetStrongElement()
+    {
+        return this.charParameters.StrongElement;
+    }
+
+    // パラメーター一覧を返す
+    public CharParameter GetCharData()
+    {
+        return this.charParameters;
     }
 }

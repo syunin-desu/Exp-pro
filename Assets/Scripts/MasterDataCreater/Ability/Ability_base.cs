@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using CONST;
+using System;
+using System.Linq;
 
 [CreateAssetMenu(menuName = "CreateData/Create AbilityData")]
 public class Ability_base : ScriptableObject
@@ -23,6 +25,9 @@ public class Ability_base : ScriptableObject
     [ValueDropdown("ability_Element_list")]
     public CONST.UTILITY.Element Element;
     public int power;
+    //実行するアクション(一番上から順に実行される)
+    [ValueDropdown("Ability_Action_Cell")]
+    public List<CONST.ACTION.Ability_Action_Cell> executeActionList;
 
     //パラメーター設定値
     /// <summary>アビリティのタイプ(Attack, Baff, etc)</summary>
@@ -53,4 +58,11 @@ public class Ability_base : ScriptableObject
         CONST.UTILITY.Element.Thunder,
         CONST.UTILITY.Element.None
     };
+
+    /// <summary>
+    /// アビリティ発動時に実行されるアクション
+    /// </summary>
+    private static List<CONST.ACTION.Ability_Action_Cell> Ability_Action_Cell = Enum.GetValues(typeof(CONST.UTILITY.Element))
+                                                         .Cast<CONST.ACTION.Ability_Action_Cell>()
+                                                         .ToList();
 }
