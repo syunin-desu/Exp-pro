@@ -147,9 +147,6 @@ public class BattleManager : MonoBehaviour
     [SerializeField]
     public List<BattleAction> allActionList;
 
-    //Playerパーティーの人数
-    // TODO あとでパーティ情報はクラスなどにまとめる
-    private int char_Num = 1;
 
     private bool endBattle = false;
 
@@ -407,7 +404,7 @@ public class BattleManager : MonoBehaviour
         BattleAction act = new BattleAction(CONST.BATTLE_ACTION.COMMAND.Attack, character);
         setActionList_FOR_Role(character.char_role, act);
 
-        if (actionList.Count == char_Num && character.char_role == CONST.CHARCTOR.PLAYER)
+        if (actionList.Count == character.countActionATurn && character.char_role == CONST.CHARCTOR.PLAYER)
         {
             this.battle();
         }
@@ -419,7 +416,7 @@ public class BattleManager : MonoBehaviour
         BattleAction act = new BattleAction(CONST.BATTLE_ACTION.COMMAND.Defence, character);
         setActionList_FOR_Role(character.char_role, act);
 
-        if (actionList.Count == char_Num)
+        if (actionList.Count == character.countActionATurn)
         {
             this.battle();
         }
@@ -437,7 +434,7 @@ public class BattleManager : MonoBehaviour
 
         // アビリティウインドウを閉じる
         this.abilityUI.removeAbilityWindow();
-        if (actionList.Count == char_Num)
+        if (actionList.Count == character.countActionATurn)
         {
             this.battle();
         }
@@ -461,7 +458,7 @@ public class BattleManager : MonoBehaviour
         // アイテムウインドウを閉じる
         this.itemUI.removeItemWindow();
 
-        if (actionList.Count == char_Num)
+        if (actionList.Count == character.countActionATurn)
         {
             this.battle();
         }
@@ -518,20 +515,23 @@ public class BattleManager : MonoBehaviour
     // 敵の行動を登録する
     private void setAction_Enemy(int command, CharBase enemy)
     {
-        switch (command)
+        for(int i = 0; i < enemy.countActionATurn; i++)
         {
-            case (int)CONST.BATTLE_ACTION.COMMAND.Attack:
-                this.setAction_Attack(enemy);
-                break;
-            case (int)CONST.BATTLE_ACTION.COMMAND.Ability:
-                break;
-            case (int)CONST.BATTLE_ACTION.COMMAND.Defence:
-                this.setAction_Defence(enemy);
-                break;
-            case (int)CONST.BATTLE_ACTION.COMMAND.Item:
-                break;
-            default:
-                break;
+            switch (command)
+            {
+                case (int)CONST.BATTLE_ACTION.COMMAND.Attack:
+                    this.setAction_Attack(enemy);
+                    break;
+                case (int)CONST.BATTLE_ACTION.COMMAND.Ability:
+                    break;
+                case (int)CONST.BATTLE_ACTION.COMMAND.Defence:
+                    this.setAction_Defence(enemy);
+                    break;
+                case (int)CONST.BATTLE_ACTION.COMMAND.Item:
+                    break;
+                default:
+                    break;
+            }
         }
     }
 

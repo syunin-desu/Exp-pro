@@ -35,6 +35,7 @@ public class CharBase : MonoBehaviour
     //キャラロール
     public int char_role;
     // 1ターン中の行動回数
+    // 行動回数の増減はパラメータを直接いじらず、この変数を返して実施すること
     public int countActionATurn;
 
     // 所持アビリティ
@@ -146,6 +147,8 @@ public class CharBase : MonoBehaviour
     {
         this.charParameters = charParameter;
 
+        countActionATurn = this.charParameters.countOfActions;
+
         // TODO Itemに関してはmockで実装
         // アイテム所持データの周りが実装されたら消す
         HavingItem mockHavingItem = new HavingItem();
@@ -245,6 +248,13 @@ public class CharBase : MonoBehaviour
     public List<CONST.UTILITY.Element> GetStrongElement()
     {
         return this.charParameters.StrongElement;
+    }
+
+    // 行動回数を返す
+    public int GetCharActionCount()
+    {
+        // パラメータから直接取得せず、別変数を返して取得する
+        return this.countActionATurn;
     }
 
     // パラメーター一覧を返す

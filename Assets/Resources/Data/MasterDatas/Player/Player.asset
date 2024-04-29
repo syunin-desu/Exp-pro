@@ -22,7 +22,7 @@ MonoBehaviour:
   SPEED: 20
   INT: 10
   ROLE: 1
-  countOfActions: 1
+  countOfActions: 2
   HavingAbility:
   - burn
   - chill

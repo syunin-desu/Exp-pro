@@ -22,7 +22,7 @@ MonoBehaviour:
   SPEED: 5
   INT: 0
   ROLE: 2
-  countOfActions: 1
+  countOfActions: 2
   HavingAbility:
   - 
   WeakElement: 01000000
