@@ -61,6 +61,22 @@ namespace CONST
 
     }
 
+    namespace BATTLE
+    {
+        /// <summary>
+        /// バトルシーンでのフェーズ状態
+        /// </summary>
+        public enum PHASES_STATUS
+        {
+            INITIALIZE,
+            STANDBY_TURN,
+            P_ACTION_SELECTING,
+            DO_BATTLE,
+            END_TURN,
+            RESULT_BATTLE,
+        }
+    }
+
     // アクション
     namespace ACTION
     {
@@ -72,7 +88,8 @@ namespace CONST
             Attack,
             Buff,
             DeBuff,
-            Heal
+            Heal,
+            UseItem,
         }
 
         /// <summary>
@@ -100,7 +117,9 @@ namespace CONST
         /// </summary>
         public enum Ability_Action_Cell
         {
+            SolidSingleAttack,
             MagicSingleAttack,
+            DoItem,
         }
     }
 

@@ -7,33 +7,38 @@ using UnityEngine;
 //char_Baseから継承
 public class EnemyManager : CharBase
 {
-    // TODO UIManagerもプロパティに含めないか検討
-    // Attackメソッドをオーバーライドし、その中でUIの値の更新も行う
-    Action tapAction; //クリックされた時に実行したい関数
 
     /// <summary>
     /// 敵のマスターデータ
     /// </summary>
     public CharData enemyData;
 
+    /// <summary>
+    /// 敵UI
+    /// </summary>
+    public EnemyUIManager enemyUI;
+
     private void Awake()
     {
         this.SetParameter(ConvertCharDataToParameter(enemyData));
+        // UI情報をセット
+        enemyUI = GameObject.Find("EnemyUI").GetComponent<EnemyUIManager>();
+        enemyUI.isShowEnemyUI(false);
     }
 
     void Start()
     {
         this.char_role = CONST.CHARCTOR.ENEMY;
-    }
-    public void AddEventListenerOnTap(Action action)
-    {
-        tapAction += action;
-    }
 
-    public void OnTap()
-    {
-        Debug.Log("クリックされた");
-        tapAction();
+        CharParameter charParameter = this.GetCharParameters();
+
+        // HPバーの初期化
+        enemyUI.isShowEnemyUI(true);
+        this.UpdateHpBar(charParameter);
+
+        // 敵名の設定
+        enemyUI.enemyText.text = charParameter.Name;
+
     }
 
     /// <summary>
@@ -61,5 +66,34 @@ public class EnemyManager : CharBase
             HavingAbility = charData.HavingAbility,
 
         };
+    }
+
+    public override void Damage(int healValue)
+    {
+        base.Damage(healValue);
+
+        CharParameter charParameter = this.GetCharParameters();
+
+        // HPバーの初期化
+        this.UpdateHpBar(charParameter);
+    }
+
+
+    public override void Heal(int healValue)
+    {
+        base.Heal(healValue);
+
+        CharParameter charParameter = this.GetCharParameters();
+
+        // HPバーの初期化
+        this.UpdateHpBar(charParameter);
+    }
+
+    private void UpdateHpBar(CharParameter charParameter)
+    {
+        float currentHpRate = (float)charParameter.currentHP / (float)charParameter.maxHp;
+
+        // HPバーの初期化
+        enemyUI.charHPBarUIManager.SetGauge(currentHpRate);
     }
 }

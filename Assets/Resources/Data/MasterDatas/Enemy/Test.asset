@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Test
   m_EditorClassIdentifier: 
   Name: test
-  currentHP: 30
+  currentHP: 50
   currentMP: 99
   maxHp: 50
   maxMp: 99

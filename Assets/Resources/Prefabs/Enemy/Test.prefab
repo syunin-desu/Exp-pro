@@ -114,12 +114,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14b01eb8a628d444cbdd051cd919e765, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  char_name: 
-  hp: 0
-  max_hp: 0
-  strange: 0
-  speed: 0
   char_role: 2
+  countActionATurn: 0
   HavingAbility: []
   enemyData: {fileID: 11400000, guid: 09581bac33a4493489f0ae4eb02e8cae, type: 2}
 --- !u!61 &733700921035318125

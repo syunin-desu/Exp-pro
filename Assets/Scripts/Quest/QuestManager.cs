@@ -8,6 +8,7 @@ public class QuestManager : MonoBehaviour
     public StageUIManager stageUI;
     public GameObject enemyPrefab;
     public SceneTransitionManager sceneTransitionManager;
+    public PartyMember w_PartyMember;
 
     //敵に遭遇するテーブル:-1なら遭遇しない 0なら遭遇する
     int[] encountTable = { -1, -1, 0, -1, 0, -1 };
@@ -56,7 +57,7 @@ public class QuestManager : MonoBehaviour
 
         // マスターに現在のプレイヤーデータを保存する
         // プレイヤーサイドのステータスを更新する
-        //PlayerData.instance.UpdatePlayerData(this.partyMember.GetCharParameters());
+        PlayerData.instance.UpdatePlayerData(this.w_PartyMember.GetCharParameters());
 
         // バトルシーンをロードする
         SceneManager.LoadScene(CONST.SCENE.Scene.Battle.ToString());

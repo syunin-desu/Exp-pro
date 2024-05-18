@@ -6,70 +6,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Linq;
 
-// 実行アクション情報クラス
-public class BattleAction
-{
-    /// <summary>
-    /// 実行アクション
-    /// </summary>
-    public CONST.BATTLE_ACTION.COMMAND action;
-
-    /// <summary>
-    /// アクション名
-    /// </summary>
-    public string abilityName = "";
-
-    /// <summary>
-    ///  アイテム名
-    /// </summary>
-    public string itemName = "";
-
-    /// <summary>
-    /// 実行キャラクタ
-    /// </summary>
-    public CharBase character;
-
-    /// <summary>
-    /// アビリティ発動時に実行するアクション
-    /// </summary>
-    public List<CONST.ACTION.Ability_Action_Cell> abilityActions = new List<CONST.ACTION.Ability_Action_Cell>();
-
-
-    public BattleAction(CONST.BATTLE_ACTION.COMMAND action, CharBase character)
-    {
-        this.action = action;
-        this.character = character;
-    }
-
-    /// <summary>
-    /// アビリティ名を格納
-    /// </summary>
-    /// <param name="abilityName"></param>
-    public void setAbilityName(string abilityName)
-    {
-        this.abilityName = abilityName;
-    }
-
-    /// <summary>
-    /// アビリティアクションを格納
-    /// </summary>
-    /// <param name="abilityName"></param>
-    public void setAbilityAction(List<CONST.ACTION.Ability_Action_Cell> abilityActions)
-    {
-        this.abilityActions = abilityActions;
-    }
-
-    /// <summary>
-    /// アイテム名を設定
-    /// </summary>
-    /// <param name="itemName"></param>
-    public void setItemName(string itemName)
-    {
-        this.itemName = itemName;
-
-    }
-}
-
 /// <summary>
 /// バトルシーン管理クラス
 /// </summary>
@@ -131,32 +67,25 @@ public class BattleManager : MonoBehaviour
     public AbilityManager abilityManager;
 
     /// <summary>
+    /// 行動リスト
+    /// </summary>
+    public BattleActionList battleActionList;
+
+    /// <summary>
     /// 経過ターン
     /// </summary>
     private int turned;
 
-    /// <summary>
-    /// プレイヤー行動リスト
-    /// </summary>
-    [SerializeField]
-    List<BattleAction> actionList;
-
-    /// <summary>
-    /// 戦闘参加者全員の行動リスト
-    /// </summary>
-    [SerializeField]
-    public List<BattleAction> allActionList;
-
 
     private bool endBattle = false;
+    /// <summary>
+    /// バトル中かどうか
+    /// </summary>
+    private CONST.BATTLE.PHASES_STATUS currentBattlePhase = CONST.BATTLE.PHASES_STATUS.INITIALIZE;
 
 
     void Start()
     {
-
-        //リストのセット
-        actionList = setActionList<BattleAction>();
-        allActionList = setActionList<BattleAction>();
 
         // バトルUIを非表示にする
         switchBattleUI(false);
@@ -164,12 +93,15 @@ public class BattleManager : MonoBehaviour
         // セットアップ
         SetUp();
 
+        this.currentBattlePhase = CONST.BATTLE.PHASES_STATUS.P_ACTION_SELECTING;
+
     }
 
     public void SetUp()
     {
         //行動リストの初期化
-        clear_actionList();
+        this.battleActionList.Clear_AllActionList();
+
         //バトルUIの表示
         switchBattleUI(true);
         playerUI.SetUpUI(partyMember);
@@ -187,8 +119,9 @@ public class BattleManager : MonoBehaviour
     /// <returns></returns>
     public async void battle()
     {
-        //アクション選択フェーズ
-        // 選択されるまで待つ
+        this.currentBattlePhase = CONST.BATTLE.PHASES_STATUS.DO_BATTLE;
+
+        // 敵のアクションを登録する
         this.actionSelect();
 
         // アクション実行順などの処理
@@ -199,14 +132,13 @@ public class BattleManager : MonoBehaviour
     }
 
     /// <summary>
-    /// プレイヤーアクション選択待機およびリストへの登録
+    /// 敵アクションの選択
     /// </summary>
     /// <returns></returns>
     private void actionSelect()
     {
-        //人数分アクションが選択されたらバトルさせる
         //プレイヤーの動きを全体行動リストに登録
-        allActionList.AddRange(actionList);
+        battleActionList.AddRangeToAllActionList(battleActionList.GetP_ActionList());
 
         //敵アクションの登録
         this.setAction_Enemy((int)CONST.BATTLE_ACTION.COMMAND.Attack, this.enemy);
@@ -221,7 +153,7 @@ public class BattleManager : MonoBehaviour
     /// <returns></returns>
     private async UniTask doAction()
     {
-        foreach (BattleAction allAction in allActionList)
+        foreach (BattleAction allAction in battleActionList.GetAllActionList())
         {
             //キャラ識別
             int role = allAction.character.char_role;
@@ -296,6 +228,7 @@ public class BattleManager : MonoBehaviour
         // 戦闘終了なら
         if (endBattle)
         {
+            this.currentBattlePhase = CONST.BATTLE.PHASES_STATUS.RESULT_BATTLE;
             //バトル終了処理
             this.EndBattle();
 
@@ -353,11 +286,12 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     void turnFinalize()
     {
+        this.currentBattlePhase = CONST.BATTLE.PHASES_STATUS.END_TURN;
         //パラメータの初期化
-        this.resetCharBuffANDunbuff(this.allActionList);
+        this.resetCharBuffANDunbuff(this.battleActionList.GetAllActionList());
 
         //行動リストの初期化
-        this.clear_actionList();
+        this.battleActionList.Clear_AllActionList();
 
         //アクション選択UIを表示
         this.switchActionSelectUI(true);
@@ -366,6 +300,8 @@ public class BattleManager : MonoBehaviour
         //ターンを追加
         this.turned++;
         Debug.Log("ターン:" + this.turned);
+
+        this.currentBattlePhase = CONST.BATTLE.PHASES_STATUS.P_ACTION_SELECTING;
     }
 
     /// <summary>
@@ -402,9 +338,10 @@ public class BattleManager : MonoBehaviour
     public void setAction_Attack(CharBase character)
     {
         BattleAction act = new BattleAction(CONST.BATTLE_ACTION.COMMAND.Attack, character);
+        act.setAbilityName("Attack");
         setActionList_FOR_Role(character.char_role, act);
 
-        if (actionList.Count == character.countActionATurn && character.char_role == CONST.CHARCTOR.PLAYER)
+        if (this.battleActionList.GetP_ActionList().Count == character.countActionATurn && character.char_role == CONST.CHARCTOR.PLAYER)
         {
             this.battle();
         }
@@ -414,9 +351,10 @@ public class BattleManager : MonoBehaviour
     public void setAction_Defence(CharBase character)
     {
         BattleAction act = new BattleAction(CONST.BATTLE_ACTION.COMMAND.Defence, character);
+        act.setAbilityName("Deffence");
         setActionList_FOR_Role(character.char_role, act);
 
-        if (actionList.Count == character.countActionATurn)
+        if (this.battleActionList.GetP_ActionList().Count == character.countActionATurn)
         {
             this.battle();
         }
@@ -434,7 +372,7 @@ public class BattleManager : MonoBehaviour
 
         // アビリティウインドウを閉じる
         this.abilityUI.removeAbilityWindow();
-        if (actionList.Count == character.countActionATurn)
+        if (this.battleActionList.GetP_ActionList().Count == character.countActionATurn)
         {
             this.battle();
         }
@@ -458,7 +396,7 @@ public class BattleManager : MonoBehaviour
         // アイテムウインドウを閉じる
         this.itemUI.removeItemWindow();
 
-        if (actionList.Count == character.countActionATurn)
+        if (this.battleActionList.GetP_ActionList().Count == character.countActionATurn)
         {
             this.battle();
         }
@@ -487,29 +425,26 @@ public class BattleManager : MonoBehaviour
         this.itemContents.SetupItemUI(charactor.GetHavingItem());
     }
 
+    /// <summary>
+    /// 現在のバトルシーンが何をしているのかを返す
+    /// </summary>
+    /// <returns></returns>
+    public CONST.BATTLE.PHASES_STATUS getCurrentBattlePhase()
+    {
+        return this.currentBattlePhase;
+    }
+
     // TODO: 関数自体を見直す必要あり
     private void setActionList_FOR_Role(int character_role, BattleAction act)
     {
         if (character_role == CONST.CHARCTOR.PLAYER)
         {
-            this.actionList.Add(act);
+            this.battleActionList.SetActionToPlayer(act);
         }
         else if (character_role == CONST.CHARCTOR.ENEMY)
         {
-            this.allActionList.Add(act);
+            this.battleActionList.SetAllActionToEnemy(act);
         }
-    }
-
-    private List<BattleAction> setActionList<BattleAction>()
-    {
-        return new List<BattleAction>();
-    }
-
-    //行動リストの初期化
-    private void clear_actionList()
-    {
-        actionList.Clear();
-        allActionList.Clear();
     }
 
     // 敵の行動を登録する
@@ -564,9 +499,9 @@ public class BattleManager : MonoBehaviour
         List<BattleAction> actList = new List<BattleAction>();
 
         // //アビリティ優先順に並び変える
-        actList.AddRange(this.sortActionListForAbilityPriority(this.allActionList));
-        this.allActionList.Clear();
-        this.allActionList.AddRange(actList);
+        actList.AddRange(this.sortActionListForAbilityPriority(this.battleActionList.GetAllActionList()));
+        this.battleActionList.ClearAllActionList();
+        this.battleActionList.AddRangeToAllActionList(actList);
 
     }
 
@@ -636,7 +571,7 @@ public class BattleManager : MonoBehaviour
         foreach (var enemyName in enemyNames)
         {
             var targetPrefab = (GameObject)Resources.Load($"Prefabs/Enemy/{enemyName}");
-            Instantiate(targetPrefab, new Vector3((float)0.05, (float)0.16, 0), Quaternion.identity);
+            Instantiate(targetPrefab, new Vector3((float)-1, (float)0.16, 0), Quaternion.identity);
             
             // 敵情報を取得する
             // TODO: 現状敵は一体のみなので敵オブジェクト一つを対象にしている

@@ -4,16 +4,6 @@ using UnityEngine;
 
 public class ItemUIManager : MonoBehaviour
 {
-    // TODO UI共通処理を持つ親クラスを作成し、それを継承するような構造にする
-
-    void Update()
-    {
-        // escキーが入力された場合ウインドウを閉じる
-        if (Input.GetKey(KeyCode.Escape))
-        {
-            this.removeItemWindow();
-        }
-    }
 
     /// <summary>
     /// アイテムウインドウを閉じる
@@ -42,5 +32,14 @@ public class ItemUIManager : MonoBehaviour
     {
 
         this.gameObject.SetActive(isShowItemWindow);
+    }
+
+    /// <summary>
+    /// アイテムウインドウがアクティブかどうかを返す
+    /// </summary>
+    /// <returns></returns>
+    public bool getIsItemUIWindowActive()
+    {
+        return this.gameObject.activeSelf;
     }
 }

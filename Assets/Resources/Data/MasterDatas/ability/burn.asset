@@ -20,4 +20,4 @@ MonoBehaviour:
   requiredMp: 3
   Element: 0
   power: 2
-  executeActionList: 00000000
+  executeActionList: 01000000

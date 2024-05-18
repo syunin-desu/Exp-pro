@@ -9,15 +9,6 @@ using UnityEngine.UI;
 public class AbilityUIManager : MonoBehaviour
 {
 
-    void Update()
-    {
-        // escキーが入力された場合ウインドウを閉じる
-        if (Input.GetKey(KeyCode.Escape))
-        {
-            this.removeAbilityWindow();
-        }
-    }
-
     /// <summary>
     ///  アビリティウインドウを閉じる
     /// </summary>
@@ -43,5 +34,14 @@ public class AbilityUIManager : MonoBehaviour
     public void manageShowAbilityWindow(bool isShowAbilityWindow)
     {
         this.gameObject.SetActive(isShowAbilityWindow);
+    }
+
+    /// <summary>
+    /// アビリティウインドウがアクティブがどうかを返す
+    /// </summary>
+    /// <returns></returns>
+    public bool getIsAbilityWindowActive()
+    {
+        return this.gameObject.activeSelf;
     }
 }

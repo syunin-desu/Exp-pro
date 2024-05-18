@@ -62,7 +62,7 @@ public class CharBase : MonoBehaviour
     }
 
     //ダメージを受ける
-    public void Damage(int damage)
+    public virtual void Damage(int damage)
     {
         //ダメージ計算
         // TODO ダメージ計算式を見直し
@@ -83,7 +83,7 @@ public class CharBase : MonoBehaviour
     /// HPを回復する
     /// </summary>
     /// <param name="healValue">回復量</param>
-    public void Heal(int healValue)
+    public virtual void Heal(int healValue)
     {
 
         Debug.Log("beforeHp:" + this.charParameters.currentHP);
@@ -169,6 +169,13 @@ public class CharBase : MonoBehaviour
 
         //アイテム数を減少させる
         targetItem.ItemCount -= reduceItemCount;
+
+        // アイテムがなくなったら削除
+        if (targetItem.ItemCount <= 0)
+        {
+            this.HavingItem.Remove(targetItem);
+        }
+
     }
 
     //=============

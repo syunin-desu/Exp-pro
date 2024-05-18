@@ -35,7 +35,8 @@ public class Ability_base : ScriptableObject
         CONST.ACTION.TYPE.Attack,
         CONST.ACTION.TYPE.Buff,
         CONST.ACTION.TYPE.DeBuff,
-        CONST.ACTION.TYPE.Heal
+        CONST.ACTION.TYPE.Heal,
+        CONST.ACTION.TYPE.UseItem,
     };
 
     /// <summary>アビリティの速さ(Fast,Normal,Delay)</summary>

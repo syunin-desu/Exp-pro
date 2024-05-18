@@ -5,19 +5,23 @@ using UnityEngine.UI;
 
 public class EnemyUIManager : MonoBehaviour
 {
-    public Text hpText;
-    public Text nameText;
 
-    public void SetUpUI(EnemyManager enemy)
+    /// <summary>
+    /// HPバー
+    /// </summary>
+    public CharHPBarUIManager charHPBarUIManager;
+
+    /// <summary>
+    /// 敵名テキスト
+    /// </summary>
+    public Text enemyText;
+
+
+
+    public void isShowEnemyUI(bool isShow)
     {
-        hpText.text = string.Format("HP:{0}", enemy.GetHp());
-        nameText.text = string.Format("{0}", enemy.GetName());
+        this.gameObject.SetActive(isShow);
 
-    }
-
-    public void UpdateUI(EnemyManager enemy)
-    {
-        hpText.text = string.Format("HP:{0}", enemy.GetHp());
     }
 
 }

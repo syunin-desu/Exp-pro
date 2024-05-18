@@ -29,9 +29,9 @@ public class AbilityManager : MonoBehaviour
     public async UniTask execAbility(CharBase performChar, CharBase? targetChar, string execAbilityName, List<CONST.ACTION.Ability_Action_Cell> execAbilityAction)
     {
         // アビリティの実行に必要なMPを消費する
-        if(performChar.ConsumeMP(this.getAbilityData(execAbilityName).requiredMp))
+        if (performChar.ConsumeMP(this.getAbilityData(execAbilityName).requiredMp))
         {
-            foreach(CONST.ACTION.Ability_Action_Cell action in execAbilityAction)
+            foreach (CONST.ACTION.Ability_Action_Cell action in execAbilityAction)
             {
                 switch (action)
                 {
@@ -43,7 +43,8 @@ public class AbilityManager : MonoBehaviour
                         break;
                 }
             }
-        }else
+        }
+        else
         {
             Debug.Log("MPが足りず、実行できませんでした。");
         }
@@ -90,6 +91,17 @@ public class AbilityManager : MonoBehaviour
     {
         Ability_base abilityDisplayName = this._abilityList.Find(ability => ability.Name == abilityName);
         return abilityDisplayName.displayName;
+    }
+
+    /// <summary>
+    /// 消費MPを返す
+    /// </summary>
+    /// <param name="abilityName">アビリティ名</param>
+    /// <returns>表示アビリティ名</returns>
+    public int getAbilityConsumeMP(string abilityName)
+    {
+        Ability_base abilityDisplayName = this._abilityList.Find(ability => ability.Name == abilityName);
+        return abilityDisplayName.requiredMp;
     }
 
     /// <summary>

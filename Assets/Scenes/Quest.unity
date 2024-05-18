@@ -336,6 +336,10 @@ PrefabInstance:
       value: 889
       objectReference: {fileID: 0}
     - target: {fileID: 3494429092318645772, guid: 3edeb862a08f78f4f9679bce31027c94, type: 3}
+      propertyPath: w_PartyMember
+      value: 
+      objectReference: {fileID: 1424915015}
+    - target: {fileID: 3494429092318645772, guid: 3edeb862a08f78f4f9679bce31027c94, type: 3}
       propertyPath: sceneTransitionManager
       value: 
       objectReference: {fileID: 899432021}
@@ -443,13 +447,26 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes:
+    - Name: PartyMember
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[CharParameter, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: HaveItemList
       Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[ItemData, Assembly-CSharp],[System.Int32,
+      Data: 1|System.Collections.Generic.Dictionary`2[[ItemData, Assembly-CSharp],[System.Int32,
         mscorlib]], mscorlib
     - Name: comparer
       Entry: 7
-      Data: 1|System.Collections.Generic.ObjectEqualityComparer`1[[ItemData, Assembly-CSharp]],
+      Data: 2|System.Collections.Generic.ObjectEqualityComparer`1[[ItemData, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 8
@@ -465,17 +482,17 @@ MonoBehaviour:
       Data: 
     - Name: HasMoney
       Entry: 7
-      Data: 2|Money, Assembly-CSharp
+      Data: 3|Money, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
     - Name: MockItemData
       Entry: 7
-      Data: 3|System.Collections.Generic.Dictionary`2[[ItemData, Assembly-CSharp],[System.Int32,
+      Data: 4|System.Collections.Generic.Dictionary`2[[ItemData, Assembly-CSharp],[System.Int32,
         mscorlib]], mscorlib
     - Name: comparer
       Entry: 7
-      Data: 4|System.Collections.Generic.ObjectEqualityComparer`1[[ItemData, Assembly-CSharp]],
+      Data: 5|System.Collections.Generic.ObjectEqualityComparer`1[[ItemData, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 8
@@ -561,8 +578,6 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  PartyMember:
-  - {fileID: 11400000, guid: cc778cd62d98e924691e3cfa6aa27eb8, type: 2}
   MockCharData:
   - {fileID: 11400000, guid: cc778cd62d98e924691e3cfa6aa27eb8, type: 2}
 --- !u!1 &817643627

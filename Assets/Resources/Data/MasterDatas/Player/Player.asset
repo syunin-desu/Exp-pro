@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: TEST
   currentHP: 999
-  currentMP: 99
+  currentMP: 5
   maxHp: 999
-  maxMp: 99
+  maxMp: 5
   STR: 20
   DEF: 5
   SPEED: 20
