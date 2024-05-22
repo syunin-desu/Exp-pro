@@ -31,6 +31,10 @@ public class BattleAction
     /// </summary>
     public List<CONST.ACTION.Ability_Action_Cell> abilityActions = new List<CONST.ACTION.Ability_Action_Cell>();
 
+    /// <summary>
+    /// 実行優先度
+    /// </summary>
+    public int speed_rank;
 
     public BattleAction(CONST.BATTLE_ACTION.COMMAND action, CharBase character)
     {
@@ -65,6 +69,15 @@ public class BattleAction
         this.itemName = itemName;
 
     }
+
+    /// <summary>
+    /// 実行優先度を設定
+    /// </summary>
+    /// <param name="speedRank"></param>
+    public void SetSpeedRank(int speedRank)
+    {
+        this.speed_rank = speedRank;
+    }
 }
 
 
@@ -88,17 +101,17 @@ public class BattleActionList : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     // プレイヤーアクションを登録する
-    public void SetActionToPlayer( BattleAction p_act)
+    public void SetActionToPlayer(BattleAction p_act)
     {
         this.p_actionList.Add(p_act);
         // 行動リストUIを更新
@@ -140,8 +153,8 @@ public class BattleActionList : MonoBehaviour
         this.actionRowNumberListScrollController.Setup_ActionRowNumberListUI(this.p_actionList);
     }
 
-    public List<BattleAction> GetP_ActionList() {  return this.p_actionList; }
-    public List<BattleAction> GetAllActionList() {  return this.allActionList; }
+    public List<BattleAction> GetP_ActionList() { return this.p_actionList; }
+    public List<BattleAction> GetAllActionList() { return this.allActionList; }
 
     public void ClearP_ActionList() { this.p_actionList.Clear(); }
     public void ClearAllActionList() { this.allActionList.Clear(); }

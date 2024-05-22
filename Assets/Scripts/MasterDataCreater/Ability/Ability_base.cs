@@ -17,6 +17,8 @@ public class Ability_base : ScriptableObject
     // アビリティの速さ(Fast,Normal,Delay)
     [ValueDropdown("ability_speed_list")]
     public CONST.ACTION.Speed timingType;
+    // 行動速度値(低いほど実行が早い)
+    public int speed_rank;
     //攻撃範囲(単体、全体)
     [ValueDropdown("ability_range_list")]
     public CONST.ACTION.Range Range;

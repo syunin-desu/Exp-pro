@@ -58,7 +58,7 @@ public class ItemManager : MonoBehaviour
     /// <returns>表示アイテム名</returns>
     public string getItemDisplayName(string itemName)
     {
-        ItemData selectedItem = this._itemList.Find(ability => ability.Name == itemName);
+        ItemData selectedItem = this._itemList.Find(item => item.Name == itemName);
         return selectedItem.displayName;
     }
 
@@ -69,8 +69,19 @@ public class ItemManager : MonoBehaviour
     /// <returns>アイテム名</returns>
     public string getItemNameForDisplayName(string itemDisplayName)
     {
-        ItemData item = this._itemList.Find(ability => ability.displayName == itemDisplayName);
+        ItemData item = this._itemList.Find(item => item.displayName == itemDisplayName);
         return item.Name;
+    }
+
+    /// <summary>
+    /// アイテム名から実行優先度を取得
+    /// </summary>
+    /// <param name="itemDisplayName">表示アイテム名/param>
+    /// <returns>アイテム名</returns>
+    public int getItemSpeedRankForItemName(string itemName)
+    {
+        ItemData item = this._itemList.Find(item => item.name == itemName);
+        return item.speed_rank;
     }
 
     /// <summary>

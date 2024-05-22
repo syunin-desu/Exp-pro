@@ -17,6 +17,10 @@ public class ItemData : ScriptableObject
 
     public CONST.ACTION.TYPE Type;
 
+    // アイテム実行自体がFAなので、アイテム同じFAアクションの中で優先順位付けをする
+    // 行動速度値(低いほど実行が早い)
+    public int speed_rank;
+
     [ValueDropdown("itemRange")]
     public CONST.ACTION.Range Range;
 

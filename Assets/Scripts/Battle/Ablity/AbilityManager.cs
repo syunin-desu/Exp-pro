@@ -138,6 +138,17 @@ public class AbilityManager : MonoBehaviour
     }
 
     /// <summary>
+    /// アビリティ名からアビリティの実行優先度ランクを取得
+    /// </summary>
+    /// <param name="abilityName">アビリティ名</param>
+    /// <returns>アビリティタイミング</returns>
+    public int getAbilitySpeedRank(string abilityName)
+    {
+        Ability_base ability = this._abilityList.Find(ability => ability.Name == abilityName);
+        return ability != null ? ability.speed_rank : 0;
+    }
+
+    /// <summary>
     /// アビリティのデータを取得
     /// </summary>
     /// <param name="abilityName">アビリティ名</param>

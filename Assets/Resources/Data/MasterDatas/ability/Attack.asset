@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: "\u305F\u305F\u304B\u3046"
   Type: 0
   timingType: 0
+  speed_rank: 5
   Range: 0
   requiredMp: 0
   Element: 3

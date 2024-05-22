@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: "\u30DC\u30EB\u30C8"
   Type: 0
   timingType: 0
+  speed_rank: 2
   Range: 0
   requiredMp: 2
   Element: 2

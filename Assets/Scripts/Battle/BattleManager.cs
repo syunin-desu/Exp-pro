@@ -339,6 +339,7 @@ public class BattleManager : MonoBehaviour
     {
         BattleAction act = new BattleAction(CONST.BATTLE_ACTION.COMMAND.Attack, character);
         act.setAbilityName("Attack");
+        act.SetSpeedRank(this.abilityManager.getAbilitySpeedRank("Attack"));
         setActionList_FOR_Role(character.char_role, act);
 
         if (this.battleActionList.GetP_ActionList().Count == character.countActionATurn && character.char_role == CONST.CHARCTOR.PLAYER)
@@ -352,6 +353,7 @@ public class BattleManager : MonoBehaviour
     {
         BattleAction act = new BattleAction(CONST.BATTLE_ACTION.COMMAND.Defence, character);
         act.setAbilityName("Deffence");
+        act.SetSpeedRank(this.abilityManager.getAbilitySpeedRank("Deffence"));
         setActionList_FOR_Role(character.char_role, act);
 
         if (this.battleActionList.GetP_ActionList().Count == character.countActionATurn)
@@ -366,6 +368,7 @@ public class BattleManager : MonoBehaviour
         BattleAction act = new BattleAction(CONST.BATTLE_ACTION.COMMAND.Ability, character);
         // アビリティ名を格納
         act.setAbilityName(selectedAbilityName);
+        act.SetSpeedRank(this.abilityManager.getAbilitySpeedRank(selectedAbilityName));
         act.setAbilityAction(ability_Actions);
 
         setActionList_FOR_Role(character.char_role, act);
@@ -390,6 +393,7 @@ public class BattleManager : MonoBehaviour
 
         // アビリティ名を格納
         act.setItemName(selectedItemName);
+        act.SetSpeedRank(this.itemManager.getItemSpeedRankForItemName(selectedItemName));
 
         setActionList_FOR_Role(character.char_role, act);
 
@@ -450,7 +454,7 @@ public class BattleManager : MonoBehaviour
     // 敵の行動を登録する
     private void setAction_Enemy(int command, CharBase enemy)
     {
-        for(int i = 0; i < enemy.countActionATurn; i++)
+        for (int i = 0; i < enemy.countActionATurn; i++)
         {
             switch (command)
             {
@@ -509,8 +513,9 @@ public class BattleManager : MonoBehaviour
     private List<BattleAction> sortActionListForAbilityPriority(List<BattleAction> allAction)
     {
         List<BattleAction> resultList = new List<BattleAction>();
-        List<BattleAction> FAlist = new List<BattleAction>();
-        List<BattleAction> NAlist = new List<BattleAction>();
+        List<BattleAction> Fast_Action_List = new List<BattleAction>();
+        List<BattleAction> Nomal_Action_List = new List<BattleAction>();
+        List<BattleAction> Delay_Action_List = new List<BattleAction>();
 
 
         //三種類の優先度に分けリストに入れる
@@ -519,37 +524,51 @@ public class BattleManager : MonoBehaviour
             //防御、またはFAだった時は先頭に持ってくる(同値はSPD比較)
             // TODO DA条件式は必要になったときに追加
             if (charAction.action == CONST.BATTLE_ACTION.COMMAND.Defence ||
-             abilityManager.getAbilityTimingType(charAction.abilityName) == CONST.ACTION.Speed.Fast)
+                charAction.action == CONST.BATTLE_ACTION.COMMAND.Attack ||
+                charAction.action == CONST.BATTLE_ACTION.COMMAND.Item ||
+                abilityManager.getAbilityTimingType(charAction.abilityName) == CONST.ACTION.Speed.Fast)
             {
-                FAlist.Add(charAction);
+                Fast_Action_List.Add(charAction);
             }
-            // TODO アイテムをNormalにするが将来的にはItemDataにTimingTypeを設定させたほうがいいと思う
-            else if (charAction.action == CONST.BATTLE_ACTION.COMMAND.Attack ||
-            charAction.action == CONST.BATTLE_ACTION.COMMAND.Item ||
-            abilityManager.getAbilityTimingType(charAction.abilityName) == CONST.ACTION.Speed.Normal)
+            else if (abilityManager.getAbilityTimingType(charAction.abilityName) == CONST.ACTION.Speed.Normal)
             {
-                NAlist.Add(charAction);
+                Nomal_Action_List.Add(charAction);
+            }
+            else
+            {
+                Delay_Action_List.Add(charAction);
             }
         }
 
-        //それぞれのリストをSPDの速い順位ソート
-        FAlist.Sort((obj, target) => obj.character.GetSpeed().CompareTo(target.character.GetSpeed()));
-        FAlist.Reverse();
+        // ソート仕様
+        // 1 早 Fast < Normal< Delay 遅　の順番に実行
+        // 2 それぞれの区分内で実行者のspdを参照しソート
+        // 3 同値の場合それぞれのアビリティor アイテムの実行優先度を参照してソート
+        Fast_Action_List.OrderByDescending(action => action.character.GetSpeed())
+                        .ThenBy(action => action.speed_rank);
 
-        NAlist.Sort((obj, target) => obj.character.GetSpeed().CompareTo(target.character.GetSpeed()));
-        NAlist.Reverse();
+        Nomal_Action_List.OrderByDescending(action => action.character.GetSpeed())
+                         .ThenBy(action => action.speed_rank);
+
+        Delay_Action_List.OrderByDescending(action => action.character.GetSpeed())
+                         .ThenBy(action => action.speed_rank);
 
         //リストに追加
-        resultList.AddRange(FAlist);
-        resultList.AddRange(NAlist);
+        resultList.AddRange(Fast_Action_List);
+        resultList.AddRange(Nomal_Action_List);
+
+        // ログ出力
+        Debug.Log("result_LIST------------");
+        int count = 1;
+        foreach (BattleAction action in resultList)
+        {
+            Debug.Log(count.ToString() + ":" + action.character.GetName());
+            Debug.Log("action : " + (action.action == CONST.BATTLE_ACTION.COMMAND.Ability ? action.abilityName : action.itemName));
+            count++;
+        }
+        Debug.Log("--------------------------");
+
         return resultList;
-    }
-
-
-    //クリックを待つ
-    private IEnumerator waitClick()
-    {
-        yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
     }
 
     //キャラクタのバフ、デバフをリセットする
@@ -572,7 +591,7 @@ public class BattleManager : MonoBehaviour
         {
             var targetPrefab = (GameObject)Resources.Load($"Prefabs/Enemy/{enemyName}");
             Instantiate(targetPrefab, new Vector3((float)-1, (float)0.16, 0), Quaternion.identity);
-            
+
             // 敵情報を取得する
             // TODO: 現状敵は一体のみなので敵オブジェクト一つを対象にしている
             enemy = GameObject.FindGameObjectWithTag("Enemy").GetComponent<EnemyManager>();
