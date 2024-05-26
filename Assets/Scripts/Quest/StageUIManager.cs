@@ -15,7 +15,7 @@ public class StageUIManager : MonoBehaviour
     public void UpdateUI(int currentStage)
     {
         Debug.Log($"UI:{currentStage}");
-        stageText.text = string.Format("{0}階", currentStage + 1);
+        stageText.text = string.Format("{0}", currentStage + 1);
     }
 
     public void HideButtons()
