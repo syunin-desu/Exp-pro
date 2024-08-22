@@ -1,3 +1,4 @@
+using CONST;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,18 +10,49 @@ public class QuestManager : MonoBehaviour
     public GameObject enemyPrefab;
     public SceneTransitionManager sceneTransitionManager;
     public PartyMember w_PartyMember;
+    public CardUIManager cardUIManager;
+    public CardManager cardManager;
 
     //敵に遭遇するテーブル:-1なら遭遇しない 0なら遭遇する
     int[] encountTable = { -1, -1, 0, -1, 0, -1 };
+    CONST.QUEST.CardType[] cardList =
+    {
+        // Mock実装 Excel等で階層ごとのカードリストを設定しておき、
+        // 初めにランダムで並び変える
+        CONST.QUEST.CardType.EncountEnemy,
+        CONST.QUEST.CardType.EncountEnemy,
+        CONST.QUEST.CardType.EncountEnemy,
+        CONST.QUEST.CardType.EncountEnemy,
+        CONST.QUEST.CardType.EncountEnemy,
+        CONST.QUEST.CardType.EncountEnemy,
+        CONST.QUEST.CardType.EncountEnemy,
+        CONST.QUEST.CardType.EncountEnemy,
+        CONST.QUEST.CardType.EncountEnemy,
+        CONST.QUEST.CardType.EncountEnemy,
+    };
 
     private int currentFloor = 0; //現在の階層
 
+    // ダンジョンに最初に張ったとき、ロードした時
     private void Start()
     {
         // QuestDataから現在の階層を読み込む
         currentFloor = QuestData.instance.currentFloor;
 
+        // QuestDataからカード配置を読み込む
+        // 一旦Mockで実装
+        // cardList = QuestData.instance.currentCardList;
+
+        // MOCK: 全カードをposition 0に生成し、Eventカードリストを更新
+        cardManager.Initialize();
+        cardManager.CreateCardOnPositon0(cardList);
+
         stageUI.UpdateUI(currentFloor);
+    }
+
+    // 一階層進み、次回層の情報を初期化する時  
+    private void InitializeNextFloor()
+    {
     }
 
     public void OnNextButton()
@@ -61,5 +93,31 @@ public class QuestManager : MonoBehaviour
 
         // バトルシーンをロードする
         SceneManager.LoadScene(CONST.SCENE.Scene.Battle.ToString());
+    }
+
+    /// <summary>
+    /// 選択されたカードイベントを実施
+    /// </summary>
+    /// <param name="selectedCardType"></param>
+    public void executeCardEvent(CONST.QUEST.CardType selectedCardType)
+    {
+        switch (selectedCardType)
+        {
+            case CONST.QUEST.CardType.EncountEnemy:
+                EncountEnemy();
+                break;
+
+            default:
+                break;
+        }
+
+        // イベント事後処理
+        // QuestManagerの仕事
+
+        // カードの順番を更新
+        // QuestManagerから呼び出させる想定
+
+        // カード選択可能状態に移行する
+        // CardUIManagerで処理させる
     }
 }

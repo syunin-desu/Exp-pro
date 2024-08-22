@@ -1,4 +1,6 @@
 
+using System.Xml.Linq;
+
 /// <summary>
 ///  不変値置き場
 /// </summary>
@@ -139,6 +141,44 @@ namespace CONST
         }
     }
 
+    // アニメーションのスピード
+    public static class ANIMATION_SPEED
+    {
+        // カード配置スピード
+        public const float MOVE_CARD_SPEED = 0.3f;
+        // カード返しスピード
+        public const float FLIP_CARD_SPEED = 0.25f;
+        // 非選択カード消失スピード
+        public const float FADEOUT_CARD_SPEED = 0.5f;
+    }
+
+    namespace QUEST
+    {
+        /// <summary>
+        /// カードの種類
+        /// </summary>
+        public enum CardType
+        {
+            // 敵と遭遇
+            EncountEnemy,
+            // アイテムを入手
+            GetItem,
+            // アーティファクトを獲得
+            GetArtifact,
+            // お金を獲得
+            GetCredit,
+            // イベント遭遇
+            EncountEvent,
+            // ボスと遭遇
+            EncountBoss,
+            // ランダムイベント
+            Secret,
+            // 何も起こらない(テスト用)
+            None
+
+        }
+    }
+
     public static class UTILITY
     {
 
@@ -154,7 +194,6 @@ namespace CONST
         }
 
         public static int BATTLEACTION_DELAY = 1;
-
     }
 
 }

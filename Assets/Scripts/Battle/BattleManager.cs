@@ -107,6 +107,7 @@ public class BattleManager : MonoBehaviour
         playerUI.SetUpUI(partyMember);
 
         // 敵オブジェクトを生成
+        // TODO: Questシーンから情報を流すことでそれに添うEnemyを生成できるようにしたい
         CreateEnemyObjects(new string[] { CONST.ENEMY_NAMES.TEST });
 
         //経過ターンをリセット

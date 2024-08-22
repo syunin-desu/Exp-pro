@@ -20,6 +20,9 @@ public class QuestData : SerializedMonoBehaviour
     // Œ»İ‚ÌŠK‘w
     public int currentFloor;
 
+    // ƒJ[ƒhˆê——
+    public List<CONST.QUEST.CardType> currentCardList;
+
     // Start is called before the first frame update
     private void Awake()
     {
