@@ -55,11 +55,10 @@ public class CardUIManager : MonoBehaviour
     /// <summary>
     /// 下側にカードをフェードアウトさせる
     /// </summary>
-    public async UniTask FadeOutForUnder()
+    public Sequence FadeOutForUnder(Sequence seq)
     {
-        await DOTween.Sequence()
-                .Append(this.gameObject.GetComponent<RectTransform>().DOMoveY(5f, CONST.ANIMATION_SPEED.FADEOUT_CARD_SPEED))
-                .Join(this.gameObject.GetComponent<Image>().DOFade(endValue: 0f, duration: CONST.ANIMATION_SPEED.FADEOUT_CARD_SPEED))
-                .AsyncWaitForCompletion();
+        return seq
+                .Join(this.gameObject.GetComponent<RectTransform>().DOMoveY(5f, CONST.ANIMATION_SPEED.FADEOUT_CARD_SPEED))
+                .Join(this.gameObject.GetComponent<Image>().DOFade(endValue: 0f, duration: CONST.ANIMATION_SPEED.FADEOUT_CARD_SPEED));
     }
 }

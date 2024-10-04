@@ -1,4 +1,5 @@
 using CONST;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Newtonsoft.Json.Linq;
 using System.Collections;
@@ -77,8 +78,8 @@ public class CardManager : MonoBehaviour
 
         this.MoveCardToEachPosition(eventCardList);
 
-        // 全カードを選択可能にする
-        SetCanSelectedAllCard(true);
+        // 先頭からX枚を選択可能状態にする
+        SetCanSelected(this.canSelectCardNumber);
     }
 
     /// <summary>
@@ -106,17 +107,28 @@ public class CardManager : MonoBehaviour
     /// <summary>
     /// 選択されたカードのイベントを実行までのインターフェース
     /// </summary>
-    public void DoEvent(CONST.QUEST.CardType selectedCardType, int rowID)
+    public async void DoEvent(CONST.QUEST.CardType selectedCardType, int rowID)
     {
         // カード選択不可状態に移行
         this.SetCanSelectedAllCard(false);
 
         // 選択されたカードのみ残して、それ以外の選択可能範囲内のカードをUI上削除する
-        this.DropUnselectedCard(rowID);
+        await this.DropUnselectedCard(rowID);
 
         // イベント実行
         // QuestManagerにイベントの種類だけ渡して、そちらで実行させる
         questManager.executeCardEvent(selectedCardType);
+    }
+
+    /// 頭から指定した数のカードを選択可能にする
+    /// </summary>
+    /// <param name="canSelectedCardNumber"></param>
+    public void SetCanSelected(int canSelectedCardNumber)
+    {
+        for (int i = 0; i < canSelectedCardNumber; i++)
+        {
+            this.eventCardList[i].gameObject.GetComponent<CardPropertyManager>().SetCanSelectCard(true);
+        }
     }
 
     /// <summary>
@@ -132,14 +144,17 @@ public class CardManager : MonoBehaviour
     }
 
     // 選択されたカードのみ残して、それ以外の選択可能範囲内のカードをUI上削除する
-    public async void DropUnselectedCard(int selectedCardIndex)
+    public async UniTask DropUnselectedCard(int selectedCardIndex)
     {
+        Sequence drop_sequence = DOTween.Sequence();
         foreach (var card in this.eventCardList.Select((value, index) => new { value, index }))
         {
             if (card.index != selectedCardIndex && card.index < canSelectCardNumber)
             {
-                await card.value.gameObject.GetComponent<CardUIManager>().FadeOutForUnder();
+                card.value.gameObject.GetComponent<CardUIManager>().FadeOutForUnder(seq: drop_sequence);
             }
         }
+
+        await drop_sequence.AsyncWaitForCompletion();
     }
 }
