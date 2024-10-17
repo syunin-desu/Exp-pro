@@ -4,23 +4,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ƒNƒGƒXƒgŠÖŒW‚Ìƒf[ƒ^
-/// ƒNƒGƒXƒgƒV[ƒ“‚É¶¬‚³‚ê‚é
 /// </summary>
 public class QuestData : SerializedMonoBehaviour
 {
 
     /// <summary>
-    /// ƒCƒ“ƒXƒ^ƒ“ƒX
+    /// ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
     /// </summary>
     public static QuestData instance;
 
-    // ƒCƒxƒ“ƒgƒ^ƒCƒ‹ƒŠƒXƒg
 
-    // Œ»İ‚ÌŠK‘w
+    // ç¾åœ¨ã®ãƒ•ãƒ­ã‚¢
     public int currentFloor;
 
-    // ƒJ[ƒhˆê——
+    // ç¾åœ¨ã®ãƒ•ãƒ­ã‚¢ã®ã‚«ãƒ¼ãƒ‰çŠ¶æ³
     public List<CONST.QUEST.CardType> currentCardList;
 
     // Start is called before the first frame update

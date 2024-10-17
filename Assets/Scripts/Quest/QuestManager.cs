@@ -1,6 +1,7 @@
 using CONST;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 public class QuestManager : MonoBehaviour
 {
@@ -15,20 +16,21 @@ public class QuestManager : MonoBehaviour
 
     //敵に遭遇するテーブル:-1なら遭遇しない 0なら遭遇する
     int[] encountTable = { -1, -1, 0, -1, 0, -1 };
-    CONST.QUEST.CardType[] cardList =
+    List<CONST.QUEST.CardType> cardList = new List<CONST.QUEST.CardType>()
     {
-        // Mock実装 Excel等で階層ごとのカードリストを設定しておき、
-        // 初めにランダムで並び変える
-        CONST.QUEST.CardType.EncountEnemy,
-        CONST.QUEST.CardType.EncountEnemy,
-        CONST.QUEST.CardType.EncountEnemy,
-        CONST.QUEST.CardType.EncountEnemy,
-        CONST.QUEST.CardType.EncountEnemy,
-        CONST.QUEST.CardType.EncountEnemy,
-        CONST.QUEST.CardType.EncountEnemy,
-        CONST.QUEST.CardType.EncountEnemy,
-        CONST.QUEST.CardType.EncountEnemy,
-        CONST.QUEST.CardType.EncountEnemy,
+            // Mock実装 Excel等で階層ごとのカードリストを設定しておき、
+            // 初めにランダムで並び変える
+            CONST.QUEST.CardType.EncountEnemy,
+            CONST.QUEST.CardType.EncountEnemy,
+            CONST.QUEST.CardType.EncountEnemy,
+            CONST.QUEST.CardType.EncountEnemy,
+            CONST.QUEST.CardType.EncountEnemy,
+            CONST.QUEST.CardType.EncountEnemy,
+            CONST.QUEST.CardType.EncountEnemy,
+            CONST.QUEST.CardType.EncountEnemy,
+            CONST.QUEST.CardType.EncountEnemy,
+            CONST.QUEST.CardType.EncountEnemy,
+
     };
 
     private int currentFloor = 0; //現在の階層
@@ -87,9 +89,13 @@ public class QuestManager : MonoBehaviour
         // ダンジョンの進捗状態、パーティー状態を保存する(Autoセーブ的な)
         QuestData.instance.currentFloor = currentFloor;
 
+        // 現在のカード状況を保存
+        QuestData.instance.currentCardList = cardList;
+
         // マスターに現在のプレイヤーデータを保存する
         // プレイヤーサイドのステータスを更新する
         PlayerData.instance.UpdatePlayerData(this.w_PartyMember.GetCharParameters());
+
 
         // バトルシーンをロードする
         SceneManager.LoadScene(CONST.SCENE.Scene.Battle.ToString());
