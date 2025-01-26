@@ -2,12 +2,13 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!78 &1
 TagManager:
-  serializedVersion: 2
+  serializedVersion: 3
   tags:
   - AbilityButton
   - ItemButton
   - Enemy
   - Action_row_number_content
+  - HowItemButton
   layers:
   - Default
   - TransparentFX
@@ -17,7 +18,7 @@ TagManager:
   - UI
   - AbilityButton
   - ItemButton
-  - 
+  - PlayerMenu
   - 
   - 
   - 
@@ -45,3 +46,5 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  m_RenderingLayers:
+  - Default

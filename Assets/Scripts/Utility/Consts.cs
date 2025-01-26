@@ -32,6 +32,35 @@ namespace CONST
         }
 
     }
+    public static class QUEST_MENU_STATUS
+    {
+        /// <summary>
+        ///  シーン
+        /// </summary>
+        public enum MenuStatus
+        {
+            Main,
+            PlayerMainMenu,
+            ItemMenu
+        }
+
+    }
+
+    public static class ITEM_MENU_STATUS
+    {
+        /// <summary>
+        ///  アイテムメニューの各フェーズ
+        /// </summary>
+        public enum MenuStatus
+        {
+            HowItem,
+            SelectItem,
+            SelectTargetAndUse,
+            SelectArrangement
+        }
+
+    }
+
     public static class BATTLE_RATE
     {
         //===========
@@ -123,6 +152,16 @@ namespace CONST
             MagicSingleAttack,
             DoItem,
         }
+
+        /// <summary>
+        /// 効果対象のstatus
+        /// </summary>
+        public enum TARGET_STATUS
+        {
+            HP,
+            MP,
+            None
+        }
     }
 
     // アイテム
@@ -173,6 +212,11 @@ namespace CONST
             EncountBoss,
             // ランダムイベント
             Secret,
+            // 削除されている
+            Deleted,
+            // 選択されている
+            Selected,
+
             // 何も起こらない(テスト用)
             None
 

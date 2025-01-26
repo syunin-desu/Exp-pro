@@ -1,34 +1,29 @@
-using CONST;
-using Cysharp.Threading.Tasks;
 using DG.Tweening;
-using Newtonsoft.Json.Linq;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
+using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class CardManager : MonoBehaviour
 {
     public QuestManager questManager;
 
-    // ?????O???J?[?h?u????
+    // 画面外に配置するカードのポジション
     [SerializeField]
     RectTransform position0;
 
-    // ?J?[?h?\???????e?I?u?W?F?N?g
+    // 現在のカードのポジション
     [SerializeField]
     public RectTransform parentCardPositions;
 
-    // ?J?[?h???X?g
+    // 現在フロアのカードリスト(questManagerからのコピー)
     public List<RectTransform> eventCardList;
 
-    // ?J?[?h???z?u???X?g
+    // 配置するカードの各ポジション座標一覧
     public List<RectTransform> cardPostions;
 
-    // ?v???C???[???I?????\???J?[?h????
-    public int canSelectCardNumber = 3;
+    // 選択可能なカード枚数
+    public int canSelectCardNumber;
 
     // Update is called once per frame
     void Update()
@@ -36,10 +31,14 @@ public class CardManager : MonoBehaviour
 
     }
     /// <summary>
-    /// ??????????(??????start????QuestManager?????x?????s??????????)
+    /// 初期化処理
     /// </summary>
     public void Initialize()
     {
+
+        // 選択可能枚数の確認
+        canSelectCardNumber = QuestData.instance.canSelectCardNumber;
+
         RectTransform[] cardDisplayArea = parentCardPositions.GetComponentsInChildren<RectTransform>();
         foreach (var item in cardDisplayArea.Select((value, index) => new { value, index }))
         {
@@ -53,7 +52,7 @@ public class CardManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ?????O???J?[?h???????????z?u
+    /// 画面外にカードを作成する
     /// </summary>
     /// <param name="cardList"></param>
     public void CreateCardOnPositon0(List<CONST.QUEST.CardType> cardList)
@@ -66,24 +65,80 @@ public class CardManager : MonoBehaviour
             targetCardPrefab.name = $"card_{cardNo}_{card.index}";
             targetCardPrefab.GetComponent<CardPropertyManager>().SetCardType(card.value);
             targetCardPrefab.GetComponent<CardPropertyManager>().SetCardRowID(card.index);
+            if (card.value == CONST.QUEST.CardType.Deleted)
+            {
+                targetCardPrefab.GetComponent<CardUIManager>().SetSpriteClear();
+            }
 
             // ?J?[?h????????
 
             // ?J?[?h???X?g??????
-            eventCardList.Add(targetCardPrefab);
 
             targetCardPrefab.gameObject.SetActive(true);
-
+            eventCardList.Add(targetCardPrefab);
         }
 
         this.MoveCardToEachPosition(eventCardList);
 
-        // ????????X?????I?????\??????????
+        // 選択可能範囲内にあるカードを選択可能にする
         SetCanSelected(this.canSelectCardNumber);
     }
 
     /// <summary>
-    /// ?J?[?h?????????????\?????u??????????
+    /// それぞれの表示位置にカードを生成
+    /// </summary>
+    /// <param name="cardList"></param>
+    public void CreateCardOnPositonEach(List<CONST.QUEST.CardType> cardList)
+    {
+        foreach (var card in cardList.Select((value, index) => new { value, index }))
+        {
+            int cardNo = (int)card.value;
+            var targetCardPrefab = GameObject.Instantiate(position0);
+            targetCardPrefab.transform.SetParent(parentCardPositions.transform, false);
+            targetCardPrefab.transform.position = cardPostions[card.index].transform.position;
+            targetCardPrefab.name = $"card_{cardNo}_{card.index}";
+            targetCardPrefab.GetComponent<CardPropertyManager>().SetCardType(card.value);
+            targetCardPrefab.GetComponent<CardPropertyManager>().SetCardRowID(card.index);
+            if (card.value == CONST.QUEST.CardType.Deleted)
+            {
+                targetCardPrefab.GetComponent<CardUIManager>().SetSpriteClear();
+            }
+
+            // ?J?[?h????????
+
+            // ?J?[?h???X?g??????
+
+            targetCardPrefab.gameObject.SetActive(true);
+            eventCardList.Add(targetCardPrefab);
+        }
+    }
+
+    /// <summary>
+    /// 削除、選択済みカードをリストから削除し、順番に並び替え
+    /// </summary>
+    /// <param name="cardList"></param>
+    public void ReMoveCardPosition(List<CONST.QUEST.CardType> cardList)
+    {
+        // 削除、選択済みステータスのカードを削除
+        eventCardList.RemoveAll(c => c.GetComponent<CardPropertyManager>().GetCardType() == CONST.QUEST.CardType.Deleted ||
+                                     c.GetComponent<CardPropertyManager>().GetCardType() == CONST.QUEST.CardType.Selected);
+
+        // rowIDを再採番
+        foreach (var card in eventCardList.Select((value, index) => new { value, index }))
+        {
+            card.value.GetComponent<CardPropertyManager>().SetCardRowID(card.index);
+        }
+
+        this.MoveCardToEachPosition(eventCardList);
+
+        // 選択可能範囲内にあるカードを選択可能にする
+        SetCanSelected(this.canSelectCardNumber);
+    }
+
+
+
+    /// <summary>
+    /// 各位置にカードを移動させる
     /// </summary>
     public void MoveCardToEachPosition(List<RectTransform> eventCardList)
     {
@@ -91,7 +146,7 @@ public class CardManager : MonoBehaviour
         {
             card.value.GetComponents<CardUIManager>().Initialize();
 
-            // ?I?????????J?[?h?????????\??????
+            // 各ポジションにカードを配置する
             if (card.index <= canSelectCardNumber - 1)
             {
                 card.value.GetComponent<CardUIManager>().MoveCardFixedPositionWithOpenCard(cardPostions[card.index].anchoredPosition, CONST.ANIMATION_SPEED.FLIP_CARD_SPEED);
@@ -105,22 +160,22 @@ public class CardManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ?I?????????J?[?h???C?x???g?????s???????C???^?[?t?F?[?X
+    /// 選択されたカードのイベントを実行するインターフェース処理
     /// </summary>
     public async void DoEvent(CONST.QUEST.CardType selectedCardType, int rowID)
     {
-        // ?J?[?h?I???s???????????s
+        // 全カードを選択不可にする
         this.SetCanSelectedAllCard(false);
 
-        // ?I?????????J?[?h?????c?????A???????O???I?????\?????????J?[?h??UI??????????
+        // 選択範囲内の非選択カードを削除するアニメーションを実行する
         await this.DropUnselectedCard(rowID);
 
-        // ?C?x???g???s
-        // QuestManager???C?x???g???????????n?????A???????????s??????
-        questManager.executeCardEvent(selectedCardType);
+        // カードに設定されているイベントを実行する
+        // 実行はQuestManagerで実行
+        questManager.executeCardEvent(selectedCardType, canSelectCardNumber, rowID);
     }
 
-    /// ???????w???????????J?[?h???I?????\??????
+    /// 選択可能かのフラグを更新
     /// </summary>
     /// <param name="canSelectedCardNumber"></param>
     public void SetCanSelected(int canSelectedCardNumber)
@@ -132,7 +187,7 @@ public class CardManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ?S?J?[?h???I???t???O????????????
+    /// 全てのカードを選択可能に変更
     /// </summary>
     /// <param name="canSelect"></param>
     public void SetCanSelectedAllCard(bool canSelect)
@@ -143,8 +198,16 @@ public class CardManager : MonoBehaviour
         }
     }
 
-    // ?I?????????J?[?h?????c?????A???????O???I?????\?????????J?[?h??UI??????????
-    public async UniTask DropUnselectedCard(int selectedCardIndex)
+    // 選択されたカードを削除するエフェクトを実行
+    public async Task DropSelectedCard(int selectedCardIndex)
+    {
+        Sequence drop_sequence = DOTween.Sequence();
+        this.eventCardList[selectedCardIndex].gameObject.GetComponent<CardUIManager>().FadeOutForUnder(seq: drop_sequence);
+        await drop_sequence.AsyncWaitForCompletion();
+    }
+
+    // 非選択カードを削除するエフェクトを実行する
+    public async Task DropUnselectedCard(int selectedCardIndex)
     {
         Sequence drop_sequence = DOTween.Sequence();
         foreach (var card in this.eventCardList.Select((value, index) => new { value, index }))
@@ -154,7 +217,7 @@ public class CardManager : MonoBehaviour
                 card.value.gameObject.GetComponent<CardUIManager>().FadeOutForUnder(seq: drop_sequence);
             }
         }
-
         await drop_sequence.AsyncWaitForCompletion();
     }
+
 }

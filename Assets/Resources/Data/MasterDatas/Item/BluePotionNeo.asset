@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5de66e8b2a5dda542a22d267fe30db2a, type: 3}
   m_Name: BluePotionNeo
   m_EditorClassIdentifier: 
-  Name: NeoBluePotion
+  Name: BluePotionNeo
   displayName: "\u30D6\u30EB\u30FC\u30DD\u30FC\u30B7\u30E7\u30F3\u30FB\u30CD\u30AA"
   Type: 3
+  speed_rank: 0
   Range: 0
   Element: 3
   value: 300

@@ -1,7 +1,4 @@
-using Cysharp.Threading.Tasks;
 using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,6 +14,13 @@ public class CardUIManager : MonoBehaviour
         isCardFront = false;
         imgCard = GetComponent<Image>();
         imgCard.sprite = backCard;
+    }
+
+    // カードを透明化させる(バトル後のカード空欄表示のため)
+    public void SetSpriteClear()
+    {
+        imgCard.sprite = null;
+        imgCard.color = Color.clear;
     }
 
     // 特定位置にカードを移動する

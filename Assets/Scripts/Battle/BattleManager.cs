@@ -1,10 +1,9 @@
-using Cysharp.Threading.Tasks;
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Linq;
 
 /// <summary>
 /// バトルシーン管理クラス
@@ -152,7 +151,7 @@ public class BattleManager : MonoBehaviour
     /// アクションリストに登録された行動を順番に実行する
     /// </summary>
     /// <returns></returns>
-    private async UniTask doAction()
+    private async Task doAction()
     {
         foreach (BattleAction allAction in battleActionList.GetAllActionList())
         {
@@ -248,12 +247,12 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     /// <param name="player"></param>
     /// <returns></returns>
-    private async UniTask PlayerAttack(PartyMember player)
+    private async Task PlayerAttack(PartyMember player)
     {
         //Playerが攻撃
         player.Attack(enemy);
         Debug.Log($"{enemy.GetName()}:HP={enemy.GetHp()}");
-        await UniTask.Delay(TimeSpan.FromSeconds(CONST.UTILITY.BATTLEACTION_DELAY));
+        await Task.Delay(TimeSpan.FromSeconds(CONST.UTILITY.BATTLEACTION_DELAY));
     }
 
     /// <summary>
@@ -261,10 +260,10 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     /// <param name="enemy"></param>
     /// <returns></returns>
-    private async UniTask EnemyAttack(EnemyManager enemy)
+    private async Task EnemyAttack(EnemyManager enemy)
     {
         enemy.Attack(partyMember);
-        await UniTask.Delay(TimeSpan.FromSeconds(CONST.UTILITY.BATTLEACTION_DELAY));
+        await Task.Delay(TimeSpan.FromSeconds(CONST.UTILITY.BATTLEACTION_DELAY));
 
     }
 
@@ -273,12 +272,12 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     /// <param name="character"></param>
     /// <returns></returns>
-    private async UniTask Defense(CharBase character)
+    private async Task Defense(CharBase character)
     {
         //指定したキャラクタの防御フラグをtrueにする
         character.Defense();
 
-        await UniTask.Delay(TimeSpan.FromSeconds(CONST.UTILITY.BATTLEACTION_DELAY));
+        await Task.Delay(TimeSpan.FromSeconds(CONST.UTILITY.BATTLEACTION_DELAY));
 
     }
 
@@ -312,6 +311,8 @@ public class BattleManager : MonoBehaviour
     {
         // プレイヤーサイドのステータスを更新する
         PlayerData.instance.UpdatePlayerData(this.partyMember.GetCharParameters());
+        // クエストシーンに戻った際のカード配置アニメーションを無効にする
+        QuestData.instance.animateCardInitialize = false;
         // UIを非表示にする
         this.switchBattleUI(false);
     }

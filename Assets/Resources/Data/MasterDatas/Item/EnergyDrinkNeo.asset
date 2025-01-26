@@ -15,7 +15,9 @@ MonoBehaviour:
   Name: EnergyDrinkNeo
   displayName: "\u30A8\u30CD\u30EB\u30AE\u30FC\u30C9\u30EA\u30F3\u30AF\u30FB\u30CD\u30AA"
   Type: 3
+  target_status: 1
+  speed_rank: 0
   Range: 0
-  Element: 0
+  Element: 3
   value: 100
-  price: 1000
+  price: 1500

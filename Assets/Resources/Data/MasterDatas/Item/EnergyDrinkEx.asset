@@ -15,7 +15,9 @@ MonoBehaviour:
   Name: EnergyDrinkEx
   displayName: "\u30A8\u30CD\u30EB\u30AE\u30FC\u30C9\u30EA\u30F3\u30AF\u30FBEX"
   Type: 3
+  target_status: 1
+  speed_rank: 0
   Range: 0
   Element: 0
   value: 300
-  price: 1500
+  price: 1000

@@ -66,7 +66,7 @@ public class PlayerData : SerializedMonoBehaviour
     {
         PartyMember = ConvertMockToCharParameter(this.MockCharData);
         HaveItemList = MockItemData;
-        this.HasMoney.InitializeMoney(99999);
+        this.HasMoney.InitializeMoney(123456789);
     }
 
     /// <summary>
@@ -76,22 +76,27 @@ public class PlayerData : SerializedMonoBehaviour
     {
         return mockCharData
             .Select(charData => new CharParameter
-        { 
-            Name = charData.Name,
-            currentHP = charData.currentHP,
-            currentMP = charData.currentMP,
-            maxHp = charData.maxHp,
-            maxMp = charData.maxMp,
-            STR = charData.STR,
-            DEF = charData.DEF,
-            SPEED = charData.SPEED,
-            INT = charData.INT,
-            ROLE = charData.ROLE,
-            countOfActions = charData.countOfActions,
-            HavingAbility = charData.HavingAbility,
-            WeakElement = charData.WeakElement,
-            StrongElement = charData.StrongElement,
+            {
+                Name = charData.Name,
+                currentHP = charData.currentHP,
+                currentMP = charData.currentMP,
+                maxHp = charData.maxHp,
+                maxMp = charData.maxMp,
+                STR = charData.STR,
+                DEF = charData.DEF,
+                SPEED = charData.SPEED,
+                INT = charData.INT,
+                ROLE = charData.ROLE,
+                countOfActions = charData.countOfActions,
+                HavingAbility = charData.HavingAbility,
+                WeakElement = charData.WeakElement,
+                StrongElement = charData.StrongElement,
 
-        }).ToList();
+            }).ToList();
+    }
+
+    public Dictionary<ItemData, int> GetItems()
+    {
+        return this.HaveItemList;
     }
 }

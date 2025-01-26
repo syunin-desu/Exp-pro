@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
-using Sirenix.Utilities;
+using System.Threading.Tasks;
 using UnityEngine;
 
 //Ability実行管理
@@ -26,7 +24,7 @@ public class AbilityManager : MonoBehaviour
     /// <param name="targetChar">対象</param>
     /// <param name="execAbilityName">実行アビリティ名</param>
     /// <returns></returns>
-    public async UniTask execAbility(CharBase performChar, CharBase? targetChar, string execAbilityName, List<CONST.ACTION.Ability_Action_Cell> execAbilityAction)
+    public async Task execAbility(CharBase performChar, CharBase? targetChar, string execAbilityName, List<CONST.ACTION.Ability_Action_Cell> execAbilityAction)
     {
         // アビリティの実行に必要なMPを消費する
         if (performChar.ConsumeMP(this.getAbilityData(execAbilityName).requiredMp))
@@ -63,7 +61,7 @@ public class AbilityManager : MonoBehaviour
     /// <param name="targetChar"></param>
     /// <param name="execAbilityData"></param>
     /// <returns></returns>
-    private async UniTask MagicSingleAttack(CharBase performChar, CharBase targetChar, Ability_base execAbilityData)
+    private async Task MagicSingleAttack(CharBase performChar, CharBase targetChar, Ability_base execAbilityData)
     {
 
         int performerInt = performChar.GetInteli();
@@ -75,7 +73,7 @@ public class AbilityManager : MonoBehaviour
 
         targetChar.Damage((int)((performerInt * power) * elementDamageRate));
 
-        await UniTask.Delay(TimeSpan.FromSeconds(CONST.UTILITY.BATTLEACTION_DELAY));
+        await Task.Delay(TimeSpan.FromSeconds(CONST.UTILITY.BATTLEACTION_DELAY));
     }
 
     //======================================

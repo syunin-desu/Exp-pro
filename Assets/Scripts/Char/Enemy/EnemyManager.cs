@@ -79,9 +79,9 @@ public class EnemyManager : CharBase
     }
 
 
-    public override void Heal(int healValue)
+    public override void HealHP(int healValue)
     {
-        base.Heal(healValue);
+        base.HealHP(healValue);
 
         CharParameter charParameter = this.GetCharParameters();
 

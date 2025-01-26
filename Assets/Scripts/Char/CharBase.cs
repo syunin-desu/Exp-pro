@@ -83,7 +83,7 @@ public class CharBase : MonoBehaviour
     /// HPを回復する
     /// </summary>
     /// <param name="healValue">回復量</param>
-    public virtual void Heal(int healValue)
+    public virtual void HealHP(int healValue)
     {
 
         Debug.Log("beforeHp:" + this.charParameters.currentHP);
@@ -93,6 +93,23 @@ public class CharBase : MonoBehaviour
             this.charParameters.currentHP = this.charParameters.maxHp;
         }
         Debug.Log("afterHp:" + this.charParameters.currentHP);
+
+    }
+
+    /// <summary>
+    /// MPを回復する
+    /// </summary>
+    /// <param name="healValue">回復量</param>
+    public virtual void HealMP(int healValue)
+    {
+
+        Debug.Log("beforeMp:" + this.charParameters.currentMP);
+        this.charParameters.currentMP += healValue;
+        if (this.charParameters.currentMP > this.charParameters.maxMp)
+        {
+            this.charParameters.currentMP = this.charParameters.maxMp;
+        }
+        Debug.Log("afterMp:" + this.charParameters.currentMP);
 
     }
 

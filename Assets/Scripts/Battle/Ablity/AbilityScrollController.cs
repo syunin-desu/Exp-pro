@@ -68,4 +68,16 @@ public class AbilityScrollController : MonoBehaviour
             }
         }
     }
+
+    public void DeleteAllItemButton()
+    {
+        var items = GameObject.FindGameObjectsWithTag("ItemButton");
+
+        //表示しているボタンの削除 
+        foreach (var button in items)
+        {
+            Destroy(button);
+
+        }
+    }
 }

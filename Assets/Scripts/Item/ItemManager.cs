@@ -1,14 +1,11 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class ItemManager : MonoBehaviour
 {
     private List<ItemData> _itemList = new List<ItemData>();
-
-    public PlayerUIManager playerUI;
 
     // Start is called before the first frame update
     void Start()
@@ -17,13 +14,19 @@ public class ItemManager : MonoBehaviour
     }
 
 #nullable enable
-    public async UniTask ExecItem(CharBase performChar, CharBase? targetChar, string execItemName)
+    public async Task ExecItem(CharBase performChar, CharBase? targetChar, string execItemName, bool canEffect = true)
     {
         switch (execItemName)
         {
             case "BluePotion":
-                await this.BluePotion(performChar, this.GetItemData(execItemName));
+            case "BluePotionEx":
+            case "BluePotionNeo":
+            case "EnagyDrink":
+            case "EnagyDrinkEx":
+            case "EnagyDrinkNeo":
+                await this.DoHealItem(performChar, this.GetItemData(execItemName), canEffect);
                 break;
+
             default:
                 Debug.Log("アイテムデータに登録されていないアイテムが指定されました");
                 break;
@@ -32,22 +35,31 @@ public class ItemManager : MonoBehaviour
 #nullable disable
 
     /// <summary>
-    ///  ブルーポーション
+    ///  回復アイテムを使用
     /// </summary>
     /// <param name="performChar">対象キャラ</param>
     /// <param name="execItemData">実行するアイテムデータ</param>
-    public async UniTask BluePotion(CharBase performChar, ItemData execItemData)
+    public async Task DoHealItem(CharBase performChar, ItemData execItemData, bool canEffect)
     {
 
         int healValue = execItemData.value;
 
-        performChar.Heal(healValue);
+        if (execItemData.Target_status == CONST.ACTION.TARGET_STATUS.HP)
+        {
+            performChar.HealHP(healValue);
+        }
+        else if (execItemData.Target_status == CONST.ACTION.TARGET_STATUS.MP)
+        {
+            performChar.HealMP(healValue);
+        }
 
         //アイテム数を減少させる
         performChar.reduceItemCount(execItemData.Name, 1);
 
-        //UI修正
-        await UniTask.Delay(TimeSpan.FromSeconds(CONST.UTILITY.BATTLEACTION_DELAY));
+        if (canEffect)
+        {
+            await Task.Delay(TimeSpan.FromSeconds(CONST.UTILITY.BATTLEACTION_DELAY));
+        }
 
     }
 

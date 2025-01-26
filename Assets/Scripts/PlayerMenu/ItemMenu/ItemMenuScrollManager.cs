@@ -1,0 +1,51 @@
+using System.Collections.Generic;
+using System.Linq;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class ItemMenuScrollManager : MonoBehaviour
+{
+    [SerializeField]
+    RectTransform ItemContents = null;
+    private RectTransform _contentArea;
+
+    [SerializeField]
+    private ItemManager _itemManager;
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        GameObject.Find("Item_Button").SetActive(false);
+    }
+
+    public void SetupItemUI(Dictionary<ItemData, int> havingItemList)
+    {
+        foreach (var item in havingItemList)
+        {
+            var itemContent = GameObject.Instantiate(ItemContents) as RectTransform;
+            itemContent.SetParent(transform, false);
+
+            var texts = itemContent.GetComponentsInChildren<TextMeshProUGUI>();
+
+            // ボタンを非活性にする
+            itemContent.GetComponentInChildren<Button>().enabled = false;
+            texts.First(t => t.name == "ItemName").text = this._itemManager.getItemDisplayName(item.Key.Name.ToString());
+            texts.First(t => t.name == "Item_Number").text = item.Value.ToString();
+
+            itemContent.gameObject.SetActive(true);
+        }
+    }
+
+    public void RemoveAllItem()
+    {
+        var items = GameObject.FindGameObjectsWithTag("ItemButton");
+
+        //表示しているボタンの削除 
+        foreach (var button in items)
+        {
+            Destroy(button);
+
+        }
+    }
+}

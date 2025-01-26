@@ -2,6 +2,7 @@ using CONST;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using System.Linq;
 
 public class QuestManager : MonoBehaviour
 {
@@ -14,40 +15,49 @@ public class QuestManager : MonoBehaviour
     public CardUIManager cardUIManager;
     public CardManager cardManager;
 
-    //敵に遭遇するテーブル:-1なら遭遇しない 0なら遭遇する
-    int[] encountTable = { -1, -1, 0, -1, 0, -1 };
-    List<CONST.QUEST.CardType> cardList = new List<CONST.QUEST.CardType>()
-    {
-            // Mock実装 Excel等で階層ごとのカードリストを設定しておき、
-            // 初めにランダムで並び変える
-            CONST.QUEST.CardType.EncountEnemy,
-            CONST.QUEST.CardType.EncountEnemy,
-            CONST.QUEST.CardType.EncountEnemy,
-            CONST.QUEST.CardType.EncountEnemy,
-            CONST.QUEST.CardType.EncountEnemy,
-            CONST.QUEST.CardType.EncountEnemy,
-            CONST.QUEST.CardType.EncountEnemy,
-            CONST.QUEST.CardType.EncountEnemy,
-            CONST.QUEST.CardType.EncountEnemy,
-            CONST.QUEST.CardType.EncountEnemy,
+    public PlayerMenuUIManager playerMenuUIManager;
 
-    };
+    List<CONST.QUEST.CardType> cardList = new List<CONST.QUEST.CardType>();
 
     private int currentFloor = 0; //現在の階層
 
+    // メニュー画面状態
+    private CONST.QUEST_MENU_STATUS.MenuStatus currentMenuStatus;
+
     // ダンジョンに最初に張ったとき、ロードした時
-    private void Start()
+    private async void Start()
     {
         // QuestDataから現在の階層を読み込む
         currentFloor = QuestData.instance.currentFloor;
 
         // QuestDataからカード配置を読み込む
-        // 一旦Mockで実装
-        // cardList = QuestData.instance.currentCardList;
+        cardList = QuestData.instance.currentCardList;
 
-        // MOCK: 全カードをposition 0に生成し、Eventカードリストを更新
         cardManager.Initialize();
-        cardManager.CreateCardOnPositon0(cardList);
+
+        if (QuestData.instance.animateCardInitialize)
+        {
+            cardManager.CreateCardOnPositon0(cardList);
+        }
+        else
+        {
+            // 初期表示(アニメーションなし)
+            cardManager.CreateCardOnPositonEach(cardList);
+
+            // 選択済みのカードを削除するアニメーション
+            int targetIndex = cardList.FindIndex(c => c == CONST.QUEST.CardType.Selected);
+            await cardManager.DropSelectedCard(targetIndex);
+            cardList[targetIndex] = CONST.QUEST.CardType.Deleted;
+
+            // 削除ステータスのカードを削除
+            cardList.RemoveAll(c => c == CONST.QUEST.CardType.Deleted);
+
+            // 並び替えアニメーション
+            cardManager.ReMoveCardPosition(cardList);
+
+        }
+
+        currentMenuStatus = QUEST_MENU_STATUS.MenuStatus.Main;
 
         stageUI.UpdateUI(currentFloor);
     }
@@ -63,16 +73,16 @@ public class QuestManager : MonoBehaviour
         //進行度をUIに反映
         stageUI.UpdateUI(currentFloor);
 
-        if (encountTable.Length <= currentFloor)
-        {
-            Debug.Log("クエストクリア");
-            stageUI.ShowClearText();
+        //if (encountTable.Length <= currentFloor)
+        //{
+        //    Debug.Log("クエストクリア");
+        //    stageUI.ShowClearText();
 
-        }
-        else if (encountTable[currentFloor] == 0)
-        {
-            EncountEnemy();
-        }
+        //}
+        //else if (encountTable[currentFloor] == 0)
+        //{
+        //    EncountEnemy();
+        //}
     }
 
     /// <summary>
@@ -85,7 +95,6 @@ public class QuestManager : MonoBehaviour
 
     void EncountEnemy()
     {
-        // シーン遷移するため
         // ダンジョンの進捗状態、パーティー状態を保存する(Autoセーブ的な)
         QuestData.instance.currentFloor = currentFloor;
 
@@ -96,7 +105,6 @@ public class QuestManager : MonoBehaviour
         // プレイヤーサイドのステータスを更新する
         PlayerData.instance.UpdatePlayerData(this.w_PartyMember.GetCharParameters());
 
-
         // バトルシーンをロードする
         SceneManager.LoadScene(CONST.SCENE.Scene.Battle.ToString());
     }
@@ -105,8 +113,22 @@ public class QuestManager : MonoBehaviour
     /// 選択されたカードイベントを実施
     /// </summary>
     /// <param name="selectedCardType"></param>
-    public void executeCardEvent(CONST.QUEST.CardType selectedCardType)
+    public void executeCardEvent(CONST.QUEST.CardType selectedCardType, int canSelectCardNumber, int selectedCardIndex)
     {
+        // 選択範囲内の非選択カードを削除
+        for (var i = 0; i < canSelectCardNumber; i++)
+        {
+            if (i != selectedCardIndex)
+            {
+                this.UpdateUnSelectedCard(i, CONST.QUEST.CardType.Deleted);
+            }
+            else
+            {
+                this.UpdateUnSelectedCard(i, CONST.QUEST.CardType.Selected);
+            }
+        }
+
+
         switch (selectedCardType)
         {
             case CONST.QUEST.CardType.EncountEnemy:
@@ -125,5 +147,40 @@ public class QuestManager : MonoBehaviour
 
         // カード選択可能状態に移行する
         // CardUIManagerで処理させる
+    }
+
+    /// <summary>
+    /// プレイヤーメニューの表示する
+    /// </summary>
+    public void ShowPlayerMenu()
+    {
+        this.currentMenuStatus = CONST.QUEST_MENU_STATUS.MenuStatus.PlayerMainMenu;
+        this.playerMenuUIManager.ShowPlayerMenu();
+    }
+
+    /// <summary>
+    /// プレイヤーメニューを閉じる
+    /// </summary>
+    public void ClosePlayerMenu()
+    {
+        this.currentMenuStatus = CONST.QUEST_MENU_STATUS.MenuStatus.Main;
+        this.playerMenuUIManager.ClosePlayerMenu();
+    }
+
+    // 選択したカードのステータスを変更
+    public void UpdateUnSelectedCard(int deletedCardIndex, CONST.QUEST.CardType updateStatus)
+    {
+
+        this.cardList[deletedCardIndex] = updateStatus;
+    }
+
+    public void UpdateCurrentMenuStatus(CONST.QUEST_MENU_STATUS.MenuStatus targetStatus)
+    {
+        this.currentMenuStatus = targetStatus;
+    }
+
+    public CONST.QUEST_MENU_STATUS.MenuStatus GetCurrentMenuStatus()
+    {
+        return currentMenuStatus;
     }
 }
