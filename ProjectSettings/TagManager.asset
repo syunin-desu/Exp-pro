@@ -9,6 +9,11 @@ TagManager:
   - Enemy
   - Action_row_number_content
   - HowItemButton
+  - PlayerMenuItembutton
+  - PlayerMenuItemSelectedIcon
+  - PlayerMenuAbilityButton
+  - PlayerMenuAbilitySelectedIcon
+  - PlayerMenuAbilityHottoButton
   layers:
   - Default
   - TransparentFX

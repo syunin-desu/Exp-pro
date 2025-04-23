@@ -55,13 +55,15 @@ public class ActionRowNumberListScrollController : MonoBehaviour
             var texts = ability_content.GetComponentsInChildren<Text>();
             int count = 1;
 
-            foreach(var text in texts) {
+            foreach (var text in texts)
+            {
                 Debug.Log(text.name);
                 // TODO: オブジェクト名を変更したらこの部分も変更すること
                 if (text.name.StartsWith("Action_row"))
                 {
                     text.text = (ability.index + 1).ToString();
-                }else
+                }
+                else
                 {
                     switch (ability.value.action)
                     {
@@ -71,7 +73,7 @@ public class ActionRowNumberListScrollController : MonoBehaviour
                             text.text = this.abilityManager.getAbilityDisplayName(ability.value.abilityName);
                             break;
                         case CONST.BATTLE_ACTION.COMMAND.Item:
-                            text.text = this.itemManager.getItemDisplayName(ability.value.itemName);
+                            text.text = this.itemManager.getItemNameFromID(ability.value.id);
                             break;
 
                     }

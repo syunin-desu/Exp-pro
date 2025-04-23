@@ -56,6 +56,11 @@ public class BattleManager : MonoBehaviour
     public AbilityUIManager abilityUI;
 
     /// <summary>
+    /// 所持アイテム管理クラス
+    /// </summary>
+    public HadItem HadItem;
+
+    /// <summary>
     /// アビリティウインドウの中身を管理するクラス
     /// </summary>
     public AbilityScrollController abilityContents;
@@ -184,11 +189,11 @@ public class BattleManager : MonoBehaviour
                     {
                         // TODO 使用者と対象のキャラ情報ははAllActionListに格納できるようにしたい
                         // 引数に指定しない
-                        await abilityManager.execAbility(partyMember, enemy, allAction.abilityName, allAction.abilityActions);
+                        await abilityManager.execAbility(partyMember, enemy, allAction.id, allAction.abilityActions);
                     }
                     else
                     {
-                        await abilityManager.execAbility(enemy, partyMember, allAction.abilityName, allAction.abilityActions);
+                        await abilityManager.execAbility(enemy, partyMember, allAction.id, allAction.abilityActions);
                         // TODO 一時的に記述 HPなどのUIへの反映を動的に監視できるようにしたい
 
                     }
@@ -202,11 +207,11 @@ public class BattleManager : MonoBehaviour
                 case CONST.BATTLE_ACTION.COMMAND.Item:
                     if (role == CONST.CHARCTOR.PLAYER)
                     {
-                        await itemManager.ExecItem(partyMember, enemy, allAction.itemName);
+                        await itemManager.ExecItem(partyMember, enemy, allAction.id);
                     }
                     else
                     {
-                        await itemManager.ExecItem(enemy, partyMember, allAction.itemName);
+                        await itemManager.ExecItem(enemy, partyMember, allAction.id);
                         // TODO 一時的に記述 HPなどのUIへの反映を動的に監視できるようにしたい
                     }
                     break;
@@ -365,11 +370,12 @@ public class BattleManager : MonoBehaviour
     }
 
     /// <summary>アビリティコマンドを登録</summary>
-    public void setAction_Ability(CharBase character, string selectedAbilityName, List<CONST.ACTION.Ability_Action_Cell> ability_Actions)
+    public void setAction_Ability(CharBase character, string selectedAbilityName, List<CONST.ACTION.Ability_Action_Cell> ability_Actions, string id)
     {
         BattleAction act = new BattleAction(CONST.BATTLE_ACTION.COMMAND.Ability, character);
         // アビリティ名を格納
         act.setAbilityName(selectedAbilityName);
+        act.id = id;
         act.SetSpeedRank(this.abilityManager.getAbilitySpeedRank(selectedAbilityName));
         act.setAbilityAction(ability_Actions);
 
@@ -389,13 +395,14 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     /// <param name="character">選択キャラ</param>
     /// <param name="selectedItemName">選択されたアイテム名</param>
-    public void setAction_Item(CharBase character, string selectedItemName)
+    public void setAction_Item(CharBase character, string selectedItemID)
     {
         BattleAction act = new BattleAction(CONST.BATTLE_ACTION.COMMAND.Item, character);
 
         // アビリティ名を格納
-        act.setItemName(selectedItemName);
-        act.SetSpeedRank(this.itemManager.getItemSpeedRankForItemName(selectedItemName));
+        act.id = selectedItemID;
+        act.setItemName(this.itemManager.getItemNameFromID(selectedItemID));
+        act.SetSpeedRank(this.itemManager.getItemSpeedRankForItemID(selectedItemID));
 
         setActionList_FOR_Role(character.char_role, act);
 
@@ -428,7 +435,7 @@ public class BattleManager : MonoBehaviour
         this.itemUI.manageShowItemWindow(true);
 
         //アビリティをコンテンツにセット
-        this.itemContents.SetupItemUI(charactor.GetHavingItem());
+        this.itemContents.SetupItemUI(HadItem.GetHavingItem());
     }
 
     /// <summary>

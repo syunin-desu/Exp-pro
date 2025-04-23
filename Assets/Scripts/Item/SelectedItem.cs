@@ -9,6 +9,7 @@ public class SelectedItem : MonoBehaviour
     public ItemManager _itemManager;
     public BattleManager _battleManager;
     public PartyMember _playerManager;
+    public string itemID;
 
 
     /// <summary>
@@ -19,10 +20,9 @@ public class SelectedItem : MonoBehaviour
     {
         // TODO 引数CharBaseでパーティの誰かを特定できるようにする
         GameObject selectedObj = eventSystem.currentSelectedGameObject.gameObject;
-        string selectedItemDisplayName = selectedObj.GetComponentInChildren<Text>().text;
+        string selectedItemID = selectedObj.GetComponent<SelectedItem>().itemID;
 
-        string selectedAbilityName = _itemManager.getItemNameForDisplayName(selectedItemDisplayName);
-        _battleManager.setAction_Item(_playerManager, selectedAbilityName);
+        _battleManager.setAction_Item(_playerManager, selectedItemID);
 
 
     }

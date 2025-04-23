@@ -1,4 +1,6 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ItemMenuUIManager : MonoBehaviour
 {
@@ -38,4 +40,28 @@ public class ItemMenuUIManager : MonoBehaviour
     /// </summary>
     /// <returns></returns>
     public bool IsItemMenu() { return isItemMenu; }
+
+    /// <summary>
+    /// 全選択アイコンを非活性にする
+    /// </summary>
+    public void AllSelectedIconDisable()
+    {
+        var targetobjs = GameObject.FindGameObjectsWithTag("PlayerMenuItemSelectedIcon");
+
+        foreach (var obj in targetobjs)
+        {
+            obj.GetComponent<TextMeshProUGUI>()
+                .alpha = 0;
+
+        }
+    }
+
+
+    /// <summary>
+    /// アイテム選択アイコンの更新
+    /// </summary>
+    public void UpdateItemSelectedIcon(TextMeshProUGUI obj, bool isEnable)
+    {
+        obj.alpha = isEnable ? 100 : 0;
+    }
 }

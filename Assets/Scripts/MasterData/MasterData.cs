@@ -22,7 +22,7 @@ public class MasterData : SerializedMonoBehaviour
     /// <summary>
     /// アイテムのマスターデータ
     /// </summary>
-    public List<ItemData> masterItemList;
+    public List<UsedItemData> masterItemList;
 
     /// <summary>
     /// 敵データリストのマスターデータ
@@ -58,11 +58,11 @@ public class MasterData : SerializedMonoBehaviour
     /// アセットからアイテムマスターデータを読み込む
     /// </summary>
     /// <returns></returns>
-    private List<ItemData> GetItemMasterDataFromAsset()
+    private List<UsedItemData> GetItemMasterDataFromAsset()
     {
         return Resources
-        .LoadAll("Data/MasterDatas/Item/", typeof(ItemData))
-        .Cast<ItemData>()
+        .LoadAll("Data/MasterDatas/Item/", typeof(UsedItemData))
+        .Cast<UsedItemData>()
         .ToList();
     }
 

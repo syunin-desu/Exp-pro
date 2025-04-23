@@ -21,7 +21,7 @@ public class PlayerData : SerializedMonoBehaviour
     public List<CharParameter> PartyMember = new List<CharParameter>();
 
     // 所持アイテムデータと所持数
-    public Dictionary<ItemData, int> HaveItemList = new Dictionary<ItemData, int>();
+    public Dictionary<UsedItemData, int> HaveItemList = new Dictionary<UsedItemData, int>();
 
     // 所持金
     public Money HasMoney = new Money();
@@ -30,7 +30,7 @@ public class PlayerData : SerializedMonoBehaviour
     // TODO: セーブデータが作成され次第削除
     public List<CharData> MockCharData;
 
-    public Dictionary<ItemData, int> MockItemData;
+    public Dictionary<UsedItemData, int> MockItemData;
 
     // Start is called before the first frame update
     private void Awake()
@@ -85,7 +85,9 @@ public class PlayerData : SerializedMonoBehaviour
                 STR = charData.STR,
                 DEF = charData.DEF,
                 SPEED = charData.SPEED,
+                MGC = charData.MagicPower,
                 INT = charData.INT,
+                KID = charData.Kindness,
                 ROLE = charData.ROLE,
                 countOfActions = charData.countOfActions,
                 HavingAbility = charData.HavingAbility,
@@ -95,7 +97,7 @@ public class PlayerData : SerializedMonoBehaviour
             }).ToList();
     }
 
-    public Dictionary<ItemData, int> GetItems()
+    public Dictionary<UsedItemData, int> GetItems()
     {
         return this.HaveItemList;
     }

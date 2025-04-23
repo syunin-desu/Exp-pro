@@ -2,26 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using System.Linq;
+using NUnit.Framework.Internal;
 
-// TODO しかるべきファイルにあとで格納する
-public class HavingItem
-{
-    private string _itemName;
-    private int _count;
-
-    public string ItemName
-    {
-        get { return _itemName; }
-        set { _itemName = value; }
-    }
-
-    public int ItemCount
-    {
-        get { return _count; }
-        set { _count = value; }
-    }
-
-}
 
 //敵や、プレイヤーなどのキャラの派生元
 public class CharBase : MonoBehaviour
@@ -37,14 +20,6 @@ public class CharBase : MonoBehaviour
     // 1ターン中の行動回数
     // 行動回数の増減はパラメータを直接いじらず、この変数を返して実施すること
     public int countActionATurn;
-
-    // 所持アビリティ
-    public List<string> HavingAbility = new List<string>();
-
-
-    //所持アイテム
-    // TODO 現状モックで実装する
-    public List<HavingItem> HavingItem = new List<HavingItem>();
 
 
     //ターン終了時の処理
@@ -166,33 +141,6 @@ public class CharBase : MonoBehaviour
 
         countActionATurn = this.charParameters.countOfActions;
 
-        // TODO Itemに関してはmockで実装
-        // アイテム所持データの周りが実装されたら消す
-        HavingItem mockHavingItem = new HavingItem();
-        mockHavingItem.ItemName = "BluePotion";
-        mockHavingItem.ItemCount = 4;
-        HavingItem.Add(mockHavingItem);
-
-    }
-
-    /// <summary>
-    /// アイテム個数を減少させる
-    /// </summary>
-    /// <param name="itemName">対象アイテム名</param>
-    /// <param name="reduceItemCount">減少させる個数</param>
-    public void reduceItemCount(string itemName, int reduceItemCount)
-    {
-        var targetItem = GetHavingItem().Find(item => item.ItemName == itemName);
-
-        //アイテム数を減少させる
-        targetItem.ItemCount -= reduceItemCount;
-
-        // アイテムがなくなったら削除
-        if (targetItem.ItemCount <= 0)
-        {
-            this.HavingItem.Remove(targetItem);
-        }
-
     }
 
     //=============
@@ -238,10 +186,20 @@ public class CharBase : MonoBehaviour
         return this.charParameters.SPEED;
     }
 
+    public int GetMagicPoser()
+    {
+        return this.charParameters.MGC;
+    }
+
     // INT
     public int GetInteli()
     {
         return this.charParameters.INT;
+    }
+
+    public int GetKindness()
+    {
+        return this.charParameters.KID;
     }
 
     //strange
@@ -250,16 +208,21 @@ public class CharBase : MonoBehaviour
         return this.charParameters.STR;
     }
 
+    public int GetDefence()
+    {
+        return this.charParameters.DEF;
+    }
+
     //所持アビリティ
-    public List<string> GetHavingAbilities()
+    public List<Ability_base> GetHavingAbilities()
     {
         return this.charParameters.HavingAbility;
     }
 
-    //所持アイテム
-    public List<HavingItem> GetHavingItem()
+    //特定のカテゴリの所持アビリティを取得
+    public List<Ability_base> GetHavingAbilitiesForCategory(CONST.ABILITY.Category targetCategory)
     {
-        return this.HavingItem;
+        return this.charParameters.HavingAbility.Where(t => t.category == targetCategory).ToList();
     }
 
     // 弱点属性

@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 917c04fd1e9eeeb45abd8f29b273cf35, type: 3}
   m_Name: Attack
   m_EditorClassIdentifier: 
+  id: AAA0001
+  category: 0
   Name: Attack
   displayName: "\u305F\u305F\u304B\u3046"
+  Level: 0
   Type: 0
   timingType: 0
   speed_rank: 5
@@ -22,3 +25,4 @@ MonoBehaviour:
   Element: 3
   power: 1
   executeActionList: 00000000
+  description: "\u708E\u5C5E\u6027\u306E\u5358\u4F53\u9B54\u6CD5\u653B\u6483\u3092\u884C\u3046"

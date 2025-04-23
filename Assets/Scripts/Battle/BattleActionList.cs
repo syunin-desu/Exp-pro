@@ -22,6 +22,11 @@ public class BattleAction
     public string itemName = "";
 
     /// <summary>
+    /// ID
+    /// </summary>
+    public string id = "";
+
+    /// <summary>
     /// 実行キャラクタ
     /// </summary>
     public CharBase character;

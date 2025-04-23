@@ -18,12 +18,14 @@ public class CharData : ScriptableObject
     public int STR;
     public int DEF;
     public int SPEED;
+    public int MagicPower;
     public int INT;
+    public int Kindness;
     public int ROLE;
     public int countOfActions;
 
     // TODO: StringからEnum型にする
-    public List<string> HavingAbility = new List<string>();
+    public List<Ability_base> HavingAbility = new List<Ability_base>();
 
     [ValueDropdown("elementList")]
     public List<CONST.UTILITY.Element> WeakElement = new List<CONST.UTILITY.Element>();

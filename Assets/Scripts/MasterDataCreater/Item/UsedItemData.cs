@@ -7,11 +7,8 @@ using System.Linq;
 using CONST;
 
 [CreateAssetMenu(menuName = "CreateData/Create ItemData")]
-public class ItemData : ScriptableObject
+public class UsedItemData : BaseItemData
 {
-    public string Name;
-
-    public string displayName;
 
     [ValueDropdown("itemType")]
 
@@ -31,7 +28,6 @@ public class ItemData : ScriptableObject
 
     public int value;
 
-    public int price;
 
 
     private static List<CONST.ACTION.TYPE> itemType = Enum.GetValues(typeof(CONST.ACTION.TYPE))
@@ -45,3 +41,4 @@ public class ItemData : ScriptableObject
                                                              .Cast<CONST.UTILITY.Element>()
                                                              .ToList();
 }
+

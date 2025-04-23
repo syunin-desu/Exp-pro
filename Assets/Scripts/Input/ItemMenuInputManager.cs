@@ -18,9 +18,7 @@ public class ItemMenuInputManager : PlayerMenuInputManager
                 this.Close_ItemMenu();
                 break;
             case CONST.ITEM_MENU_STATUS.MenuStatus.SelectItem:
-                itemMenuManager.UpdateCanSelectHowItemButtons(true);
-                itemMenuManager.UpdateCanSelectItemButton(false);
-                itemMenuManager.SetCurrentItemMenuStatus(CONST.ITEM_MENU_STATUS.MenuStatus.HowItem);
+                itemMenuManager.CloseItemSelectedMenu();
                 break;
         }
     }

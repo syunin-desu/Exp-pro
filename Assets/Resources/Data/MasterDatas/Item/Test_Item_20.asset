@@ -14,9 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Test_Item_20
   displayName: "\u30C6\u30B9\u30C8\u30A2\u30A4\u30C6\u30E0_20"
+  id: I_T_01_20
   Type: 3
+  Target_status: 0
   speed_rank: 0
   Range: 0
   Element: 0
   value: 100
   price: 1000
+  description: "\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8"

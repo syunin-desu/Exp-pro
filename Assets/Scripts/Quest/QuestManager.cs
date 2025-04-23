@@ -16,7 +16,7 @@ public class QuestManager : MonoBehaviour
     public CardManager cardManager;
 
     public PlayerMenuUIManager playerMenuUIManager;
-
+    public DeviceInputController deviceInputController;
     List<CONST.QUEST.CardType> cardList = new List<CONST.QUEST.CardType>();
 
     private int currentFloor = 0; //現在の階層
@@ -105,6 +105,8 @@ public class QuestManager : MonoBehaviour
         // プレイヤーサイドのステータスを更新する
         PlayerData.instance.UpdatePlayerData(this.w_PartyMember.GetCharParameters());
 
+        // InputActionsを無効にする
+        deviceInputController.DisableInputAction();
         // バトルシーンをロードする
         SceneManager.LoadScene(CONST.SCENE.Scene.Battle.ToString());
     }

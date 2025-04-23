@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class ItemManager : MonoBehaviour
 {
-    private List<ItemData> _itemList = new List<ItemData>();
+    private List<UsedItemData> _itemList = new List<UsedItemData>();
+    public HadItem haditem;
 
     // Start is called before the first frame update
     void Start()
@@ -14,17 +15,13 @@ public class ItemManager : MonoBehaviour
     }
 
 #nullable enable
-    public async Task ExecItem(CharBase performChar, CharBase? targetChar, string execItemName, bool canEffect = true)
+    public async Task ExecItem(CharBase performChar, CharBase? targetChar, string execItemID, bool canEffect = true)
     {
-        switch (execItemName)
+        var itemData = this.GetItemData(execItemID);
+        switch (itemData.Type)
         {
-            case "BluePotion":
-            case "BluePotionEx":
-            case "BluePotionNeo":
-            case "EnagyDrink":
-            case "EnagyDrinkEx":
-            case "EnagyDrinkNeo":
-                await this.DoHealItem(performChar, this.GetItemData(execItemName), canEffect);
+            case CONST.ACTION.TYPE.Heal:
+                await this.DoHealItem(performChar, this.GetItemData(execItemID), canEffect);
                 break;
 
             default:
@@ -39,22 +36,34 @@ public class ItemManager : MonoBehaviour
     /// </summary>
     /// <param name="performChar">対象キャラ</param>
     /// <param name="execItemData">実行するアイテムデータ</param>
-    public async Task DoHealItem(CharBase performChar, ItemData execItemData, bool canEffect)
+    public async Task DoHealItem(CharBase performChar, UsedItemData execItemData, bool canEffect)
     {
 
         int healValue = execItemData.value;
 
         if (execItemData.Target_status == CONST.ACTION.TARGET_STATUS.HP)
         {
+            if (performChar.GetHp() == performChar.GetMaxHp())
+            {
+                //TODO: 使用できませんでした的なSEを鳴らす
+                return;
+            }
             performChar.HealHP(healValue);
+
         }
         else if (execItemData.Target_status == CONST.ACTION.TARGET_STATUS.MP)
         {
+            if (performChar.GetMp() == performChar.GetMaxMp())
+            {
+                //TODO: 使用できませんでした的なSEを鳴らす
+                return;
+            }
             performChar.HealMP(healValue);
         }
 
+
         //アイテム数を減少させる
-        performChar.reduceItemCount(execItemData.Name, 1);
+        haditem.reduceItemCount(execItemData.id, 1);
 
         if (canEffect)
         {
@@ -70,7 +79,13 @@ public class ItemManager : MonoBehaviour
     /// <returns>表示アイテム名</returns>
     public string getItemDisplayName(string itemName)
     {
-        ItemData selectedItem = this._itemList.Find(item => item.Name == itemName);
+        UsedItemData selectedItem = this._itemList.Find(item => item.Name == itemName);
+        return selectedItem.displayName;
+    }
+
+    public string getItemNameFromID(string itemID)
+    {
+        UsedItemData selectedItem = this._itemList.Find(item => item.id == itemID);
         return selectedItem.displayName;
     }
 
@@ -81,7 +96,7 @@ public class ItemManager : MonoBehaviour
     /// <returns>アイテム名</returns>
     public string getItemNameForDisplayName(string itemDisplayName)
     {
-        ItemData item = this._itemList.Find(item => item.displayName == itemDisplayName);
+        UsedItemData item = this._itemList.Find(item => item.displayName == itemDisplayName);
         return item.Name;
     }
 
@@ -90,9 +105,9 @@ public class ItemManager : MonoBehaviour
     /// </summary>
     /// <param name="itemDisplayName">表示アイテム名/param>
     /// <returns>アイテム名</returns>
-    public int getItemSpeedRankForItemName(string itemName)
+    public int getItemSpeedRankForItemID(string itemName)
     {
-        ItemData item = this._itemList.Find(item => item.name == itemName);
+        UsedItemData item = this._itemList.Find(item => item.id == itemName);
         return item.speed_rank;
     }
 
@@ -101,9 +116,14 @@ public class ItemManager : MonoBehaviour
     /// </summary>
     /// <param name="itemName">アイテム名</param>
     /// <returns>アイテムデータ</returns>
-    private ItemData GetItemData(string itemName)
+    private UsedItemData GetItemData(string itemID)
     {
-        return this._itemList.Find(item => item.Name == itemName);
+        return this._itemList.Find(item => item.id == itemID);
 
+    }
+
+    public string GetItemDiscriptionfromMaster(string itemID)
+    {
+        return this._itemList.Find(item => item.id == itemID).item_description;
     }
 }

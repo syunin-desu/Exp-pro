@@ -9,8 +9,14 @@ using System.Linq;
 [CreateAssetMenu(menuName = "CreateData/Create AbilityData")]
 public class Ability_base : ScriptableObject
 {
+    public string id;
+    // アビリティのカテゴリ
+    [ValueDropdown("ability_Category_list")]
+    public CONST.ABILITY.Category category;
     public string Name;
     public string displayName;
+    // アビリティのレベル
+    public int Level;
     // アビリティのタイプ(Attack, Baff, etc)
     [ValueDropdown("ability_type_list")]
     public CONST.ACTION.TYPE Type;
@@ -30,6 +36,8 @@ public class Ability_base : ScriptableObject
     //実行するアクション(一番上から順に実行される)
     [ValueDropdown("Ability_Action_Cell")]
     public List<CONST.ACTION.Ability_Action_Cell> executeActionList;
+
+    public string description;
 
     //パラメーター設定値
     /// <summary>アビリティのタイプ(Attack, Baff, etc)</summary>
@@ -60,6 +68,13 @@ public class Ability_base : ScriptableObject
         CONST.UTILITY.Element.Ice,
         CONST.UTILITY.Element.Thunder,
         CONST.UTILITY.Element.None
+    };
+
+    /// <summary>分類</summary>
+    private static CONST.ABILITY.Category[] ability_Category_list = {
+        CONST.ABILITY.Category.Default,
+        CONST.ABILITY.Category.Magic,
+        CONST.ABILITY.Category.SwordArts,
     };
 
     /// <summary>

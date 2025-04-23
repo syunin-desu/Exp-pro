@@ -36,13 +36,14 @@ public class ItemScrollController : MonoBehaviour
 
             var texts = itemContent.GetComponentsInChildren<Text>();
 
-            texts.First(t => t.name == "Text").text = this._itemManager.getItemDisplayName(item.ItemName);
+            texts.First(t => t.name == "Text").text = this._itemManager.getItemNameFromID(item.id);
+            itemContent.GetComponent<SelectedItem>().itemID = item.id;
 
             itemContent.gameObject.SetActive(true);
 
             // アクションリストに該当アイテムが登録されていたらその個数分差し引く
-            int lefttemCount = item.ItemCount - battleActionList.GetP_ActionList()
-                                                .FindAll(a => a.itemName == item.ItemName)
+            int lefttemCount = item.count - battleActionList.GetP_ActionList()
+                                                .FindAll(a => a.itemName == item.name)
                                                 .Count();
 
             if (lefttemCount <= 0)

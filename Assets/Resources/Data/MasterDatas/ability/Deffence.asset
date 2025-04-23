@@ -12,12 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 917c04fd1e9eeeb45abd8f29b273cf35, type: 3}
   m_Name: Deffence
   m_EditorClassIdentifier: 
+  id: AAD0001
+  category: 0
   Name: Deffence
   displayName: "\u9632\u5FA1"
+  Level: 0
   Type: 4
   timingType: 0
+  speed_rank: 0
   Range: 0
   requiredMp: 0
   Element: 3
   power: 0
   executeActionList: 02000000
+  description: 

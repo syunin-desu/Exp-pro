@@ -16,6 +16,8 @@ public class DeviceInputController : MonoBehaviour
     public QuestInputManager questInputManager;
     public PlayerMenuInputManager playerMenuInputManager;
     public ItemMenuInputManager itemMenuInputManager;
+    public AbilityMenuInputManager abilityMenuInputManager;
+    public EquipMenuInputManager equipMenuInputManager;
 
     [SerializeField]
     private QuestManager _questManager;
@@ -70,7 +72,15 @@ public class DeviceInputController : MonoBehaviour
             case CONST.QUEST_MENU_STATUS.MenuStatus.ItemMenu:
                 currentMenuInputManager = itemMenuInputManager;
                 break;
+            case CONST.QUEST_MENU_STATUS.MenuStatus.AbilityMenu:
+                currentMenuInputManager = abilityMenuInputManager;
+                break;
         }
+    }
+
+    public void DisableInputAction()
+    {
+        this.questSceneInputActions.Disable();
     }
 
 }

@@ -1,0 +1,68 @@
+using System.Collections;
+using System.Collections.Generic;
+using Sirenix.OdinInspector;
+using UnityEngine;
+using System;
+using System.Linq;
+using CONST;
+
+[CreateAssetMenu(menuName = "CreateData/Create EquipData")]
+public class EquipData : BaseItemData
+{
+
+    public int Attack;
+
+    public int Defence;
+
+    //各パラメータ補正値
+    public int addMaxHp;
+    public int addMaxMp;
+    public int addSTR;
+    public int addDEF;
+    public int addSPD;
+    public int addMagicPower;
+    public int addINT;
+    public int Kindness;
+
+
+    //追加効果
+    [ValueDropdown("addBuff")]
+    public CONST.ITEM.ADDBUFF buff;
+
+    // 追加デバフ
+    [ValueDropdown("addDebuff")]
+    public CONST.ITEM.ADDDEBUFF debuff;
+
+    public string description_equip;
+
+    [ValueDropdown("elementList")]
+    public List<CONST.UTILITY.Element> WeakElement = new List<CONST.UTILITY.Element>();
+    [ValueDropdown("elementList")]
+    public List<CONST.UTILITY.Element> StrongElement = new List<CONST.UTILITY.Element>();
+
+    private static List<CONST.UTILITY.Element> elementList = Enum.GetValues(typeof(CONST.UTILITY.Element))
+                                                             .Cast<CONST.UTILITY.Element>()
+                                                             .ToList();
+
+
+    private static List<CONST.ACTION.TYPE> itemType = Enum.GetValues(typeof(CONST.ACTION.TYPE))
+                                                             .Cast<CONST.ACTION.TYPE>()
+                                                             .ToList();
+    private static List<CONST.ITEM.CATEGORY> ItemCategory = Enum.GetValues(typeof(CONST.ITEM.CATEGORY))
+                                                         .Cast<CONST.ITEM.CATEGORY>()
+                                                         .ToList();
+
+    private static List<CONST.ACTION.Range> itemRange = Enum.GetValues(typeof(CONST.ACTION.Range))
+                                                             .Cast<CONST.ACTION.Range>()
+                                                             .ToList();
+    private static List<CONST.UTILITY.Element> element = Enum.GetValues(typeof(CONST.UTILITY.Element))
+                                                             .Cast<CONST.UTILITY.Element>()
+                                                             .ToList();
+    private static List<CONST.ITEM.ADDDEBUFF> addBuff = Enum.GetValues(typeof(CONST.ITEM.ADDDEBUFF))
+                                                             .Cast<CONST.ITEM.ADDDEBUFF>()
+                                                             .ToList();
+    private static List<CONST.ITEM.ADDDEBUFF> addDebuff = Enum.GetValues(typeof(CONST.ITEM.ADDDEBUFF))
+                                                             .Cast<CONST.ITEM.ADDDEBUFF>()
+                                                             .ToList();
+}
+

@@ -41,7 +41,8 @@ namespace CONST
         {
             Main,
             PlayerMainMenu,
-            ItemMenu
+            ItemMenu,
+            AbilityMenu
         }
 
     }
@@ -57,6 +58,48 @@ namespace CONST
             SelectItem,
             SelectTargetAndUse,
             SelectArrangement
+        }
+
+    }
+
+    public static class ABILITY_MENU_STATUS
+    {
+        /// <summary>
+        ///  アイテムメニューの各フェーズ
+        /// </summary>
+        public enum MenuStatus
+        {
+            HowAbility,
+            SelectAbility,
+            SelectTargetAndDOAbility,
+            SelectArrangement
+        }
+
+    }
+
+    public static class EQUIP_MENU_STATUS
+    {
+        /// <summary>
+        ///  装備メニューの各フェーズ
+        /// </summary>
+        public enum MenuStatus
+        {
+            SelectEquipParts,
+            SelectEquip,
+        }
+
+    }
+
+    public static class ABILITY
+    {
+        /// <summary>
+        ///  アイテムメニューの各フェーズ
+        /// </summary>
+        public enum Category
+        {
+            Default,
+            Magic,
+            SwordArts,
         }
 
     }
@@ -150,6 +193,7 @@ namespace CONST
         {
             SolidSingleAttack,
             MagicSingleAttack,
+            Heal,
             DoItem,
         }
 
@@ -177,6 +221,31 @@ namespace CONST
             EnagyDrink,
             EnergyDrinkEx,
             EnergyDrinkNeo
+        }
+
+        public enum CATEGORY
+        {
+            HEAL_ITEM,
+            ATTACK_ITEM,
+            HEAD_EQUIP_ITEM,
+            BODY_EQUIP_ITEM,
+            ACCESSORY_ITEM
+        }
+
+        // 追加永続バフ
+        public enum ADDBUFF
+        {
+            NONE,
+            DAMAGE_UP,
+
+        }
+
+        // 追加永続デバフ
+        public enum ADDDEBUFF
+        {
+            NONE,
+            DAMAGE_DOWN,
+
         }
     }
 

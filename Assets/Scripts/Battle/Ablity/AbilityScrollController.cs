@@ -32,17 +32,20 @@ public class AbilityScrollController : MonoBehaviour
     /// <summary>
     /// アビリティのパラメータを設定する
     /// </summary>
-    public void Setup_abilityUI(List<string> ability_List)
+    public void Setup_abilityUI(List<Ability_base> ability_List)
     {
-        foreach (string ability in ability_List)
+        foreach (Ability_base ability in ability_List)
         {
             var ability_content = GameObject.Instantiate(ability_contents) as RectTransform;
             ability_content.SetParent(transform, false);
 
             var texts = ability_content.GetComponentsInChildren<Text>();
 
-            texts.First(t => t.name == "Text").text = this.abilityManager.getAbilityDisplayName(ability);
-            texts.First(t => t.name == "ConsumeMP").text = this.abilityManager.getAbilityConsumeMP(ability).ToString();
+            texts.First(t => t.name == "Text").text = ability.displayName;
+            texts.First(t => t.name == "ConsumeMP").text = ability.requiredMp.ToString();
+
+            ability_content.GetComponent<selectedAbility>().SetAbilityID(ability.id);
+
             ability_content.gameObject.SetActive(true);
 
             // アクションリスト登録中のアビリティの消費MPの合計分を取得
@@ -59,7 +62,7 @@ public class AbilityScrollController : MonoBehaviour
 
             // 現在のプレイヤーのMPから総消費MPを減らし、MPが足りないアビリティは非活性にする
             int leftMP = partyMember.GetMp() - all_ConsumeMp;
-            if (leftMP < this.abilityManager.getAbilityConsumeMP(ability))
+            if (leftMP < ability.requiredMp)
             {
                 ability_content.GetComponentInChildren<Button>().enabled = false;
                 texts.First(t => t.name == "Text").color = Color.gray;

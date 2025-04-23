@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.UIElements;
 
 /// <summary>
 /// 内部用キャラのパラメータをまとめたクラス
@@ -17,12 +18,14 @@ public class CharParameter
     public int STR;
     public int DEF;
     public int SPEED;
-    public int INT;
+    public int MGC; // 魔力
+    public int INT; // 知性
+    public int KID; //慈愛
     public int ROLE;
     public int countOfActions;
 
     // TODO: StringからEnum型にする
-    public List<string> HavingAbility = new List<string>();
+    public List<Ability_base> HavingAbility = new List<Ability_base>();
 
     public List<CONST.UTILITY.Element> WeakElement = new List<CONST.UTILITY.Element>();
     public List<CONST.UTILITY.Element> StrongElement = new List<CONST.UTILITY.Element>();

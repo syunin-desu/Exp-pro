@@ -13,19 +13,24 @@ MonoBehaviour:
   m_Name: Player
   m_EditorClassIdentifier: 
   Name: P_TEST
-  currentHP: 999
-  currentMP: 5
+  currentHP: 800
+  currentMP: 35
   maxHp: 999
-  maxMp: 5
+  maxMp: 50
   STR: 20
   DEF: 5
   SPEED: 20
+  MagicPower: 10
   INT: 10
+  Kindness: 10
   ROLE: 1
   countOfActions: 2
   HavingAbility:
-  - burn
-  - chill
-  - volt
+  - {fileID: 11400000, guid: a48441e99fe61004581acfe7fba70b47, type: 2}
+  - {fileID: 11400000, guid: 8c6d010032c0c344fb787adfa4780008, type: 2}
+  - {fileID: 11400000, guid: 3e35e86ccba0fbf469d6f3f186b8f157, type: 2}
+  - {fileID: 11400000, guid: 60ae8e633270e09449c140e82cd9ac84, type: 2}
+  - {fileID: 11400000, guid: dfb6f98c1c56fd843af6f65bf619db42, type: 2}
+  - {fileID: 11400000, guid: ce69291269072194c9d67567b5a01b08, type: 2}
   WeakElement: 03000000
   StrongElement: 03000000
