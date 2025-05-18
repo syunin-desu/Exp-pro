@@ -14,9 +14,25 @@ namespace CONST
         public const int PLAYER = 1;
         public const int ENEMY = 2;
 
+        public const int MAXCHARPARAMETERVALUE_1 = 999;
+        public const int MAXCHARPARAMETERVALUE_2 = 99;
+
         // 属性
-
-
+        public enum ParameterCategory
+        {
+            HP,
+            MAXHP,
+            MP,
+            MAXMP,
+            ATTACK,
+            DEFENCE,
+            STR,
+            DEF,
+            SPD,
+            MGC,
+            INT,
+            KID
+        }
     }
     public static class SCENE
     {
@@ -88,6 +104,18 @@ namespace CONST
             SelectEquip,
         }
 
+    }
+
+    public static class EQUIP
+    {
+        public enum PARTS_CATEGORY
+        {
+            WEPON,
+            HEAD,
+            BODY,
+            ACCESSORY1,
+            ACCESSORY2,
+        }
     }
 
     public static class ABILITY
@@ -227,9 +255,12 @@ namespace CONST
         {
             HEAL_ITEM,
             ATTACK_ITEM,
+            WEAPON_ITEM,
             HEAD_EQUIP_ITEM,
             BODY_EQUIP_ITEM,
-            ACCESSORY_ITEM
+            ACCESSORY_ITEM,
+            TEST_ITEM,
+            NONE
         }
 
         // 追加永続バフ

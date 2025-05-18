@@ -27,6 +27,12 @@ public class CharData : ScriptableObject
     // TODO: StringからEnum型にする
     public List<Ability_base> HavingAbility = new List<Ability_base>();
 
+    public WeaponData weaponData;
+    public HeadData armedHead;
+    public BodyData armedBody;
+    public AccessoryData armedAccessory_1;
+    public AccessoryData armedAccessory_2;
+
     [ValueDropdown("elementList")]
     public List<CONST.UTILITY.Element> WeakElement = new List<CONST.UTILITY.Element>();
     [ValueDropdown("elementList")]

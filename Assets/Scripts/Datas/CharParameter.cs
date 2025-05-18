@@ -4,6 +4,17 @@ using System;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.UIElements;
+using System.Runtime.CompilerServices;
+
+
+public class PlayerEquipData
+{
+    public WeaponData weaponData;
+    public HeadData armedHead;
+    public BodyData armedBody;
+    public AccessoryData armedAccessory_1;
+    public AccessoryData armedAccessory_2;
+}
 
 /// <summary>
 /// 内部用キャラのパラメータをまとめたクラス
@@ -23,6 +34,8 @@ public class CharParameter
     public int KID; //慈愛
     public int ROLE;
     public int countOfActions;
+
+    public PlayerEquipData equipDatas = new PlayerEquipData();
 
     // TODO: StringからEnum型にする
     public List<Ability_base> HavingAbility = new List<Ability_base>();

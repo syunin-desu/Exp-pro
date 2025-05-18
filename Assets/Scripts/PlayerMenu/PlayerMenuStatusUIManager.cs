@@ -4,16 +4,19 @@ using UnityEngine.UI;
 
 public class PlayerMenuStatusUIManager : MonoBehaviour
 {
-    public Text hpText;
-    public Text maxHpText;
-    public Text mpText;
-    public Text maxMpText;
+    public Text attack;
+    public Text defence;
+    public Text maxHP;
+    public Text maxMp;
 
-    public TextMeshProUGUI charName;
-    public TextMeshProUGUI str;
-    public TextMeshProUGUI def;
-    public TextMeshProUGUI spd;
-    public TextMeshProUGUI inteligence;
+    public Text str;
+    public Text def;
+    public Text spd;
+    public Text mgc;
+    public Text inteligence;
+    public Text kid;
+
+
 
     public PartyMember _playerManager;
 
@@ -24,15 +27,16 @@ public class PlayerMenuStatusUIManager : MonoBehaviour
     {
         if (playerMenuUIManager.IsPlayerMenu())
         {
-            hpText.text = string.Format("{0}", _playerManager.GetHp());
-            maxHpText.text = string.Format("{0}", _playerManager.GetMaxHp());
-            mpText.text = string.Format("{0}", _playerManager.GetMp());
-            maxMpText.text = string.Format("{0}", _playerManager.GetMaxMp());
-            charName.text = _playerManager.GetName();
+            attack.text = string.Format("{0}", _playerManager.GetAttackParameter());
+            defence.text = string.Format("{0}", _playerManager.GetDefenceParameter());
+            maxHP.text = string.Format("{0}", _playerManager.GetMaxHp());
+            maxMp.text = string.Format("{0}", _playerManager.GetMaxMp());
             def.text = _playerManager.GetDefence().ToString();
             str.text = _playerManager.GetStrange().ToString();
             spd.text = _playerManager.GetSpeed().ToString();
+            mgc.text = _playerManager.GetMagicPoser().ToString();
             inteligence.text = _playerManager.GetSpeed().ToString();
+            kid.text = _playerManager.GetKindness().ToString();
         }
     }
 }

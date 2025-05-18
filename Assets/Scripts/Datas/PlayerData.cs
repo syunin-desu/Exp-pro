@@ -21,7 +21,7 @@ public class PlayerData : SerializedMonoBehaviour
     public List<CharParameter> PartyMember = new List<CharParameter>();
 
     // 所持アイテムデータと所持数
-    public Dictionary<UsedItemData, int> HaveItemList = new Dictionary<UsedItemData, int>();
+    public Dictionary<BaseItemData, int> HaveItemList = new Dictionary<BaseItemData, int>();
 
     // 所持金
     public Money HasMoney = new Money();
@@ -30,7 +30,7 @@ public class PlayerData : SerializedMonoBehaviour
     // TODO: セーブデータが作成され次第削除
     public List<CharData> MockCharData;
 
-    public Dictionary<UsedItemData, int> MockItemData;
+    public Dictionary<BaseItemData, int> MockItemData;
 
     // Start is called before the first frame update
     private void Awake()
@@ -65,7 +65,7 @@ public class PlayerData : SerializedMonoBehaviour
     private void CreateMockData()
     {
         PartyMember = ConvertMockToCharParameter(this.MockCharData);
-        HaveItemList = MockItemData;
+        HaveItemList = MockItemData ?? new Dictionary<BaseItemData, int>();
         this.HasMoney.InitializeMoney(123456789);
     }
 
@@ -93,11 +93,19 @@ public class PlayerData : SerializedMonoBehaviour
                 HavingAbility = charData.HavingAbility,
                 WeakElement = charData.WeakElement,
                 StrongElement = charData.StrongElement,
+                equipDatas = new PlayerEquipData()
+                {
+                    weaponData = charData.weaponData,
+                    armedHead = charData.armedHead,
+                    armedBody = charData.armedBody,
+                    armedAccessory_1 = charData.armedAccessory_1,
+                    armedAccessory_2 = charData.armedAccessory_2,
+                },
 
             }).ToList();
     }
 
-    public Dictionary<UsedItemData, int> GetItems()
+    public Dictionary<BaseItemData, int> GetItems()
     {
         return this.HaveItemList;
     }

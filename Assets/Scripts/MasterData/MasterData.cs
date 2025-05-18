@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using Sirenix.OdinInspector;
+using System;
 
 /// <summary>
 ///  マスターデータ
@@ -23,6 +24,11 @@ public class MasterData : SerializedMonoBehaviour
     /// アイテムのマスターデータ
     /// </summary>
     public List<UsedItemData> masterItemList;
+
+    /// <summary>
+    /// 装備のマスターデータ
+    /// </summary>
+    public List<EquipBase> masterEquipList;
 
     /// <summary>
     /// 敵データリストのマスターデータ
@@ -52,6 +58,7 @@ public class MasterData : SerializedMonoBehaviour
         masterItemList = GetItemMasterDataFromAsset();
         masterAbilityList = GetAbilityMasterDataFromAsset();
         masterEnemyDataList = GetEnemyMasterDataFromAsset();
+        masterEquipList = GetEquipMasterDataFromAsset();
     }
 
     /// <summary>
@@ -60,9 +67,26 @@ public class MasterData : SerializedMonoBehaviour
     /// <returns></returns>
     private List<UsedItemData> GetItemMasterDataFromAsset()
     {
-        return Resources
+        List<UsedItemData> masterItemList = new List<UsedItemData>();
+        List<UsedItemData> itemList = Resources
         .LoadAll("Data/MasterDatas/Item/", typeof(UsedItemData))
         .Cast<UsedItemData>()
+        .ToList();
+        List<BaseItemData> equipList = Resources
+        .LoadAll("Data/MasterDatas/Equip/", typeof(BaseItemData))
+        .Cast<BaseItemData>()
+        .ToList();
+
+        masterItemList.AddRange(itemList);
+        masterItemList.AddRange(this.ConvertEquipDataToUsedItemData(equipList));
+        return masterItemList;
+    }
+
+    private List<EquipBase> GetEquipMasterDataFromAsset()
+    {
+        return Resources
+        .LoadAll("Data/MasterDatas/Equip/", typeof(EquipBase))
+        .Cast<EquipBase>()
         .ToList();
     }
 
@@ -88,5 +112,21 @@ public class MasterData : SerializedMonoBehaviour
         .LoadAll("Data/MasterDatas/Enemy/", typeof(CharData))
         .Cast<CharData>()
         .ToList();
+    }
+
+    private List<UsedItemData> ConvertEquipDataToUsedItemData(List<BaseItemData> equipBases)
+    {
+        return equipBases.Select(equip => new UsedItemData
+        {
+            name = equip.Name,
+            displayName = equip.displayName,
+            id = equip.id,
+            Rarity = equip.Rarity,
+            category = equip.category,
+            PurchasePrice = equip.PurchasePrice,
+            Sellingrice = equip.Sellingrice,
+            item_description = equip.item_description,
+
+        }).ToList();
     }
 }

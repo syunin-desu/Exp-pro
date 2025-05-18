@@ -180,37 +180,140 @@ public class CharBase : MonoBehaviour
         return this.charParameters.maxMp;
     }
 
+    public int GetAttackParameter()
+    {
+        var attack = this.GetEquiCharParameter(CONST.CHARCTOR.ParameterCategory.ATTACK);
+        return attack >= CONST.CHARCTOR.MAXCHARPARAMETERVALUE_1 ? CONST.CHARCTOR.MAXCHARPARAMETERVALUE_1 : attack;
+    }
+
+    public int GetDefenceParameter()
+    {
+        var defence = this.GetEquiCharParameter(CONST.CHARCTOR.ParameterCategory.DEFENCE);
+        return defence >= CONST.CHARCTOR.MAXCHARPARAMETERVALUE_1 ? CONST.CHARCTOR.MAXCHARPARAMETERVALUE_1 : defence;
+    }
+
     //speed
     public int GetSpeed()
     {
-        return this.charParameters.SPEED;
+        var spd = this.charParameters.SPEED + GetEquiCharParameter(CONST.CHARCTOR.ParameterCategory.SPD);
+        return spd >= CONST.CHARCTOR.MAXCHARPARAMETERVALUE_2 ? CONST.CHARCTOR.MAXCHARPARAMETERVALUE_2 : spd;
     }
 
     public int GetMagicPoser()
     {
-        return this.charParameters.MGC;
+        var mgc = this.charParameters.SPEED + GetEquiCharParameter(CONST.CHARCTOR.ParameterCategory.MGC);
+        return mgc >= CONST.CHARCTOR.MAXCHARPARAMETERVALUE_2 ? CONST.CHARCTOR.MAXCHARPARAMETERVALUE_2 : mgc;
     }
 
     // INT
     public int GetInteli()
     {
-        return this.charParameters.INT;
+        var inteligence = this.charParameters.SPEED + GetEquiCharParameter(CONST.CHARCTOR.ParameterCategory.INT);
+        return inteligence >= CONST.CHARCTOR.MAXCHARPARAMETERVALUE_2 ? CONST.CHARCTOR.MAXCHARPARAMETERVALUE_2 : inteligence;
     }
 
     public int GetKindness()
     {
-        return this.charParameters.KID;
+        var kid = this.charParameters.SPEED + GetEquiCharParameter(CONST.CHARCTOR.ParameterCategory.KID);
+        return kid >= CONST.CHARCTOR.MAXCHARPARAMETERVALUE_2 ? CONST.CHARCTOR.MAXCHARPARAMETERVALUE_2 : kid;
     }
 
     //strange
     public int GetStrange()
     {
-        return this.charParameters.STR;
+        var str = this.charParameters.SPEED + GetEquiCharParameter(CONST.CHARCTOR.ParameterCategory.STR);
+        return str >= CONST.CHARCTOR.MAXCHARPARAMETERVALUE_2 ? CONST.CHARCTOR.MAXCHARPARAMETERVALUE_2 : str;
     }
 
     public int GetDefence()
     {
-        return this.charParameters.DEF;
+        var def = this.charParameters.SPEED + GetEquiCharParameter(CONST.CHARCTOR.ParameterCategory.DEF);
+        return def >= CONST.CHARCTOR.MAXCHARPARAMETERVALUE_2 ? CONST.CHARCTOR.MAXCHARPARAMETERVALUE_2 : def;
+    }
+
+    private int GetEquiCharParameter(CONST.CHARCTOR.ParameterCategory parameterCategory)
+    {
+        PlayerEquipData equip = this.charParameters.equipDatas;
+        List<EquipBase> armedEquipList = new List<EquipBase>();
+        armedEquipList.Add(equip.weaponData as EquipBase);
+        armedEquipList.Add((EquipBase)equip.armedHead);
+        armedEquipList.Add((EquipBase)equip.armedBody);
+        armedEquipList.Add((EquipBase)equip.armedAccessory_1);
+        armedEquipList.Add((EquipBase)equip.armedAccessory_2);
+
+        int result = 0;
+        switch (parameterCategory)
+        {
+            case CONST.CHARCTOR.ParameterCategory.ATTACK:
+                foreach (var armedEquip in armedEquipList)
+                {
+                    if (armedEquip.category == CONST.ITEM.CATEGORY.WEAPON_ITEM)
+                    {
+                        result += armedEquip.Attack;
+                    }
+                }
+                return result;
+            case CONST.CHARCTOR.ParameterCategory.DEFENCE:
+                foreach (var armedEquip in armedEquipList)
+                {
+                    if (armedEquip.category != CONST.ITEM.CATEGORY.WEAPON_ITEM)
+                    {
+                        result += armedEquip.Defence;
+                    }
+                }
+                return result;
+            case CONST.CHARCTOR.ParameterCategory.MAXHP:
+                foreach (var armedEquip in armedEquipList)
+                {
+                    result += armedEquip.addMaxHp;
+                }
+                return result;
+            case CONST.CHARCTOR.ParameterCategory.MAXMP:
+                foreach (var armedEquip in armedEquipList)
+                {
+                    result += armedEquip.addMaxMp;
+                }
+                return result;
+            case CONST.CHARCTOR.ParameterCategory.STR:
+                foreach (var armedEquip in armedEquipList)
+                {
+                    result += armedEquip.addSTR;
+                }
+                return result;
+            case CONST.CHARCTOR.ParameterCategory.DEF:
+                foreach (var armedEquip in armedEquipList)
+                {
+                    result += armedEquip.addDEF;
+                }
+                return result;
+            case CONST.CHARCTOR.ParameterCategory.SPD:
+                foreach (var armedEquip in armedEquipList)
+                {
+                    result += armedEquip.addSPD;
+                }
+                return result;
+            case CONST.CHARCTOR.ParameterCategory.MGC:
+                foreach (var armedEquip in armedEquipList)
+                {
+                    result += armedEquip.addMagicPower;
+                }
+                return result;
+            case CONST.CHARCTOR.ParameterCategory.INT:
+                foreach (var armedEquip in armedEquipList)
+                {
+                    result += armedEquip.addINT;
+                }
+                return result;
+            case CONST.CHARCTOR.ParameterCategory.KID:
+                foreach (var armedEquip in armedEquipList)
+                {
+                    result += armedEquip.Kindness;
+                }
+                return result;
+            default:
+                Debug.Log("Not Target Parameter Category");
+                return 0;
+        }
     }
 
     //所持アビリティ
@@ -224,6 +327,66 @@ public class CharBase : MonoBehaviour
     {
         return this.charParameters.HavingAbility.Where(t => t.category == targetCategory).ToList();
     }
+
+    /// <summary>
+    /// 装備中のアイテムを取得
+    /// </summary>
+    /// <returns></returns>
+    public PlayerEquipData GetArmedEquip()
+    {
+        return this.charParameters.equipDatas;
+    }
+
+    public EquipBase UpdateEquip(CONST.ITEM.CATEGORY partsCategory,
+        EquipBase targetEquip,
+        CONST.EQUIP.PARTS_CATEGORY currentSelectedArmedParts)
+    {
+        if (partsCategory != targetEquip.category)
+        {
+            Debug.Log("指定されている部位と装備の部位が異なっています");
+            return null;
+        }
+        switch (partsCategory)
+        {
+            case CONST.ITEM.CATEGORY.WEAPON_ITEM:
+                EquipBase equipedWepon = this.charParameters.equipDatas.weaponData;
+                this.charParameters.equipDatas.weaponData = targetEquip as WeaponData;
+                return equipedWepon;
+
+            case CONST.ITEM.CATEGORY.HEAD_EQUIP_ITEM:
+                EquipBase equipedHead = this.charParameters.equipDatas.armedHead;
+                this.charParameters.equipDatas.armedHead = targetEquip as HeadData;
+                return equipedHead;
+
+            case CONST.ITEM.CATEGORY.BODY_EQUIP_ITEM:
+                EquipBase equipedBody = this.charParameters.equipDatas.armedBody;
+                this.charParameters.equipDatas.armedBody = targetEquip as BodyData;
+                return equipedBody;
+
+            case CONST.ITEM.CATEGORY.ACCESSORY_ITEM:
+                if (currentSelectedArmedParts == CONST.EQUIP.PARTS_CATEGORY.ACCESSORY1)
+                {
+                    EquipBase equipedAccessory1 = this.charParameters.equipDatas.armedAccessory_1;
+                    this.charParameters.equipDatas.armedAccessory_1 = targetEquip as AccessoryData;
+                    return equipedAccessory1;
+                }
+                else if (currentSelectedArmedParts == CONST.EQUIP.PARTS_CATEGORY.ACCESSORY2)
+                {
+                    EquipBase equipedAccessory2 = this.charParameters.equipDatas.armedAccessory_2;
+                    this.charParameters.equipDatas.armedAccessory_2 = targetEquip as AccessoryData;
+                    return equipedAccessory2;
+                }
+                else
+                {
+                    return null;
+                }
+
+            default:
+                return null;
+
+        }
+    }
+
 
     // 弱点属性
     public List<CONST.UTILITY.Element> GetWeakElement()

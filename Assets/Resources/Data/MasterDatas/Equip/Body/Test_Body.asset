@@ -9,17 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e5e9d716929a1a4dba201ba43b8a313, type: 3}
-  m_Name: RaserArmer
+  m_Script: {fileID: 11500000, guid: fecaf35a97dff38409574b600fe88108, type: 3}
+  m_Name: Test_Body
   m_EditorClassIdentifier: 
-  Name: RaserArmer
-  displayName: "\u76AE\u306E\u3088\u308D\u3044"
-  id: IB_0101
-  Rarity: 1
-  category: 2
-  PurchasePrice: 0
-  Sellingrice: 0
-  item_description: "\u9769\u88FD\u306E\u3088\u308D\u3044"
+  Name: TestBody
+  displayName: "\u30C6\u30B9\u30C8\u30DC\u30C7\u30A3"
+  id: IBT0101
+  Rarity: 0
+  category: 4
+  PurchasePrice: 10
+  Sellingrice: 10
+  item_description: "\u30C6\u30B9\u30C8"
   Attack: 0
   Defence: 10
   addMaxHp: 0
@@ -32,6 +32,6 @@ MonoBehaviour:
   Kindness: 0
   buff: 0
   debuff: 0
-  description_equip: "\u9632\u5FA1\u529B + 10"
+  description_equip: "\u30C6\u30B9\u30C8"
   WeakElement: 
   StrongElement: 

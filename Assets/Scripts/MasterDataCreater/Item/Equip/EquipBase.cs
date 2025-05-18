@@ -1,15 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using Sirenix.OdinInspector;
-using UnityEngine;
 using System;
+using System.Collections.Generic;
+using UnityEngine;
 using System.Linq;
 using CONST;
 
-[CreateAssetMenu(menuName = "CreateData/Create EquipData")]
-public class EquipData : BaseItemData
+public class EquipBase : BaseItemData
 {
-
     public int Attack;
 
     public int Defence;
@@ -23,7 +20,6 @@ public class EquipData : BaseItemData
     public int addMagicPower;
     public int addINT;
     public int Kindness;
-
 
     //’Ç‰ÁŒø‰Ê
     [ValueDropdown("addBuff")]
@@ -65,4 +61,3 @@ public class EquipData : BaseItemData
                                                              .Cast<CONST.ITEM.ADDDEBUFF>()
                                                              .ToList();
 }
-

@@ -15,11 +15,14 @@ MonoBehaviour:
   Name: Test_Item_10
   displayName: "\u30C6\u30B9\u30C8\u30A2\u30A4\u30C6\u30E0_10"
   id: I_T_01_10
+  Rarity: 0
+  category: 6
+  PurchasePrice: 0
+  Sellingrice: 0
+  item_description: 
   Type: 3
   Target_status: 0
   speed_rank: 0
   Range: 0
   Element: 0
   value: 100
-  price: 1000
-  description: "\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8"

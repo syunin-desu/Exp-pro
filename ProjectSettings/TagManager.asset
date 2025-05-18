@@ -14,6 +14,10 @@ TagManager:
   - PlayerMenuAbilityButton
   - PlayerMenuAbilitySelectedIcon
   - PlayerMenuAbilityHottoButton
+  - PlayerMenuEquipButton
+  - PlayerMenuEquipSelectedIcon
+  - PlayerMenuEquipItemButton
+  - PlayerMenuEquipItemSelectedIcon
   layers:
   - Default
   - TransparentFX

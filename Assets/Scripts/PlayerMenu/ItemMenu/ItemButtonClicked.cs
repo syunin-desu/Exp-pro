@@ -14,7 +14,6 @@ public class ItemButtonClicked : MonoBehaviour
     public ItemMenuUIManager itemMenuUIManager;
     public ItemMenuScrollManager itemMenuScrollManager;
     public PartyMember _playerManager;
-    public ItemStatus _itemStatus;
     public HadItem haditem;
     public string item_id;
 
@@ -42,8 +41,16 @@ public class ItemButtonClicked : MonoBehaviour
             itemMenuUIManager.UpdateItemSelectedIcon(target_obj, true);
 
             // Description を更新
-            var targetItemID = selectedObj.GetComponent<ItemButtonClicked>().item_id;
             itemMenuManager.UpdateDiscription(_itemManager.GetItemDiscriptionfromMaster(selectedItemID) ?? "");
+            return;
+        }
+
+        if (_itemManager.getItemCategoryForItemID(selectedItemID) != CONST.ITEM.CATEGORY.HEAL_ITEM
+            && selectedObj.GetComponentInChildren<ItemStatus>().GetIsSelected())
+        {
+            // Description を更新
+            itemMenuManager.UpdateDiscription(_itemManager.GetItemDiscriptionfromMaster(selectedItemID) ?? "");
+            Debug.Log(selectedItemID.ToString() + "は使用できないアイテムカテゴリです");
             return;
         }
 

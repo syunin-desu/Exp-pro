@@ -8,6 +8,7 @@ public class HavingItem
     public string id;
     public string name;
     public int count;
+    public CONST.ITEM.CATEGORY category;
 
 }
 
@@ -26,7 +27,8 @@ public class HadItem : MonoBehaviour
         {
             id = v.Key.id,
             name = v.Key.name,
-            count = v.Value
+            count = v.Value,
+            category = v.Key.category,
         }).ToList();
     }
 
@@ -43,6 +45,7 @@ public class HadItem : MonoBehaviour
     /// <param name="reduceItemCount">減少させる個数</param>
     public void reduceItemCount(string itemID, int reduceItemCount)
     {
+
         var targetItem = this.havingItems.Find(item => item.id == itemID);
 
         //アイテム数を減少させる
@@ -56,10 +59,30 @@ public class HadItem : MonoBehaviour
 
     }
 
+    public void AddItem(HavingItem addItem)
+    {
+        // 新規登録アイテムならそのまま追加
+        if (this.GetItemCount(addItem.id) is null)
+        {
+            this.havingItems.Add(addItem);
+        }
+        // 同IDのアイテムがすでにある場合は、個数を追加する
+        else
+        {
+            this.havingItems.Find(item => item.id == addItem.id).count += addItem.count;
+        }
+
+    }
+
     //所持アイテム
     public List<HavingItem> GetHavingItem()
     {
         return this.havingItems;
+    }
+
+    public List<HavingItem> GetEquipItem(CONST.ITEM.CATEGORY category)
+    {
+        return this.havingItems.FindAll(i => i.category == category);
     }
 
 #nullable enable

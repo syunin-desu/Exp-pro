@@ -36,6 +36,13 @@ public class ItemMenuScrollManager : MonoBehaviour
             var selected_text = itemContent.Find("SelectedIcon").GetComponent<TextMeshProUGUI>();
             selected_text.alpha = 0;
 
+            if (this._itemManager.getItemCategoryForItemID(item.id) != CONST.ITEM.CATEGORY.HEAL_ITEM)
+            {
+                texts.First(t => t.name == "ItemName").color = Color.gray;
+                texts.First(t => t.name == "Item_Number").color = Color.gray;
+                texts.First(t => t.name == "delimiter").color = Color.gray;
+            }
+
 
             itemContent.gameObject.SetActive(true);
         }

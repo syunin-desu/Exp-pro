@@ -1,17 +1,21 @@
+using CONST;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 
 public class ItemManager : MonoBehaviour
 {
-    private List<UsedItemData> _itemList = new List<UsedItemData>();
+    private List<UsedItemData> _masteritemList = new List<UsedItemData>();
+    private List<EquipBase> _masterequipList = new List<EquipBase>();
     public HadItem haditem;
 
     // Start is called before the first frame update
     void Start()
     {
-        _itemList = MasterData.instance.masterItemList;
+        _masteritemList = MasterData.instance.masterItemList;
+        _masterequipList = MasterData.instance.masterEquipList;
     }
 
 #nullable enable
@@ -79,14 +83,22 @@ public class ItemManager : MonoBehaviour
     /// <returns>表示アイテム名</returns>
     public string getItemDisplayName(string itemName)
     {
-        UsedItemData selectedItem = this._itemList.Find(item => item.Name == itemName);
+        UsedItemData selectedItem = this._masteritemList.Find(item => item.Name == itemName);
         return selectedItem.displayName;
     }
 
     public string getItemNameFromID(string itemID)
     {
-        UsedItemData selectedItem = this._itemList.Find(item => item.id == itemID);
+        UsedItemData selectedItem = this._masteritemList.Find(item => item.id == itemID);
         return selectedItem.displayName;
+    }
+
+    public List<string> getHadEquipListFromID()
+    {
+        return this._masterequipList
+            .FindAll(item => item.category == CONST.ITEM.CATEGORY.WEAPON_ITEM)
+            .Select(item => item.id)
+            .ToList();
     }
 
     /// <summary>
@@ -96,7 +108,7 @@ public class ItemManager : MonoBehaviour
     /// <returns>アイテム名</returns>
     public string getItemNameForDisplayName(string itemDisplayName)
     {
-        UsedItemData item = this._itemList.Find(item => item.displayName == itemDisplayName);
+        UsedItemData item = this._masteritemList.Find(item => item.displayName == itemDisplayName);
         return item.Name;
     }
 
@@ -107,8 +119,24 @@ public class ItemManager : MonoBehaviour
     /// <returns>アイテム名</returns>
     public int getItemSpeedRankForItemID(string itemName)
     {
-        UsedItemData item = this._itemList.Find(item => item.id == itemName);
+        UsedItemData item = this._masteritemList.Find(item => item.id == itemName);
         return item.speed_rank;
+    }
+
+    public CONST.ITEM.CATEGORY getItemCategoryForItemID(string itemid)
+    {
+        UsedItemData item = this._masteritemList.Find(item => item.id == itemid);
+        return item.category;
+    }
+
+    public EquipBase GetEquipDataFromMaster(string equipID)
+    {
+        return this._masterequipList.FirstOrDefault(e => e.id == equipID);
+    }
+
+    public EquipBase GetNoneEquip(CONST.ITEM.CATEGORY targetCategory)
+    {
+        return this._masterequipList.FindAll(e => e.category == targetCategory).FirstOrDefault(e => e.name == "None");
     }
 
     /// <summary>
@@ -118,12 +146,17 @@ public class ItemManager : MonoBehaviour
     /// <returns>アイテムデータ</returns>
     private UsedItemData GetItemData(string itemID)
     {
-        return this._itemList.Find(item => item.id == itemID);
+        return this._masteritemList.Find(item => item.id == itemID);
 
     }
 
     public string GetItemDiscriptionfromMaster(string itemID)
     {
-        return this._itemList.Find(item => item.id == itemID).item_description;
+        return this._masteritemList.Find(item => item.id == itemID).item_description;
+    }
+
+    public string GetEquipDiscriptionfromMaster(string itemID)
+    {
+        return this._masterequipList.Find(item => item.id == itemID).description_equip;
     }
 }
