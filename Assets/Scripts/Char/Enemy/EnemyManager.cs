@@ -20,7 +20,6 @@ public class EnemyManager : CharBase
 
     private void Awake()
     {
-        this.SetParameter(ConvertCharDataToParameter(enemyData));
         // UI情報をセット
         enemyUI = GameObject.Find("EnemyUI").GetComponent<EnemyUIManager>();
         enemyUI.isShowEnemyUI(false);
@@ -28,7 +27,8 @@ public class EnemyManager : CharBase
 
     void Start()
     {
-        this.char_role = CONST.CHARCTOR.ENEMY;
+        this.char_role = CONST.CHARCTOR.Role.ENEMY;
+        this.SetParameter(ConvertCharDataToParameter(enemyData));
 
         CharParameter charParameter = this.GetCharParameters();
 
@@ -66,6 +66,14 @@ public class EnemyManager : CharBase
             WeakElement = charData.WeakElement,
             StrongElement = charData.StrongElement,
             HavingAbility = charData.HavingAbility,
+            equipDatas = new PlayerEquipData()
+            {
+                weaponData = charData.weaponData,
+                armedHead = charData.armedHead,
+                armedBody = charData.armedBody,
+                armedAccessory_1 = charData.armedAccessory_1,
+                armedAccessory_2 = charData.armedAccessory_2,
+            },
 
         };
     }
@@ -78,6 +86,12 @@ public class EnemyManager : CharBase
 
         // HPバーの初期化
         this.UpdateHpBar(charParameter);
+    }
+
+    public void UpdateEnemyDataAndCharParameter(CharData targetCharData)
+    {
+        this.enemyData = targetCharData;
+        this.SetParameter(ConvertCharDataToParameter(enemyData));
     }
 
 

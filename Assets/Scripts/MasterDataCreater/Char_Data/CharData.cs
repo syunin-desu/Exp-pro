@@ -8,6 +8,7 @@ using System.Linq;
 using CONST;
 
 [CreateAssetMenu(menuName = "CreateData/Create CharData")]
+[System.Serializable]
 public class CharData : ScriptableObject
 {
     public string Name;
@@ -21,8 +22,10 @@ public class CharData : ScriptableObject
     public int MagicPower;
     public int INT;
     public int Kindness;
-    public int ROLE;
+    public CONST.CHARCTOR.Role ROLE;
     public int countOfActions;
+    [ValueDropdown("classList")]
+    public CONST.CHARCTOR.Class charClass;
 
     // TODO: StringからEnum型にする
     public List<Ability_base> HavingAbility = new List<Ability_base>();
@@ -40,6 +43,9 @@ public class CharData : ScriptableObject
 
     private static List<CONST.UTILITY.Element> elementList = Enum.GetValues(typeof(CONST.UTILITY.Element))
                                                              .Cast<CONST.UTILITY.Element>()
+                                                             .ToList();
+    private static List<CONST.CHARCTOR.Class> classList = Enum.GetValues(typeof(CONST.CHARCTOR.Class))
+                                                             .Cast<CONST.CHARCTOR.Class>()
                                                              .ToList();
 
 }

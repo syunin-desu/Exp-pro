@@ -1,3 +1,4 @@
+using CONST;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,11 @@ public class BattleManager : MonoBehaviour
     /// 敵キャラ
     /// </summary>
     private EnemyManager enemy;
+
+    /// <summary>
+    /// 敵オブジェクト
+    /// </summary>
+    public GameObject enemyObject;
 
     /// <summary>
     /// コマンド選択UI(名前を変える必要がある)
@@ -75,6 +81,8 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     public BattleActionList battleActionList;
 
+    public BattleWhimManager battleWhimManager;
+
     /// <summary>
     /// 経過ターン
     /// </summary>
@@ -112,7 +120,8 @@ public class BattleManager : MonoBehaviour
 
         // 敵オブジェクトを生成
         // TODO: Questシーンから情報を流すことでそれに添うEnemyを生成できるようにしたい
-        CreateEnemyObjects(new string[] { CONST.ENEMY_NAMES.TEST });
+        CharData targetEnemy = BattleData.instance.GetTargetEnemy();
+        CreateEnemyObjects(targetEnemy);
 
         //経過ターンをリセット
         turned = 0;
@@ -160,8 +169,15 @@ public class BattleManager : MonoBehaviour
     {
         foreach (BattleAction allAction in battleActionList.GetAllActionList())
         {
+            // キャンセル状態の場合は行動を中断
+            if (allAction.status == BATTLE_ACTION.STATUS.Canceled)
+            {
+                continue;
+            }
+
             //キャラ識別
-            int role = allAction.character.char_role;
+            CONST.CHARCTOR.Role role = allAction.character.char_role;
+            allAction.status = BATTLE_ACTION.STATUS.Excuting;
 
             // TODO: デバック用なのであとで消す
             Debug.Log(allAction.action);
@@ -171,30 +187,46 @@ public class BattleManager : MonoBehaviour
                 //攻撃
                 case CONST.BATTLE_ACTION.COMMAND.Attack:
                     //プレイヤーの場合
-                    if (role == CONST.CHARCTOR.PLAYER)
+                    if (role == CONST.CHARCTOR.Role.PLAYER)
                     {
-                        await this.PlayerAttack(partyMember);
+                        await abilityManager.execAbility(partyMember, enemy, allAction.id, allAction.abilityActions);
 
                     }
                     //敵の場合
                     else
                     {
-                        await this.EnemyAttack(enemy);
+                        await abilityManager.execAbility(enemy, partyMember, allAction.id, allAction.abilityActions);
                     }
                     break;
 
                 // アビリティ
                 case CONST.BATTLE_ACTION.COMMAND.Ability:
-                    if (role == CONST.CHARCTOR.PLAYER)
+                    if (role == CONST.CHARCTOR.Role.PLAYER)
                     {
-                        // TODO 使用者と対象のキャラ情報ははAllActionListに格納できるようにしたい
-                        // 引数に指定しない
-                        await abilityManager.execAbility(partyMember, enemy, allAction.id, allAction.abilityActions);
+                        // 思いつき候補アビリティ取得
+                        var candidateWhimAbility = battleWhimManager.GetCandidateWhimAbility(this.battleActionList, allAction);
+
+                        // 思いつき判定
+                        var WhimAbility = battleWhimManager.JudgeWhimAbility(candidateWhimAbility);
+
+                        // アクションリスト整理
+                        if (WhimAbility != null)
+                        {
+                            battleActionList.SetActionCanceled(WhimAbility.canceledAbilities);
+                        }
+
+
+                        var ability_id = WhimAbility is not null ? WhimAbility.Ability.First().id : allAction.id;
+                        var ability_action = WhimAbility is not null ? WhimAbility.Ability.First().executeActionList : allAction.abilityActions;
+                        // アビリティを実行
+                        await abilityManager.execAbility(partyMember,
+                            enemy,
+                            ability_id,
+                            ability_action);
                     }
                     else
                     {
                         await abilityManager.execAbility(enemy, partyMember, allAction.id, allAction.abilityActions);
-                        // TODO 一時的に記述 HPなどのUIへの反映を動的に監視できるようにしたい
 
                     }
                     break;
@@ -205,7 +237,7 @@ public class BattleManager : MonoBehaviour
                     break;
                 // アイテム
                 case CONST.BATTLE_ACTION.COMMAND.Item:
-                    if (role == CONST.CHARCTOR.PLAYER)
+                    if (role == CONST.CHARCTOR.Role.PLAYER)
                     {
                         await itemManager.ExecItem(partyMember, enemy, allAction.id);
                     }
@@ -219,6 +251,8 @@ public class BattleManager : MonoBehaviour
                     Debug.Log("不正なアクションが登録されました");
                     break;
             }
+
+            allAction.status = BATTLE_ACTION.STATUS.Completed;
 
             // 敵HPが尽きたとき
             // TODO: 現在は1v1を想定して作られている
@@ -344,12 +378,16 @@ public class BattleManager : MonoBehaviour
     //<summary>攻撃アクションを登録</summary>
     public void setAction_Attack(CharBase character)
     {
-        BattleAction act = new BattleAction(CONST.BATTLE_ACTION.COMMAND.Attack, character);
-        act.setAbilityName("Attack");
-        act.SetSpeedRank(this.abilityManager.getAbilitySpeedRank("Attack"));
+        BattleAction act = new BattleAction(CONST.BATTLE_ACTION.COMMAND.Ability, character);
+        var attackAbility = MasterData.instance.masterAbilityList.FirstOrDefault(a => a.Name == "Attack");
+
+        act.setAbilityName(attackAbility.Name);
+        act.SetSpeedRank(attackAbility.speed_rank);
+        act.setID(attackAbility.id);
+        act.setAbilityAction(attackAbility.executeActionList);
         setActionList_FOR_Role(character.char_role, act);
 
-        if (this.battleActionList.GetP_ActionList().Count == character.countActionATurn && character.char_role == CONST.CHARCTOR.PLAYER)
+        if (this.battleActionList.GetP_ActionList().Count == character.countActionATurn && character.char_role == CONST.CHARCTOR.Role.PLAYER)
         {
             this.battle();
         }
@@ -448,13 +486,13 @@ public class BattleManager : MonoBehaviour
     }
 
     // TODO: 関数自体を見直す必要あり
-    private void setActionList_FOR_Role(int character_role, BattleAction act)
+    private void setActionList_FOR_Role(CONST.CHARCTOR.Role character_role, BattleAction act)
     {
-        if (character_role == CONST.CHARCTOR.PLAYER)
+        if (character_role == CONST.CHARCTOR.Role.PLAYER)
         {
             this.battleActionList.SetActionToPlayer(act);
         }
-        else if (character_role == CONST.CHARCTOR.ENEMY)
+        else if (character_role == CONST.CHARCTOR.Role.ENEMY)
         {
             this.battleActionList.SetAllActionToEnemy(act);
         }
@@ -593,18 +631,18 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// 敵オブジェクトを生成する
     /// </summary>
-    private void CreateEnemyObjects(string[] enemyNames)
+    private void CreateEnemyObjects(CharData enemyData)
     {
         // TODO: 現状敵は一体のみなので敵オブジェクト一つを対象にしている)
-        foreach (var enemyName in enemyNames)
-        {
-            var targetPrefab = (GameObject)Resources.Load($"Prefabs/Enemy/{enemyName}");
-            Instantiate(targetPrefab, new Vector3((float)-1, (float)0.16, 0), Quaternion.identity);
+        //foreach (var enemyName in enemyNames)
+        //{
+        var targetData = MasterData.instance.masterEnemyDataList.FirstOrDefault(e => e.Name == enemyData.Name);
+        enemyObject.gameObject.GetComponent<EnemyManager>().UpdateEnemyDataAndCharParameter(enemyData);
 
-            // 敵情報を取得する
-            // TODO: 現状敵は一体のみなので敵オブジェクト一つを対象にしている
-            enemy = GameObject.FindGameObjectWithTag("Enemy").GetComponent<EnemyManager>();
-        }
+        // 敵情報を取得する
+        // TODO: 現状敵は一体のみなので敵オブジェクト一つを対象にしている
+        enemy = enemyObject.gameObject.GetComponent<EnemyManager>();
+        //}
     }
 
     /// <summary>

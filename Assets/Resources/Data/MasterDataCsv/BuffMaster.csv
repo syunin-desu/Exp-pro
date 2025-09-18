@@ -1,0 +1,5 @@
+buffName,buffCategory,value_degree,value_rate,effectPeriod_Category,effectPeriod
+ClriticalUP_Worrior_ult,CriticalRateUp,0,100,per_turn,1
+DamageUP_Worrior_pass,DamagingUP,0,10,infinite,0
+DamageUP_Worrior_skill,DamagingUP,0,25,per_turn,1
+DamageUP_Worrior_ult,DamagingUP,0,100,per_turn,1

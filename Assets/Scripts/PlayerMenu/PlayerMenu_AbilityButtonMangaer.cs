@@ -1,11 +1,27 @@
 using UnityEngine;
 
-public class PlayerMenu_AbilityButtonMangaer : MonoBehaviour
+public class PlayerMenu_AbilityButtonMangaer : MonoBehaviour, IButtonClicked
 {
     public AbilityMenuManager abilityManager;
+    public PlayerMenu_SelectMenuUIManager playerMenu_SelectMenuUIManager;
+    public SelectedStatus playerMenu_SelectMenuStatus;
 
-    public void ClickedAbilityButton()
+    public void OnClicked()
     {
-        abilityManager.SetAbilityMenu();
+        if (playerMenu_SelectMenuStatus.GetIsSelected())
+        {
+            abilityManager.SetAbilityMenu();
+
+        }
+        else
+        {
+            ///全アイテムの選択中ステータスをFalseにする
+            playerMenu_SelectMenuUIManager.ClearItemButtonSelected();
+            playerMenu_SelectMenuUIManager.AllSelectedIconDisable();
+
+            // このボタンを選択状態に更新
+            playerMenu_SelectMenuUIManager.UpdateSelectedButtonColor(this.gameObject);
+            playerMenu_SelectMenuStatus.UpdateIsSelected(true);
+        }
     }
 }

@@ -6,7 +6,7 @@ using System.Linq;
 using UnityEngine.UIElements;
 using System.Runtime.CompilerServices;
 
-
+[System.Serializable]
 public class PlayerEquipData
 {
     public WeaponData weaponData;
@@ -19,6 +19,7 @@ public class PlayerEquipData
 /// <summary>
 /// 内部用キャラのパラメータをまとめたクラス
 /// </summary>
+[System.Serializable]
 public class CharParameter
 {
     public string Name;
@@ -32,10 +33,12 @@ public class CharParameter
     public int MGC; // 魔力
     public int INT; // 知性
     public int KID; //慈愛
-    public int ROLE;
+    public CONST.CHARCTOR.Role ROLE;
     public int countOfActions;
+    public CONST.CHARCTOR.Class charClass;
 
     public PlayerEquipData equipDatas = new PlayerEquipData();
+    public PlayerEquipData BeforeUpdatedequipDatas = new PlayerEquipData();
 
     // TODO: StringからEnum型にする
     public List<Ability_base> HavingAbility = new List<Ability_base>();

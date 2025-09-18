@@ -25,6 +25,9 @@ public class CardManager : MonoBehaviour
     // 選択可能なカード枚数
     public int canSelectCardNumber;
 
+    // カードの表示可能枚数
+    private const int canDisplayCardNumber = 10;
+
     // Update is called once per frame
     void Update()
     {
@@ -55,24 +58,21 @@ public class CardManager : MonoBehaviour
     /// 画面外にカードを作成する
     /// </summary>
     /// <param name="cardList"></param>
-    public void CreateCardOnPositon0(List<CONST.QUEST.CardType> cardList)
+    public void CreateCardOnPositon0(List<BaseCardProperty> cardList)
     {
         foreach (var card in cardList.Select((value, index) => new { value, index }))
         {
-            int cardNo = (int)card.value;
+            int cardNo = (int)card.value.cartType;
             var targetCardPrefab = GameObject.Instantiate(position0);
             targetCardPrefab.transform.SetParent(parentCardPositions.transform, false);
             targetCardPrefab.name = $"card_{cardNo}_{card.index}";
-            targetCardPrefab.GetComponent<CardPropertyManager>().SetCardType(card.value);
+            targetCardPrefab.GetComponent<CardPropertyManager>().SetCardType(card.value.cartType);
             targetCardPrefab.GetComponent<CardPropertyManager>().SetCardRowID(card.index);
-            if (card.value == CONST.QUEST.CardType.Deleted)
+            targetCardPrefab.GetComponent<CardPropertyManager>().baseCardProperty = card.value;
+            if (card.value.cartType == CONST.QUEST.CardType.Deleted)
             {
                 targetCardPrefab.GetComponent<CardUIManager>().SetSpriteClear();
             }
-
-            // ?J?[?h????????
-
-            // ?J?[?h???X?g??????
 
             targetCardPrefab.gameObject.SetActive(true);
             eventCardList.Add(targetCardPrefab);
@@ -88,18 +88,23 @@ public class CardManager : MonoBehaviour
     /// それぞれの表示位置にカードを生成
     /// </summary>
     /// <param name="cardList"></param>
-    public void CreateCardOnPositonEach(List<CONST.QUEST.CardType> cardList)
+    public void CreateCardOnPositonEach(List<BaseCardProperty> cardList)
     {
         foreach (var card in cardList.Select((value, index) => new { value, index }))
         {
-            int cardNo = (int)card.value;
+            int cardNo = (int)card.value.cartType;
             var targetCardPrefab = GameObject.Instantiate(position0);
             targetCardPrefab.transform.SetParent(parentCardPositions.transform, false);
-            targetCardPrefab.transform.position = cardPostions[card.index].transform.position;
+            if (card.index <= canDisplayCardNumber - 1)
+            {
+                targetCardPrefab.transform.position = cardPostions[card.index].transform.position;
+            }
+
             targetCardPrefab.name = $"card_{cardNo}_{card.index}";
-            targetCardPrefab.GetComponent<CardPropertyManager>().SetCardType(card.value);
+            targetCardPrefab.GetComponent<CardPropertyManager>().SetCardType(card.value.cartType);
             targetCardPrefab.GetComponent<CardPropertyManager>().SetCardRowID(card.index);
-            if (card.value == CONST.QUEST.CardType.Deleted)
+            targetCardPrefab.GetComponent<CardPropertyManager>().baseCardProperty = card.value;
+            if (card.value.cartType == CONST.QUEST.CardType.Deleted)
             {
                 targetCardPrefab.GetComponent<CardUIManager>().SetSpriteClear();
             }
@@ -117,7 +122,7 @@ public class CardManager : MonoBehaviour
     /// 削除、選択済みカードをリストから削除し、順番に並び替え
     /// </summary>
     /// <param name="cardList"></param>
-    public void ReMoveCardPosition(List<CONST.QUEST.CardType> cardList)
+    public void ReMoveCardPosition()
     {
         // 削除、選択済みステータスのカードを削除
         eventCardList.RemoveAll(c => c.GetComponent<CardPropertyManager>().GetCardType() == CONST.QUEST.CardType.Deleted ||
@@ -151,7 +156,7 @@ public class CardManager : MonoBehaviour
             {
                 card.value.GetComponent<CardUIManager>().MoveCardFixedPositionWithOpenCard(cardPostions[card.index].anchoredPosition, CONST.ANIMATION_SPEED.FLIP_CARD_SPEED);
             }
-            else
+            else if (card.index <= canDisplayCardNumber - 1)
             {
                 card.value.GetComponent<CardUIManager>().MoveCardFixedPosition(cardPostions[card.index].anchoredPosition, CONST.ANIMATION_SPEED.FLIP_CARD_SPEED);
 
@@ -162,17 +167,15 @@ public class CardManager : MonoBehaviour
     /// <summary>
     /// 選択されたカードのイベントを実行するインターフェース処理
     /// </summary>
-    public async void DoEvent(CONST.QUEST.CardType selectedCardType, int rowID)
+    public void DoEvent(CONST.QUEST.CardType selectedCardType, int rowID, BaseCardProperty baseCardProperty)
     {
         // 全カードを選択不可にする
         this.SetCanSelectedAllCard(false);
 
-        // 選択範囲内の非選択カードを削除するアニメーションを実行する
-        await this.DropUnselectedCard(rowID);
 
         // カードに設定されているイベントを実行する
         // 実行はQuestManagerで実行
-        questManager.executeCardEvent(selectedCardType, canSelectCardNumber, rowID);
+        questManager.executeCardEvent(selectedCardType, canSelectCardNumber, rowID, baseCardProperty);
     }
 
     /// 選択可能かのフラグを更新
@@ -180,9 +183,12 @@ public class CardManager : MonoBehaviour
     /// <param name="canSelectedCardNumber"></param>
     public void SetCanSelected(int canSelectedCardNumber)
     {
-        for (int i = 0; i < canSelectedCardNumber; i++)
+        foreach (var item in eventCardList.Select((value, index) => new { value, index }))
         {
-            this.eventCardList[i].gameObject.GetComponent<CardPropertyManager>().SetCanSelectCard(true);
+            if (item.index < 3)
+            {
+                item.value.gameObject.GetComponent<CardPropertyManager>().SetCanSelectCard(true);
+            }
         }
     }
 
@@ -207,17 +213,27 @@ public class CardManager : MonoBehaviour
     }
 
     // 非選択カードを削除するエフェクトを実行する
-    public async Task DropUnselectedCard(int selectedCardIndex)
+    public async Task DropUnselectedCard(int selectedCardIndex, List<int> excludeCardIndex)
     {
         Sequence drop_sequence = DOTween.Sequence();
         foreach (var card in this.eventCardList.Select((value, index) => new { value, index }))
         {
-            if (card.index != selectedCardIndex && card.index < canSelectCardNumber)
+            if (card.index != selectedCardIndex && card.index < canSelectCardNumber && !excludeCardIndex.Contains(card.index))
             {
                 card.value.gameObject.GetComponent<CardUIManager>().FadeOutForUnder(seq: drop_sequence);
             }
         }
         await drop_sequence.AsyncWaitForCompletion();
+    }
+
+    public void UpdateCardListStatus(int index, CONST.QUEST.CardType updateStatus)
+    {
+        this.eventCardList[index].GetComponent<CardPropertyManager>().SetCardType(updateStatus);
+    }
+
+    public void ClearCardList()
+    {
+        this.eventCardList.Clear();
     }
 
 }

@@ -43,7 +43,7 @@ public class ItemScrollController : MonoBehaviour
 
             // アクションリストに該当アイテムが登録されていたらその個数分差し引く
             int lefttemCount = item.count - battleActionList.GetP_ActionList()
-                                                .FindAll(a => a.itemName == item.name)
+                                                .FindAll(a => a.itemName == item.Name)
                                                 .Count();
 
             if (lefttemCount <= 0)

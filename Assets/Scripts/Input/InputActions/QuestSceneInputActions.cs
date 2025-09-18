@@ -44,6 +44,60 @@ public partial class @QuestSceneInputActions: IInputActionCollection2, IDisposab
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Enter"",
+                    ""type"": ""Button"",
+                    ""id"": ""72e9e6f1-9378-45fe-bd15-c457225bd8f1"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Up"",
+                    ""type"": ""Button"",
+                    ""id"": ""834457dd-448b-456d-9f0e-07d93adfb473"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Down"",
+                    ""type"": ""Button"",
+                    ""id"": ""e7b52711-a45f-4f7f-9050-e3e76b182585"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Left"",
+                    ""type"": ""Button"",
+                    ""id"": ""48af20c7-17af-4064-8308-b9fe90634424"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Right"",
+                    ""type"": ""Button"",
+                    ""id"": ""d6300586-d8ff-4aa0-b9d5-cb39f6379a2e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""db346e4d-fb26-43bc-945e-f29ddedae2c3"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -61,7 +115,7 @@ public partial class @QuestSceneInputActions: IInputActionCollection2, IDisposab
                 {
                     ""name"": """",
                     ""id"": ""f50c8e9d-b56e-445a-95d0-9ef215d6a94a"",
-                    ""path"": ""<Joystick>/{Menu}"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -72,7 +126,7 @@ public partial class @QuestSceneInputActions: IInputActionCollection2, IDisposab
                 {
                     ""name"": """",
                     ""id"": ""66065d1f-a6a1-4e91-b18c-7c3efbf4bdac"",
-                    ""path"": ""<Keyboard>/escape"",
+                    ""path"": ""<Keyboard>/leftShift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -83,11 +137,198 @@ public partial class @QuestSceneInputActions: IInputActionCollection2, IDisposab
                 {
                     ""name"": """",
                     ""id"": ""3853d67b-56b7-4113-9dc5-a5c3a3787b39"",
-                    ""path"": ""<Joystick>/{Cancel}"",
+                    ""path"": ""<Gamepad>/{Cancel}"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Return"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9cee5ead-d3c6-41ee-8728-8d4fc94bf8e5"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Return"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5eda60c6-44f1-4308-aef7-ce1076389ef8"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Enter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f148ecc8-6f26-4af1-86fa-c1394a29867f"",
+                    ""path"": ""<Gamepad>/{Submit}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Enter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""40efd81d-e3bd-434e-a9e6-0201e20c0678"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Up"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""10fcbaf6-8b4f-4098-900d-4f8578dbfc3f"",
+                    ""path"": ""<Gamepad>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Up"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9f4ec8e6-dc0d-4d11-bf3d-10a226cb68bc"",
+                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Up"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f85282b0-64d4-4a0a-a21c-64135a454a18"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Down"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bcac625e-63c3-4762-a213-001c8bf6c007"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Down"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b243b94a-829c-4f44-8bcd-d038ad01240d"",
+                    ""path"": ""<Gamepad>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Down"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""48a3e57e-e6fd-4afa-a26c-0382b63c7783"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Left"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""da680eb5-bd5a-4997-92c9-652b281b4774"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Left"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6745a2be-e457-4346-a495-240281e028d0"",
+                    ""path"": ""<Gamepad>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Left"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a1f59d9f-b45a-4bd6-a682-cefc8789bb6e"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""066fba56-634f-416f-9379-cfc3aa79d717"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""148f910a-3e4f-4696-b0b9-9bc0bcbb3828"",
+                    ""path"": ""<Gamepad>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""043513b3-c753-4f6c-bc54-b2f18ddfa17e"",
+                    ""path"": ""<Keyboard>/p"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b0bba80b-e4ea-4fcf-aaff-c696e82809bd"",
+                    ""path"": ""<Gamepad>/{Menu}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -96,21 +337,16 @@ public partial class @QuestSceneInputActions: IInputActionCollection2, IDisposab
     ],
     ""controlSchemes"": [
         {
-            ""name"": ""New Control Scheme"",
-            ""bindingGroup"": ""New Control Scheme"",
+            ""name"": ""ControllerScheme"",
+            ""bindingGroup"": ""ControllerScheme"",
             ""devices"": [
                 {
-                    ""devicePath"": ""<Joystick>"",
+                    ""devicePath"": ""<Gamepad>"",
                     ""isOptional"": false,
                     ""isOR"": false
                 },
                 {
                     ""devicePath"": ""<Keyboard>"",
-                    ""isOptional"": false,
-                    ""isOR"": false
-                },
-                {
-                    ""devicePath"": ""<Pointer>"",
                     ""isOptional"": false,
                     ""isOR"": false
                 }
@@ -122,6 +358,12 @@ public partial class @QuestSceneInputActions: IInputActionCollection2, IDisposab
         m_QuestScene = asset.FindActionMap("QuestScene", throwIfNotFound: true);
         m_QuestScene_OpenMenu = m_QuestScene.FindAction("OpenMenu", throwIfNotFound: true);
         m_QuestScene_Return = m_QuestScene.FindAction("Return", throwIfNotFound: true);
+        m_QuestScene_Enter = m_QuestScene.FindAction("Enter", throwIfNotFound: true);
+        m_QuestScene_Up = m_QuestScene.FindAction("Up", throwIfNotFound: true);
+        m_QuestScene_Down = m_QuestScene.FindAction("Down", throwIfNotFound: true);
+        m_QuestScene_Left = m_QuestScene.FindAction("Left", throwIfNotFound: true);
+        m_QuestScene_Right = m_QuestScene.FindAction("Right", throwIfNotFound: true);
+        m_QuestScene_Pause = m_QuestScene.FindAction("Pause", throwIfNotFound: true);
     }
 
     ~@QuestSceneInputActions()
@@ -190,12 +432,24 @@ public partial class @QuestSceneInputActions: IInputActionCollection2, IDisposab
     private List<IQuestSceneActions> m_QuestSceneActionsCallbackInterfaces = new List<IQuestSceneActions>();
     private readonly InputAction m_QuestScene_OpenMenu;
     private readonly InputAction m_QuestScene_Return;
+    private readonly InputAction m_QuestScene_Enter;
+    private readonly InputAction m_QuestScene_Up;
+    private readonly InputAction m_QuestScene_Down;
+    private readonly InputAction m_QuestScene_Left;
+    private readonly InputAction m_QuestScene_Right;
+    private readonly InputAction m_QuestScene_Pause;
     public struct QuestSceneActions
     {
         private @QuestSceneInputActions m_Wrapper;
         public QuestSceneActions(@QuestSceneInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @OpenMenu => m_Wrapper.m_QuestScene_OpenMenu;
         public InputAction @Return => m_Wrapper.m_QuestScene_Return;
+        public InputAction @Enter => m_Wrapper.m_QuestScene_Enter;
+        public InputAction @Up => m_Wrapper.m_QuestScene_Up;
+        public InputAction @Down => m_Wrapper.m_QuestScene_Down;
+        public InputAction @Left => m_Wrapper.m_QuestScene_Left;
+        public InputAction @Right => m_Wrapper.m_QuestScene_Right;
+        public InputAction @Pause => m_Wrapper.m_QuestScene_Pause;
         public InputActionMap Get() { return m_Wrapper.m_QuestScene; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -211,6 +465,24 @@ public partial class @QuestSceneInputActions: IInputActionCollection2, IDisposab
             @Return.started += instance.OnReturn;
             @Return.performed += instance.OnReturn;
             @Return.canceled += instance.OnReturn;
+            @Enter.started += instance.OnEnter;
+            @Enter.performed += instance.OnEnter;
+            @Enter.canceled += instance.OnEnter;
+            @Up.started += instance.OnUp;
+            @Up.performed += instance.OnUp;
+            @Up.canceled += instance.OnUp;
+            @Down.started += instance.OnDown;
+            @Down.performed += instance.OnDown;
+            @Down.canceled += instance.OnDown;
+            @Left.started += instance.OnLeft;
+            @Left.performed += instance.OnLeft;
+            @Left.canceled += instance.OnLeft;
+            @Right.started += instance.OnRight;
+            @Right.performed += instance.OnRight;
+            @Right.canceled += instance.OnRight;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
         }
 
         private void UnregisterCallbacks(IQuestSceneActions instance)
@@ -221,6 +493,24 @@ public partial class @QuestSceneInputActions: IInputActionCollection2, IDisposab
             @Return.started -= instance.OnReturn;
             @Return.performed -= instance.OnReturn;
             @Return.canceled -= instance.OnReturn;
+            @Enter.started -= instance.OnEnter;
+            @Enter.performed -= instance.OnEnter;
+            @Enter.canceled -= instance.OnEnter;
+            @Up.started -= instance.OnUp;
+            @Up.performed -= instance.OnUp;
+            @Up.canceled -= instance.OnUp;
+            @Down.started -= instance.OnDown;
+            @Down.performed -= instance.OnDown;
+            @Down.canceled -= instance.OnDown;
+            @Left.started -= instance.OnLeft;
+            @Left.performed -= instance.OnLeft;
+            @Left.canceled -= instance.OnLeft;
+            @Right.started -= instance.OnRight;
+            @Right.performed -= instance.OnRight;
+            @Right.canceled -= instance.OnRight;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
         }
 
         public void RemoveCallbacks(IQuestSceneActions instance)
@@ -238,18 +528,24 @@ public partial class @QuestSceneInputActions: IInputActionCollection2, IDisposab
         }
     }
     public QuestSceneActions @QuestScene => new QuestSceneActions(this);
-    private int m_NewControlSchemeSchemeIndex = -1;
-    public InputControlScheme NewControlSchemeScheme
+    private int m_ControllerSchemeSchemeIndex = -1;
+    public InputControlScheme ControllerSchemeScheme
     {
         get
         {
-            if (m_NewControlSchemeSchemeIndex == -1) m_NewControlSchemeSchemeIndex = asset.FindControlSchemeIndex("New Control Scheme");
-            return asset.controlSchemes[m_NewControlSchemeSchemeIndex];
+            if (m_ControllerSchemeSchemeIndex == -1) m_ControllerSchemeSchemeIndex = asset.FindControlSchemeIndex("ControllerScheme");
+            return asset.controlSchemes[m_ControllerSchemeSchemeIndex];
         }
     }
     public interface IQuestSceneActions
     {
         void OnOpenMenu(InputAction.CallbackContext context);
         void OnReturn(InputAction.CallbackContext context);
+        void OnEnter(InputAction.CallbackContext context);
+        void OnUp(InputAction.CallbackContext context);
+        void OnDown(InputAction.CallbackContext context);
+        void OnLeft(InputAction.CallbackContext context);
+        void OnRight(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
 }

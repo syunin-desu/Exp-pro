@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a7e0847e2cc15a4b931dcdcdf0d8946, type: 3}
+  m_Name: test
+  m_EditorClassIdentifier: 
+  Name: test
+  currentHP: 500
+  currentMP: 50
+  maxHp: 999
+  maxMp: 999
+  STR: 10
+  DEF: 5
+  SPEED: 5
+  MagicPower: 5
+  INT: 5
+  Kindness: 5
+  ROLE: 0
+  countOfActions: 3
+  charClass: 1
+  HavingAbility:
+  - {fileID: 11400000, guid: dfb6f98c1c56fd843af6f65bf619db42, type: 2}
+  - {fileID: 11400000, guid: ce69291269072194c9d67567b5a01b08, type: 2}
+  - {fileID: 11400000, guid: a48441e99fe61004581acfe7fba70b47, type: 2}
+  - {fileID: 11400000, guid: 8c6d010032c0c344fb787adfa4780008, type: 2}
+  - {fileID: 11400000, guid: 60ae8e633270e09449c140e82cd9ac84, type: 2}
+  - {fileID: 11400000, guid: 3e35e86ccba0fbf469d6f3f186b8f157, type: 2}
+  weaponData: {fileID: 11400000, guid: 5d9af82921f2a134eacefac8b9d5cc48, type: 2}
+  armedHead: {fileID: 11400000, guid: 77fae007f6eb3ec4c90fb808685efcdc, type: 2}
+  armedBody: {fileID: 11400000, guid: a2af6dbdb91279c438d9a3eafe07c733, type: 2}
+  armedAccessory_1: {fileID: 11400000, guid: 417fe94726166ec4d9404d8b07c87ae4, type: 2}
+  armedAccessory_2: {fileID: 11400000, guid: 4990ba4255ce2ff4594bc5b6e59df970, type: 2}
+  WeakElement: 03000000
+  StrongElement: 03000000

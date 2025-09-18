@@ -23,8 +23,9 @@ public class CardInputManager : MonoBehaviour
         {
             CONST.QUEST.CardType selected_obj_card_type = this.gameObject.GetComponent<CardPropertyManager>().GetCardType();
             int rowID = this.gameObject.GetComponent<CardPropertyManager>().GetCardRowID();
+            BaseCardProperty card_property = this.gameObject.GetComponent<CardPropertyManager>().baseCardProperty;
 
-            cardManager.DoEvent(selected_obj_card_type, rowID);
+            cardManager.DoEvent(selected_obj_card_type, rowID, card_property);
         }
     }
 }

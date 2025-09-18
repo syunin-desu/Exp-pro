@@ -12,4 +12,9 @@ public class SceneTransitionManager : MonoBehaviour
         SceneManager.LoadScene(scene.ToString());
     }
 
+    public void LoadToQuest()
+    {
+        SceneManager.LoadScene(CONST.SCENE.Scene.Quest.ToString());
+    }
+
 }

@@ -30,9 +30,9 @@ public class EquipMenuScrollManager : MonoBehaviour
         this.SetUpArmedEquip(playerEquipData);
     }
 
-    public void SetUpHadEquipList(List<HavingItem> havingEquipList)
+    public List<RectTransform> SetUpHadEquipList(List<HavingItem> havingEquipList)
     {
-
+        var result = new List<RectTransform>();
         // リストの初期表示
         foreach (HavingItem equip in havingEquipList)
         {
@@ -51,11 +51,12 @@ public class EquipMenuScrollManager : MonoBehaviour
             selected_text.alpha = 0;
 
             equipContent.gameObject.SetActive(true);
+            result.Add(equipContent);
         }
-
+        return result;
     }
 
-    public void SetUpRemoveButton(CONST.ITEM.CATEGORY currentSelectedParts)
+    public RectTransform SetUpRemoveButton(CONST.ITEM.CATEGORY currentSelectedParts)
     {
         var equipRemoveContent = GameObject.Instantiate(EquipRemoveContent) as RectTransform;
         equipRemoveContent.SetParent(transform, false);
@@ -67,11 +68,12 @@ public class EquipMenuScrollManager : MonoBehaviour
         var selected_text = equipRemoveContent.Find("SelectedIcon").GetComponent<TextMeshProUGUI>();
         selected_text.alpha = 0;
         equipRemoveContent.gameObject.SetActive(true);
+
+        return equipRemoveContent;
     }
 
-    public void ClearHadEquipList()
+    public void ClearHadEquipList(List<GameObject> equips)
     {
-        var equips = GameObject.FindGameObjectsWithTag("PlayerMenuEquipItemButton");
 
         foreach (var equip in equips)
         {
@@ -79,14 +81,12 @@ public class EquipMenuScrollManager : MonoBehaviour
         }
     }
 
-    public void ClearEquipItemButtonSelectedStatus()
+    public void ClearEquipItemButtonSelectedStatus(List<GameObject> items)
     {
-        // 既に表示されていれば表示内容を全削除
-        var items = GameObject.FindGameObjectsWithTag("PlayerMenuEquipItemButton");
 
         foreach (var item in items)
         {
-            item.GetComponent<EquipStatus>().UpdateIsSelected(false);
+            item.GetComponent<SelectedStatus>().UpdateIsSelected(false);
         }
     }
 

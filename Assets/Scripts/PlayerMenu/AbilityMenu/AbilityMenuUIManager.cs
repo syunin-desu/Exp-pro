@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -5,6 +6,14 @@ using UnityEngine.UI;
 
 public class AbilityMenuUIManager : MonoBehaviour
 {
+    private ListViewUtility listUtility = new ListViewUtility();
+
+
+    [SerializeField]
+    private ScrollRect scrollRect;
+    [SerializeField]
+    private RectTransform scrollContent;
+
     private bool isAbilityMenu = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -87,11 +96,9 @@ public class AbilityMenuUIManager : MonoBehaviour
     /// <summary>
     /// Howtoボタンの非活性を更新
     /// </summary>
-    public void UpdatHowtoButtonEnable(bool enable)
+    public void UpdatHowtoButtonEnable(bool enable, List<GameObject> abilityHowButtons)
     {
-        var targetobjs = GameObject.FindGameObjectsWithTag("PlayerMenuAbilityHottoButton");
-
-        foreach (var obj in targetobjs)
+        foreach (var obj in abilityHowButtons)
         {
             obj.GetComponentInChildren<Button>().enabled = enable;
 
@@ -101,13 +108,11 @@ public class AbilityMenuUIManager : MonoBehaviour
     /// <summary>
     /// 全選択アイコンを非活性にする
     /// </summary>
-    public void AllSelectedIconDisable()
+    public void AllSelectedIconDisable(List<GameObject> abilityButtons)
     {
-        var targetobjs = GameObject.FindGameObjectsWithTag("PlayerMenuAbilitySelectedIcon");
-
-        foreach (var obj in targetobjs)
+        foreach (var obj in abilityButtons)
         {
-            obj.GetComponent<TextMeshProUGUI>()
+            obj.GetComponent<AbilityButtonClicked>().selectedIcon
                 .alpha = 0;
 
         }
@@ -120,5 +125,28 @@ public class AbilityMenuUIManager : MonoBehaviour
     public void UpdateAbilitySelectedIcon(TextMeshProUGUI obj, bool isEnable)
     {
         obj.alpha = isEnable ? 100 : 0;
+    }
+
+    public void UpdateHowAbilityButtonColor(List<GameObject> objects, GameObject targetGameObject)
+    {
+        this.AllSelectedHowButtonUnSelected(objects);
+        targetGameObject.GetComponent<Image>().color = CONST.UI.SELECTED_BUTTON_COLOR;
+    }
+
+    /// <summary>
+    /// ボタンを非選択状態にUI更新する
+    /// </summary>
+    public void AllSelectedHowButtonUnSelected(List<GameObject> targets)
+    {
+        foreach (var obj in targets)
+        {
+            obj.GetComponent<Image>().color = Color.white;
+
+        }
+    }
+
+    public void resetListScroll(RectTransform targetContent)
+    {
+        this.listUtility.ScrollToTarget(this.scrollRect, scrollContent, targetContent);
     }
 }

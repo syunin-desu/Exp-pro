@@ -1,5 +1,6 @@
 
 using System.Xml.Linq;
+using UnityEngine;
 
 /// <summary>
 ///  不変値置き場
@@ -10,12 +11,15 @@ namespace CONST
     public static class CHARCTOR
     {
 
-        //キャラクタ識別
-        public const int PLAYER = 1;
-        public const int ENEMY = 2;
-
         public const int MAXCHARPARAMETERVALUE_1 = 999;
         public const int MAXCHARPARAMETERVALUE_2 = 99;
+        public const int MAXCHARPARAMETERVALUE_3 = 9999;
+
+        public enum Role
+        {
+            PLAYER,
+            ENEMY,
+        }
 
         // 属性
         public enum ParameterCategory
@@ -32,6 +36,44 @@ namespace CONST
             MGC,
             INT,
             KID
+        }
+
+        public enum BuffCategory
+        {
+            DamagingUP,
+            HealOfTime,
+            DamagedDown,
+            DamagingDrain,
+            AddAction,
+            MAXHHPUP,
+            MAXHMPUP,
+            STRUP,
+            DEFUP,
+            SPDUP,
+            MGCUP,
+            INTUP,
+            KIDUP,
+            ConsumeMPDown,
+            CriticalRateUp,
+
+        }
+
+        /// <summary>
+        /// 効果期限カテゴリ
+        /// </summary>
+        public enum EffectPeriod_Category
+        {
+            per_action,
+            per_turn,
+            infinite
+        }
+
+        // 戦闘クラス
+        public enum Class
+        {
+            NIGHT,
+            WORRIER,
+            WIZARD
         }
     }
     public static class SCENE
@@ -58,7 +100,10 @@ namespace CONST
             Main,
             PlayerMainMenu,
             ItemMenu,
-            AbilityMenu
+            AbilityMenu,
+            EquipMenu,
+            SaveAndLoadMenu,
+            OptionMenu
         }
 
     }
@@ -128,6 +173,7 @@ namespace CONST
             Default,
             Magic,
             SwordArts,
+            Ability,
         }
 
     }
@@ -159,6 +205,15 @@ namespace CONST
             Ability,
             Defence,
             Item
+        }
+
+        public enum STATUS
+        {
+            Waiting,
+            Excuting,
+            Canceled,
+            Completed
+
         }
 
     }
@@ -223,6 +278,7 @@ namespace CONST
             MagicSingleAttack,
             Heal,
             DoItem,
+            Buff
         }
 
         /// <summary>
@@ -300,22 +356,32 @@ namespace CONST
         {
             // 敵と遭遇
             EncountEnemy,
-            // アイテムを入手
+            // 消費アイテムを入手
             GetItem,
+            // 装備品を入手
+            GetEquip,
             // アーティファクトを獲得
             GetArtifact,
             // お金を獲得
             GetCredit,
             // イベント遭遇
             EncountEvent,
+            // 強力な敵との遭遇
+            EncountSecretEnemy,
             // ボスと遭遇
             EncountBoss,
+            // ショップを利用する
+            StopbyatShop,
             // ランダムイベント
             Secret,
             // 削除されている
             Deleted,
             // 選択されている
             Selected,
+            // 次の階へ
+            NextFloor,
+            // 次の階へ(鍵付)
+            LockedNextFloor,
 
             // 何も起こらない(テスト用)
             None
@@ -338,6 +404,46 @@ namespace CONST
         }
 
         public static int BATTLEACTION_DELAY = 1;
+    }
+
+    public static class SAVE_AND_LOAD
+    {
+        public static int SAVE_SLOT_COUNT = 30;
+
+        public static string SAVEFILE_STRAGEPATH = "/saveData/saveData";
+        public static string GLOBALSAVEDATA_STRAGEPATH = "/saveData/globalData";
+        public static string SAVEFILEEXTENTION = ".es3";
+        public static string SAVEKEYPATH = "/Utility/__.dat";
+        public static string SAVEDATAKLEY = "SAVEDATA";
+        public static string GENERALSAVEDATAKLEY = "GENERALSAVEDATA";
+    }
+
+    public static class OPTION
+    {
+        public static int OPTION_BGM_VALUE = 8;
+        public static int OPTION_SE_VALUE = 8;
+    }
+
+    public static class MENU
+    {
+        public enum SELECTEDTYPE
+        {
+            NEXT,
+            PREV,
+            ENTER,
+            NEXTCOLUMN,
+            PREVCOLUMN,
+        }
+    }
+
+    public static class UI
+    {
+        public static Color SELECTED_BUTTON_COLOR = Color.blue;
+    }
+
+    public static class ILLEGALVALUE
+    {
+        public static int ILLEGALMENUINDEX = 99999;
     }
 
 }

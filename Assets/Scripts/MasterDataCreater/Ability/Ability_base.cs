@@ -5,6 +5,7 @@ using UnityEngine;
 using CONST;
 using System;
 using System.Linq;
+using NUnit.Framework;
 
 [CreateAssetMenu(menuName = "CreateData/Create AbilityData")]
 public class Ability_base : ScriptableObject
@@ -36,6 +37,10 @@ public class Ability_base : ScriptableObject
     //実行するアクション(一番上から順に実行される)
     [ValueDropdown("Ability_Action_Cell")]
     public List<CONST.ACTION.Ability_Action_Cell> executeActionList;
+
+    public List<Ability_base> requireAbilityForWhim;
+
+    public List<BuffData> buffs;
 
     public string description;
 
@@ -75,12 +80,13 @@ public class Ability_base : ScriptableObject
         CONST.ABILITY.Category.Default,
         CONST.ABILITY.Category.Magic,
         CONST.ABILITY.Category.SwordArts,
+        CONST.ABILITY.Category.Ability
     };
 
     /// <summary>
     /// アビリティ発動時に実行されるアクション
     /// </summary>
-    private static List<CONST.ACTION.Ability_Action_Cell> Ability_Action_Cell = Enum.GetValues(typeof(CONST.UTILITY.Element))
+    private static List<CONST.ACTION.Ability_Action_Cell> Ability_Action_Cell = Enum.GetValues(typeof(CONST.ACTION.Ability_Action_Cell))
                                                          .Cast<CONST.ACTION.Ability_Action_Cell>()
                                                          .ToList();
 }

@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 917c04fd1e9eeeb45abd8f29b273cf35, type: 3}
+  m_Name: Worrior_skill
+  m_EditorClassIdentifier: 
+  id: ABB0001
+  category: 3
+  Name: Worrior_skill
+  displayName: Worrior_skill
+  Level: 1
+  Type: 1
+  timingType: 0
+  speed_rank: 0
+  Range: 0
+  requiredMp: 0
+  Element: 3
+  power: 0
+  executeActionList: 04000000
+  requireAbilityForWhim: []
+  buffs:
+  - {fileID: 11400000, guid: 278d4a7be920adb4a9bf33389c63620c, type: 2}
+  description: Do Worrior_skll

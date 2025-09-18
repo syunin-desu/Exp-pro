@@ -10,20 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1a7e0847e2cc15a4b931dcdcdf0d8946, type: 3}
-  m_Name: Test
+  m_Name: test
   m_EditorClassIdentifier: 
   Name: test
-  currentHP: 50
+  currentHP: 200
   currentMP: 99
-  maxHp: 50
+  maxHp: 200
   maxMp: 99
   STR: 5
   DEF: 5
   SPEED: 5
+  MagicPower: 0
   INT: 0
-  ROLE: 2
+  Kindness: 0
+  ROLE: 1
   countOfActions: 2
-  HavingAbility:
-  - 
+  charClass: 0
+  HavingAbility: []
+  weaponData: {fileID: 11400000, guid: bb48655a91e8e4144a1c97af67785cad, type: 2}
+  armedHead: {fileID: 11400000, guid: f67b5640b885d7442bd1b8313a489b63, type: 2}
+  armedBody: {fileID: 11400000, guid: a7a9f92d8d7ca7240bb5b6a6e1493d76, type: 2}
+  armedAccessory_1: {fileID: 11400000, guid: d5f474668deba984fbc3c28a75296f13, type: 2}
+  armedAccessory_2: {fileID: 11400000, guid: d5f474668deba984fbc3c28a75296f13, type: 2}
   WeakElement: 01000000
   StrongElement: 00000000

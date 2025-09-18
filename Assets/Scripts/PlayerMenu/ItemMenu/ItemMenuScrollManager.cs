@@ -19,8 +19,9 @@ public class ItemMenuScrollManager : MonoBehaviour
         GameObject.Find("Item_Button").SetActive(false);
     }
 
-    public void SetupItemUI(List<HavingItem> havingItemList)
+    public List<RectTransform> SetupItemUI(List<HavingItem> havingItemList)
     {
+        var result = new List<RectTransform>();
         foreach (HavingItem item in havingItemList)
         {
             var itemContent = GameObject.Instantiate(ItemContents) as RectTransform;
@@ -43,9 +44,10 @@ public class ItemMenuScrollManager : MonoBehaviour
                 texts.First(t => t.name == "delimiter").color = Color.gray;
             }
 
-
+            result.Add(itemContent);
             itemContent.gameObject.SetActive(true);
         }
+        return result;
     }
 
     public void RemoveAllItem()
@@ -70,7 +72,7 @@ public class ItemMenuScrollManager : MonoBehaviour
 
         foreach (var item in items)
         {
-            item.GetComponent<ItemStatus>().UpdateIsSelected(false);
+            item.GetComponent<SelectedStatus>().UpdateIsSelected(false);
         }
     }
 }

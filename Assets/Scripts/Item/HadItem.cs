@@ -6,7 +6,7 @@ using UnityEngine;
 public class HavingItem
 {
     public string id;
-    public string name;
+    public string Name;
     public int count;
     public CONST.ITEM.CATEGORY category;
 
@@ -26,7 +26,7 @@ public class HadItem : MonoBehaviour
         havingItems = PlayerData.instance.HaveItemList.Select(v => new HavingItem
         {
             id = v.Key.id,
-            name = v.Key.name,
+            Name = v.Key.Name,
             count = v.Value,
             category = v.Key.category,
         }).ToList();

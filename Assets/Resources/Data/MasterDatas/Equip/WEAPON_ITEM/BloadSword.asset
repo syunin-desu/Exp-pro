@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c40dcae758da5924ba38b9e1f801bd1c, type: 3}
+  m_Name: BloadSword
+  m_EditorClassIdentifier: 
+  Name: BloadSword
+  displayName: BloadSword
+  id: IWS0101
+  Rarity: 0
+  category: 2
+  PurchasePrice: 0
+  Sellingrice: 0
+  item_description: a broad sword
+  Attack: 5
+  Defence: 0
+  addMaxHp: 0
+  addMaxMp: 0
+  addSTR: 0
+  addDEF: 0
+  addSPD: 0
+  addMagicPower: 0
+  addINT: 0
+  Kindness: 0
+  buff: 00000000
+  debuff: 00000000
+  description_equip: 
+  WeakElement: 
+  StrongElement: 

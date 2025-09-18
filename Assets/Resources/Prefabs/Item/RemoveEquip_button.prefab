@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 7870242554788676034}
   - component: {fileID: 5243519916638807904}
   - component: {fileID: 2008088073212392030}
-  - component: {fileID: 2661361349808754637}
   m_Layer: 5
   m_Name: RemoveEquip_button
   m_TagString: PlayerMenuEquipItemButton
@@ -136,19 +135,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &2661361349808754637
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1392681731559304965}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f823a8d0c85c4147ad55c244e70b61a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsSelected: 0
 --- !u!1 &2471946227976946304
 GameObject:
   m_ObjectHideFlags: 0

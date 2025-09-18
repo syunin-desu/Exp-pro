@@ -18,6 +18,11 @@ TagManager:
   - PlayerMenuEquipSelectedIcon
   - PlayerMenuEquipItemButton
   - PlayerMenuEquipItemSelectedIcon
+  - PlayerMenuWroteButton
+  - PlayerMenuEmptyButton
+  - PlayerMenuSaveContent
+  - PlayerMenuKeyConfigSettingButton
+  - PlayerMenuSelectMenuButtons
   layers:
   - Default
   - TransparentFX

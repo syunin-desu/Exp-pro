@@ -1,0 +1,2 @@
+Name,currentHP,currentMP,maxHp,maxMp,STR,DEF,SPEED,MagicPower,INT,Kindness,ROLE,countOfActions,charClass,HavingAbility,weaponData,armedHead,armedBody,armedAccessory_1,armedAccessory_2,WeakElement,StrongElement
+test,200,99,200,99,5,5,5,0,0,0,ENEMY,2,NIGHT,,None,None,None,None,None,Ice,Fire

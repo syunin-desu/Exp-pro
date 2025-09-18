@@ -3,11 +3,16 @@
 // 計算関連クラス群
 
 
+using UnityEditor;
+
 /// <summary>
 /// battle関連計算クラス
 /// </summary>
-public class Calc_Battle_Manager 
+public class Calc_Battle_Manager
 {
+
+
+
     /// <summary>
     /// 属性によるダメージ率の増減を計算し返す
     /// </summary>
@@ -17,6 +22,10 @@ public class Calc_Battle_Manager
     /// <returns>ダメージ率</returns>
     public float calcElementDamageRate(CONST.UTILITY.Element Element, CharBase targetChar)
     {
+        if (Element == CONST.UTILITY.Element.None)
+        {
+            return 1;
+        }
         bool haveTargetCharWeakElement = targetChar.GetWeakElement().Contains(Element);
         bool haveTargetCharStrongElement = targetChar.GetStrongElement().Contains(Element);
         float elementDamageRate = 1;

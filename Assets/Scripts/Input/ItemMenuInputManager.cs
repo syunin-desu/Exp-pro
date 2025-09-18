@@ -28,4 +28,29 @@ public class ItemMenuInputManager : PlayerMenuInputManager
         itemMenuManager.CloseItemMenu();
         questManager.UpdateCurrentMenuStatus(CONST.QUEST_MENU_STATUS.MenuStatus.PlayerMainMenu);
     }
+
+    public override void KeyInput_Up()
+    {
+        itemMenuManager.ItemButtonFromBasisKeyInput(CONST.MENU.SELECTEDTYPE.PREV);
+    }
+
+    public override void KeyInput_Down()
+    {
+        itemMenuManager.ItemButtonFromBasisKeyInput(CONST.MENU.SELECTEDTYPE.NEXT);
+    }
+
+    public override void KeyInput_Enter()
+    {
+        itemMenuManager.ItemButtonFromBasisKeyInput(CONST.MENU.SELECTEDTYPE.ENTER);
+    }
+
+    public override void KeyInput_Left()
+    {
+        itemMenuManager.ItemButtonFromKeyInputShiftColumn(CONST.MENU.SELECTEDTYPE.PREVCOLUMN);
+    }
+
+    public override void KeyInput_Right()
+    {
+        itemMenuManager.ItemButtonFromKeyInputShiftColumn(CONST.MENU.SELECTEDTYPE.NEXTCOLUMN);
+    }
 }

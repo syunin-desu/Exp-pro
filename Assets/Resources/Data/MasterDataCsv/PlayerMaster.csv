@@ -1,0 +1,2 @@
+Name,currentHP,currentMP,maxHp,maxMp,STR,DEF,SPEED,MagicPower,INT,Kindness,ROLE,countOfActions,charClass,HavingAbility,weaponData,armedHead,armedBody,armedAccessory_1,armedAccessory_2,WeakElement,StrongElement
+test,500,50,999,999,10,5,5,5,5,5,PLAYER,3,WORRIER,HorizontalSlash-VerticalSlash-Burn-Chill-liquor-Volt,BloadSword,test_head,TestBody,test_accessory,test_accessory2,Ice,Fire

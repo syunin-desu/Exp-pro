@@ -13,16 +13,18 @@ MonoBehaviour:
   m_Name: BluePotion
   m_EditorClassIdentifier: 
   Name: BluePotion
-  displayName: "\u30D6\u30EB\u30FC\u30DD\u30FC\u30B7\u30E7\u30F3"
+  displayName: BluePotion
   id: IH_0101
   Rarity: 1
   category: 0
+  PurchasePrice: 0
+  Sellingrice: 0
+  item_description: 
   Type: 3
   Target_status: 0
   speed_rank: 0
   Range: 0
-  Element: 0
+  Element: 3
   value: 100
-  PurchasePrice: 0
-  Sellingrice: 0
-  description: "\u4F53\u529B\u304C\u3061\u3087\u3063\u3068\u56DE\u5FA9\u3059\u308B\u3002\u8272\u306F\u304D\u308C\u3044\u3060\u304C\u3001\u82E6\u304F\u3066\u307E\u305A\u3044\u3002"
+  Usedbuff: 
+  Useddebuff: 

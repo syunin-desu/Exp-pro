@@ -11,6 +11,14 @@ public class EquipMenuUIManager : MonoBehaviour
     public TextMeshProUGUI Accessory2Name;
     public ItemManager itemManager;
 
+    private ListViewUtility listUtility = new ListViewUtility();
+
+
+    [SerializeField]
+    private ScrollRect scrollRect;
+    [SerializeField]
+    private RectTransform scrollContent;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -90,5 +98,10 @@ public class EquipMenuUIManager : MonoBehaviour
     public void UpdateEquipPartsSelectedIcon(TextMeshProUGUI obj, bool isEnable)
     {
         obj.alpha = isEnable ? 100 : 0;
+    }
+
+    public void resetListScroll(RectTransform targetContent)
+    {
+        this.listUtility.ScrollToTarget(this.scrollRect, scrollContent, targetContent);
     }
 }

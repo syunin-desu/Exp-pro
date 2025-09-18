@@ -27,4 +27,16 @@ public class SceneWindow : EditorWindow
     {
         EditorSceneManager.OpenScene("Assets/Scenes/Battle.unity", OpenSceneMode.Single);
     }
+
+    [MenuItem("Launcher/MasterDataCreateor", priority = 0)]
+    public static void OpenMasterDataCreateorScene()
+    {
+        EditorSceneManager.OpenScene("Assets/Scenes/MasterDataCreateor.unity", OpenSceneMode.Single);
+    }
+
+    [MenuItem("Launcher/Conversation", priority = 0)]
+    public static void OpenConversationScene()
+    {
+        EditorSceneManager.OpenScene("Assets/Scenes/Conversation.unity", OpenSceneMode.Single);
+    }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using CONST;
 
+[System.Serializable]
 public class Money
 {
     /// <summary>

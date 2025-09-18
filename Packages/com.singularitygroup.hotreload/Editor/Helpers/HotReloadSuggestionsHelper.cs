@@ -114,6 +114,7 @@ namespace SingularityGroup.HotReload.Editor {
         internal static readonly OpenURLButton recompileTroubleshootingButton = new OpenURLButton("Docs", Constants.RecompileTroubleshootingURL);
         internal static readonly OpenURLButton featuresDocumentationButton = new OpenURLButton("Docs", Constants.FeaturesDocumentationURL);
         internal static readonly OpenURLButton multipleEditorsDocumentationButton = new OpenURLButton("Docs", Constants.MultipleEditorsURL);
+        internal static readonly OpenURLButton debuggerDocumentationButton = new OpenURLButton("More Info", Constants.DebuggerURL);
         public static Dictionary<HotReloadSuggestionKind, AlertEntry> suggestionMap = new Dictionary<HotReloadSuggestionKind, AlertEntry> {
             { HotReloadSuggestionKind.UnityBestDevelopmentToolAward2023, new AlertEntry(
                 AlertType.Suggestion, 
@@ -348,7 +349,7 @@ namespace SingularityGroup.HotReload.Editor {
             { HotReloadSuggestionKind.AddMonobehaviourMethod, new AlertEntry(
                 AlertType.Suggestion, 
                 "New MonoBehaviour methods are not shown in the inspector",
-                "New methods in MonobeHaviours are not shown in the inspector until the script is recompiled. This is a limitation of Hot Reload handling of Unity's serialization system.\n\nYou can use the button below to auto recompile partially supported changes such as this one.",
+                "New methods in MonoBehaviours are not shown in the inspector until the script is recompiled. This is a limitation of Hot Reload handling of Unity's serialization system.\n\nYou can use the button below to auto recompile partially supported changes such as this one.",
                 actionData: () => {
                     GUILayout.Space(8f);
                     using (new EditorGUILayout.HorizontalScope()) {
@@ -391,6 +392,53 @@ namespace SingularityGroup.HotReload.Editor {
                 iconType: AlertType.UnsupportedChange
             )},
 #endif
+            { HotReloadSuggestionKind.HotReloadWhileDebuggerIsAttached, new AlertEntry(
+                AlertType.Suggestion, 
+                "Hot Reload is disabled while a debugger is attached",
+                "Hot Reload automatically disables itself while a debugger is attached, as it can otherwise interfere with certain debugger features.\nWhile disabled, every code change will trigger a full Unity recompilation.\n\nYou can choose to keep Hot Reload enabled while a debugger is attached, though some features like debugger variable inspection might not always work as expected.",
+                actionData: () => {
+                    GUILayout.Space(8f);
+                    using (new EditorGUILayout.HorizontalScope()) {
+                        if (GUILayout.Button(" Keep enabled during debugging ")) {
+                            SetSuggestionInactive(HotReloadSuggestionKind.HotReloadWhileDebuggerIsAttached);
+                            HotReloadPrefs.AutoDisableHotReloadWithDebugger = false;
+                        }
+                        GUILayout.FlexibleSpace();
+                        debuggerDocumentationButton.OnGUI();
+                        if (GUILayout.Button(" Don't show again ")) {
+                            SetSuggestionsShown(HotReloadSuggestionKind.HotReloadWhileDebuggerIsAttached);
+                            SetSuggestionInactive(HotReloadSuggestionKind.HotReloadWhileDebuggerIsAttached);
+                        }
+                    }
+                },
+                timestamp: DateTime.Now,
+                entryType: EntryType.Foldout,
+                iconType: AlertType.Suggestion
+            )},
+            { HotReloadSuggestionKind.HotReloadedMethodsWhenDebuggerIsAttached, new AlertEntry(
+                AlertType.Suggestion, 
+                "Hot Reload may interfere with your debugger session",
+                "Some debugger features, like variable inspection, might not work as expected for methods patched during the Hot Reload session. A full Unity recompile is required to get the full debugger experience.",
+                actionData: () => {
+                    GUILayout.Space(8f);
+                    using (new EditorGUILayout.HorizontalScope()) {
+                        if (GUILayout.Button(" Recompile ")) {
+                            SetSuggestionInactive(HotReloadSuggestionKind.HotReloadedMethodsWhenDebuggerIsAttached);
+                            if (HotReloadRunTab.ConfirmExitPlaymode("Using the Recompile button will stop Play Mode.\n\nDo you wish to proceed?")) {
+                                HotReloadRunTab.Recompile();
+                            }
+                        }
+                        GUILayout.FlexibleSpace();
+                        debuggerDocumentationButton.OnGUI();
+                        GUILayout.Space(8f);
+                    }
+                },
+                timestamp: DateTime.Now,
+                entryType: EntryType.Foldout,
+                iconType: AlertType.UnsupportedChange,
+                hasExitButton: false
+            )},
+            
         };
         
         static ListRequest listRequest;
@@ -468,17 +516,11 @@ namespace SingularityGroup.HotReload.Editor {
         private static async Task CheckEditorsWithoutHRAsync() {
             try {
                 checkingEditorsWihtoutHR = true;
-                var showSuggestion = await Task.Run(() => {
-                    try {
-                        var runningUnities = Process.GetProcessesByName("Unity Editor").Length;
-                        var runningPatchers = Process.GetProcessesByName("CodePatcherCLI").Length;
-                        return runningPatchers > 0 && runningUnities > runningPatchers;
-                    } catch (ArgumentException) {
-                        // On some devices GetProcessesByName throws ArgumentException for no good reason.
-                        // it happens rarely and the feature is not the most important so proper solution is not required
-                        return false;
-                    }
-                });
+                var editorsWithoutHr = await RequestHelper.RequestEditorsWithoutHRRunning();
+                if (editorsWithoutHr == null) {
+                    return;
+                }
+                var showSuggestion = editorsWithoutHr.editorsWithoutHRRunning;
                 if (!showSuggestion) {
                     HotReloadSuggestionsHelper.SetSuggestionInactive(HotReloadSuggestionKind.EditorsWithoutHRRunning);
                     return;

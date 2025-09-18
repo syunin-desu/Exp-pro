@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 917c04fd1e9eeeb45abd8f29b273cf35, type: 3}
-  m_Name: Liquor
+  m_Name: liquor
   m_EditorClassIdentifier: 
   id: AMH0104
   category: 1
   Name: liquor
-  displayName: "\u30EA\u30AB\u30FC"
+  displayName: liquor
   Level: 1
   Type: 3
   timingType: 1
@@ -25,4 +25,6 @@ MonoBehaviour:
   Element: 3
   power: 50
   executeActionList: 02000000
-  description: "\u5BFE\u8C61\u306EHP\u3092\u5C11\u3057\u56DE\u5FA9\u3059\u308B"
+  requireAbilityForWhim: []
+  buffs: []
+  description: Heal my Energy

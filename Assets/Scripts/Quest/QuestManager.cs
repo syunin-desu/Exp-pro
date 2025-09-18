@@ -3,21 +3,25 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Data;
+using NUnit.Framework;
 
 public class QuestManager : MonoBehaviour
 {
 
     // 現在の階層
     public StageUIManager stageUI;
-    public GameObject enemyPrefab;
     public SceneTransitionManager sceneTransitionManager;
     public PartyMember w_PartyMember;
+    public HadItem hadItem;
     public CardUIManager cardUIManager;
     public CardManager cardManager;
+    public PlayerMenuManager playerMenuManager;
 
     public PlayerMenuUIManager playerMenuUIManager;
     public DeviceInputController deviceInputController;
-    List<CONST.QUEST.CardType> cardList = new List<CONST.QUEST.CardType>();
+    List<BaseCardProperty> cardList = new List<BaseCardProperty>();
 
     private int currentFloor = 0; //現在の階層
 
@@ -25,7 +29,7 @@ public class QuestManager : MonoBehaviour
     private CONST.QUEST_MENU_STATUS.MenuStatus currentMenuStatus;
 
     // ダンジョンに最初に張ったとき、ロードした時
-    private async void Start()
+    private void Start()
     {
         // QuestDataから現在の階層を読み込む
         currentFloor = QuestData.instance.currentFloor;
@@ -44,16 +48,8 @@ public class QuestManager : MonoBehaviour
             // 初期表示(アニメーションなし)
             cardManager.CreateCardOnPositonEach(cardList);
 
-            // 選択済みのカードを削除するアニメーション
-            int targetIndex = cardList.FindIndex(c => c == CONST.QUEST.CardType.Selected);
-            await cardManager.DropSelectedCard(targetIndex);
-            cardList[targetIndex] = CONST.QUEST.CardType.Deleted;
-
-            // 削除ステータスのカードを削除
-            cardList.RemoveAll(c => c == CONST.QUEST.CardType.Deleted);
-
-            // 並び替えアニメーション
-            cardManager.ReMoveCardPosition(cardList);
+            // 選択カードの削除と表示位置のリセット
+            this.ResetCard();
 
         }
 
@@ -67,22 +63,45 @@ public class QuestManager : MonoBehaviour
     {
     }
 
-    public void OnNextButton()
+    // ロード実行された際にUIを初期化、ロード状態に更新する
+    public void OnDataLoaded()
     {
+
+    }
+
+    public void GetItems(BaseCardProperty baseCardProperty)
+    {
+        // アイテムを追加
+        baseCardProperty.item.ForEach(item =>
+        {
+            hadItem.AddItem(new HavingItem()
+            {
+                id = item.id,
+                Name = item.name,
+                category = item.category,
+                count = 1, // 複数を同タイミングで着脱する予定はないため一つとする
+            });
+        });
+
+        // TODO: アイテム取得メッセージを表示
+
+        // カードUpdate処理
+        this.ResetCard();
+    }
+
+    public void NextFloor()
+    {
+        // フェードアウト
+
+        // 次の階に進む
         currentFloor++;
-        //進行度をUIに反映
-        stageUI.UpdateUI(currentFloor);
 
-        //if (encountTable.Length <= currentFloor)
-        //{
-        //    Debug.Log("クエストクリア");
-        //    stageUI.ShowClearText();
+        // カード状態をリセット
+        cardList.Clear();
+        cardManager.ClearCardList();
 
-        //}
-        //else if (encountTable[currentFloor] == 0)
-        //{
-        //    EncountEnemy();
-        //}
+
+        // 次の階のカードをセット
     }
 
     /// <summary>
@@ -93,7 +112,7 @@ public class QuestManager : MonoBehaviour
         sceneTransitionManager.LoadTo(CONST.SCENE.Scene.Town);
     }
 
-    void EncountEnemy()
+    void EncountEnemy(BaseCardProperty baseCardProperty)
     {
         // ダンジョンの進捗状態、パーティー状態を保存する(Autoセーブ的な)
         QuestData.instance.currentFloor = currentFloor;
@@ -107,6 +126,10 @@ public class QuestManager : MonoBehaviour
 
         // InputActionsを無効にする
         deviceInputController.DisableInputAction();
+
+        // 敵データを設定する
+        BattleData.instance.UpdateBattleTargetEnemy(baseCardProperty.enemyData);
+
         // バトルシーンをロードする
         SceneManager.LoadScene(CONST.SCENE.Scene.Battle.ToString());
     }
@@ -115,40 +138,76 @@ public class QuestManager : MonoBehaviour
     /// 選択されたカードイベントを実施
     /// </summary>
     /// <param name="selectedCardType"></param>
-    public void executeCardEvent(CONST.QUEST.CardType selectedCardType, int canSelectCardNumber, int selectedCardIndex)
+    public async void executeCardEvent(CONST.QUEST.CardType selectedCardType,
+        int canSelectCardNumber,
+        int selectedCardIndex,
+        BaseCardProperty baseCardProperty)
     {
-        // 選択範囲内の非選択カードを削除
-        for (var i = 0; i < canSelectCardNumber; i++)
+        // Drop対象外のカードのIndexを取得 
+        List<int> excludeCardIndeies = new List<int>();
+        foreach (var item in cardList.Select((value, index) => new { value, index }))
         {
-            if (i != selectedCardIndex)
+            if (item.value.cartType == CONST.QUEST.CardType.NextFloor
+                || item.value.cartType == CONST.QUEST.CardType.LockedNextFloor)
             {
-                this.UpdateUnSelectedCard(i, CONST.QUEST.CardType.Deleted);
-            }
-            else
-            {
-                this.UpdateUnSelectedCard(i, CONST.QUEST.CardType.Selected);
+                excludeCardIndeies.Add(item.index);
             }
         }
 
+        // 選択範囲内の非選択カードを削除するアニメーションを実行する
+        await cardManager.DropUnselectedCard(selectedCardIndex, excludeCardIndeies);
+
+        // 選択範囲内の非選択カードを削除
+        foreach (var item in cardList.Select((value, index) => new { value, index }))
+        {
+            if (item.index == selectedCardIndex)
+            {
+                item.value.cartType = CONST.QUEST.CardType.Selected;
+                cardManager.UpdateCardListStatus(item.index, CONST.QUEST.CardType.Selected);
+            }
+            else if (item.index < canSelectCardNumber && item.value.cartType != CONST.QUEST.CardType.NextFloor)
+            {
+                item.value.cartType = CONST.QUEST.CardType.Deleted;
+                cardManager.UpdateCardListStatus(item.index, CONST.QUEST.CardType.Deleted);
+            }
+        }
 
         switch (selectedCardType)
         {
             case CONST.QUEST.CardType.EncountEnemy:
-                EncountEnemy();
+                EncountEnemy(baseCardProperty);
                 break;
+            case CONST.QUEST.CardType.GetItem:
+                this.GetItems(baseCardProperty);
+                break;
+            case CONST.QUEST.CardType.NextFloor:
+                this.NextFloor();
+                break;
+
 
             default:
                 break;
         }
+    }
 
-        // イベント事後処理
-        // QuestManagerの仕事
+    private async void ResetCard()
+    {
+        // 選択済みのカードを削除する
+        await this.DropSelectedCard();
 
-        // カードの順番を更新
-        // QuestManagerから呼び出させる想定
+        // 並び替えアニメーション
+        cardManager.ReMoveCardPosition();
+    }
 
-        // カード選択可能状態に移行する
-        // CardUIManagerで処理させる
+    private async Task DropSelectedCard()
+    {
+        // 選択済みのカードを削除するアニメーション
+        int targetIndex = cardList.FindIndex(c => c.cartType == CONST.QUEST.CardType.Selected);
+        await cardManager.DropSelectedCard(targetIndex);
+        cardList[targetIndex].cartType = CONST.QUEST.CardType.Deleted;
+
+        // 削除ステータスのカードを削除
+        cardList.RemoveAll(c => c.cartType == CONST.QUEST.CardType.Deleted);
     }
 
     /// <summary>
@@ -157,6 +216,9 @@ public class QuestManager : MonoBehaviour
     public void ShowPlayerMenu()
     {
         this.currentMenuStatus = CONST.QUEST_MENU_STATUS.MenuStatus.PlayerMainMenu;
+        // メニュー側初期化処理
+        playerMenuManager.InitializePlayerMenuSelectButtons();
+
         this.playerMenuUIManager.ShowPlayerMenu();
     }
 
@@ -166,14 +228,7 @@ public class QuestManager : MonoBehaviour
     public void ClosePlayerMenu()
     {
         this.currentMenuStatus = CONST.QUEST_MENU_STATUS.MenuStatus.Main;
-        this.playerMenuUIManager.ClosePlayerMenu();
-    }
-
-    // 選択したカードのステータスを変更
-    public void UpdateUnSelectedCard(int deletedCardIndex, CONST.QUEST.CardType updateStatus)
-    {
-
-        this.cardList[deletedCardIndex] = updateStatus;
+        this.playerMenuManager.ClosePlayerMenu();
     }
 
     public void UpdateCurrentMenuStatus(CONST.QUEST_MENU_STATUS.MenuStatus targetStatus)

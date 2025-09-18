@@ -5,10 +5,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using static UnityEditor.Timeline.Actions.MenuPriority;
 
-public class ItemButtonClicked : MonoBehaviour
+public class ItemButtonClicked : MonoBehaviour, IButtonClicked
 {
-    // eventSystemを取得するための変数宣言
-    [SerializeField] EventSystem eventSystem;
     public ItemManager _itemManager;
     public ItemMenuManager itemMenuManager;
     public ItemMenuUIManager itemMenuUIManager;
@@ -21,24 +19,15 @@ public class ItemButtonClicked : MonoBehaviour
     /// 表示されているアイテムがクリックした時の処理
     /// </summary>
     /// <param name="charactor">キャラ</param>
-    public void OnClickItem()
+    public void OnClicked()
     {
-        GameObject selectedObj = eventSystem.currentSelectedGameObject.gameObject;
-
         // 選択されたOBJと一致していた場合はアイテム使用を実施
-        string selectedItemID = selectedObj.GetComponent<ItemButtonClicked>().item_id;
+        string selectedItemID = this.gameObject.GetComponent<ItemButtonClicked>().item_id;
 
         // managerクラスに選択中オブジェクトとして更新
-        if (selectedObj.GetComponentInChildren<ItemStatus>().GetIsSelected() == false)
+        if (!this.gameObject.GetComponentInChildren<SelectedStatus>().GetIsSelected())
         {
-            //全アイテムの選択中ステータスをFalseにする
-            itemMenuScrollManager.ClearItemButtonSelected();
-            itemMenuUIManager.AllSelectedIconDisable();
-
-            // 選択されたアイテムを選択状態にする
-            selectedObj.GetComponentInChildren<ItemStatus>().UpdateIsSelected(true);
-            TextMeshProUGUI target_obj = selectedObj.transform.Find("SelectedIcon").GetComponent<TextMeshProUGUI>();
-            itemMenuUIManager.UpdateItemSelectedIcon(target_obj, true);
+            this.itemMenuManager.UpdateItemSelected(this.gameObject);
 
             // Description を更新
             itemMenuManager.UpdateDiscription(_itemManager.GetItemDiscriptionfromMaster(selectedItemID) ?? "");
@@ -46,7 +35,7 @@ public class ItemButtonClicked : MonoBehaviour
         }
 
         if (_itemManager.getItemCategoryForItemID(selectedItemID) != CONST.ITEM.CATEGORY.HEAL_ITEM
-            && selectedObj.GetComponentInChildren<ItemStatus>().GetIsSelected())
+            && this.gameObject.GetComponentInChildren<SelectedStatus>().GetIsSelected())
         {
             // Description を更新
             itemMenuManager.UpdateDiscription(_itemManager.GetItemDiscriptionfromMaster(selectedItemID) ?? "");
@@ -61,11 +50,11 @@ public class ItemButtonClicked : MonoBehaviour
         var updatedTargetItemCount = haditem.GetItemCount(selectedItemID);
         if (updatedTargetItemCount is null)
         {
-            Destroy(selectedObj);
+            Destroy(this.gameObject);
         }
 
         // アイテム個数のUIを更新
-        var texts = selectedObj.GetComponentsInChildren<TextMeshProUGUI>();
+        var texts = this.gameObject.GetComponentsInChildren<TextMeshProUGUI>();
         texts.First(t => t.name == "Item_Number").text = updatedTargetItemCount.ToString();
 
 

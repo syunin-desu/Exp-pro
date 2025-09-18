@@ -45,6 +45,9 @@ public class AbilityManager : MonoBehaviour
                     case CONST.ACTION.Ability_Action_Cell.Heal:
                         await this.MagicSingleHeal(performChar, targetChar ?? performChar, this.getAbilityData(execAbilityID));
                         break;
+                    case CONST.ACTION.Ability_Action_Cell.SolidSingleAttack:
+                        await this.SolidSingleAttack(performChar, targetChar, this.getAbilityData(execAbilityID));
+                        break;
                     default:
                         Debug.Log("アクションとして登録されていないアクションが指定されました");
                         break;
@@ -62,6 +65,43 @@ public class AbilityManager : MonoBehaviour
     //======================================
     // アクションの内容
     //======================================
+
+    /// <summary>
+    /// 単体物理攻撃
+    /// </summary>
+    /// <param name="performChar"></param>
+    /// <param name="targetChar"></param>
+    /// <param name="execAbilityData"></param>
+    /// <returns></returns>
+    private async Task SolidSingleAttack(CharBase performChar, CharBase targetChar, Ability_base execAbilityData)
+    {
+
+        int performerSTR = performChar.GetStrange();
+        int performerAttack = performChar.GetAttackParameter();
+        int power = execAbilityData.power;
+        CONST.UTILITY.Element Element = execAbilityData.Element;
+
+        // 軽減率を除く素のダメージを算出
+        float elementDamageRate = this.calc_battle.calcElementDamageRate(Element, targetChar);
+
+        int beforeBuffDamage = (int)((performerSTR * power) * elementDamageRate);
+
+        // ダメージ増加バフ
+        // TODO: 実装
+        int rowDamage = beforeBuffDamage;
+
+        Debug.Log("rowDamage:" + rowDamage.ToString());
+
+        // 軽減計算
+        // 与えられた素のダメージを元にバフ等での軽減率を計算した値をダメージとする
+        float defenceRate = targetChar.GetActionDefence() ? CONST.BATTLE_RATE.RATE_DEFENCE : CONST.BATTLE_RATE.RATE_DEFAULT_DEFENCE;
+        int resultDamage = (int)Math.Ceiling(rowDamage / defenceRate);
+
+        // ダメージ軽減は各CharクラスのDamage関数で実施
+        targetChar.Damage(resultDamage);
+
+        await Task.Delay(TimeSpan.FromSeconds(CONST.UTILITY.BATTLEACTION_DELAY));
+    }
 
     /// <summary>
     /// 魔法単体攻撃アクション

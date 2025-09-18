@@ -10,5 +10,12 @@ public interface IInputAction
 
     // –ß‚éƒ{ƒ^ƒ“‰Ÿ‰º
     void KeyInput_Return() { }
+    void KeyInput_Enter() { }
+    void KeyInput_Up() { }
+    void KeyInput_Down() { }
+    void KeyInput_Left() { }
+    void KeyInput_Right() { }
+    void KeyInput_Pause() { }
+
 
 }

@@ -13,6 +13,9 @@ public class CardPropertyManager : MonoBehaviour
     [SerializeField]
     private CONST.QUEST.CardType cardType;
 
+    /// コンテンツ
+    public BaseCardProperty baseCardProperty;
+
     /// <summary>
     /// 順番ID(0スタート)
     /// </summary>

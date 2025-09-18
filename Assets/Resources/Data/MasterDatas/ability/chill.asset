@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 917c04fd1e9eeeb45abd8f29b273cf35, type: 3}
-  m_Name: chill
+  m_Name: Chill
   m_EditorClassIdentifier: 
   id: AMA0102
   category: 1
-  Name: chill
-  displayName: "\u30C1\u30EB"
+  Name: Chill
+  displayName: Chill
   Level: 1
   Type: 0
   timingType: 0
@@ -25,4 +25,6 @@ MonoBehaviour:
   Element: 1
   power: 2
   executeActionList: 01000000
-  description: "\u5BFE\u8C61\u306B\u6C37\u5C5E\u6027\u306E\u5358\u4F53\u9B54\u6CD5\u653B\u6483\u3092\u884C\u3046"
+  requireAbilityForWhim: []
+  buffs: []
+  description: spell ice magic

@@ -11,7 +11,6 @@ public class UsedItemData : BaseItemData
 {
 
     [ValueDropdown("itemType")]
-
     public CONST.ACTION.TYPE Type;
 
     public CONST.ACTION.TARGET_STATUS Target_status;
@@ -28,6 +27,14 @@ public class UsedItemData : BaseItemData
 
     public int value;
 
+    //’Ç‰ÁŒø‰Ê
+    [ValueDropdown("addBuff")]
+    public List<CONST.ITEM.ADDBUFF> Usedbuff;
+
+    // ’Ç‰Áƒfƒoƒt
+    [ValueDropdown("addDebuff")]
+    public List<CONST.ITEM.ADDDEBUFF> Useddebuff;
+
 
 
     private static List<CONST.ACTION.TYPE> itemType = Enum.GetValues(typeof(CONST.ACTION.TYPE))
@@ -40,5 +47,13 @@ public class UsedItemData : BaseItemData
     private static List<CONST.UTILITY.Element> element = Enum.GetValues(typeof(CONST.UTILITY.Element))
                                                              .Cast<CONST.UTILITY.Element>()
                                                              .ToList();
+
+    private static List<CONST.ITEM.ADDBUFF> addBuff = Enum.GetValues(typeof(CONST.ITEM.ADDBUFF))
+                                                         .Cast<CONST.ITEM.ADDBUFF>()
+                                                         .ToList();
+    private static List<CONST.ITEM.ADDDEBUFF> addDebuff = Enum.GetValues(typeof(CONST.ITEM.ADDDEBUFF))
+                                                         .Cast<CONST.ITEM.ADDDEBUFF>()
+                                                         .ToList();
+
 }
 

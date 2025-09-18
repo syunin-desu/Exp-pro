@@ -41,6 +41,12 @@ public class BattleAction
     /// </summary>
     public int speed_rank;
 
+    /// <summary>
+    /// 実施ステータス
+    /// 実施待ち状態で初期化
+    /// </summary>
+    public CONST.BATTLE_ACTION.STATUS status = CONST.BATTLE_ACTION.STATUS.Waiting;
+
     public BattleAction(CONST.BATTLE_ACTION.COMMAND action, CharBase character)
     {
         this.action = action;
@@ -54,6 +60,15 @@ public class BattleAction
     public void setAbilityName(string abilityName)
     {
         this.abilityName = abilityName;
+    }
+
+    /// <summary>
+    /// アビリティ/アイテムのIDを登録
+    /// </summary>
+    /// <param name="ID"></param>
+    public void setID(string id)
+    {
+        this.id = id;
     }
 
     /// <summary>
@@ -103,18 +118,6 @@ public class BattleActionList : MonoBehaviour
     /// </summary>
     public ActionRowNumberListScrollController actionRowNumberListScrollController;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     // プレイヤーアクションを登録する
     public void SetActionToPlayer(BattleAction p_act)
     {
@@ -127,6 +130,21 @@ public class BattleActionList : MonoBehaviour
     public void SetAllActionToEnemy(BattleAction e_act)
     {
         this.allActionList.Add(e_act);
+    }
+
+    // 特定のアクションをキャンセルする
+    public void SetActionCanceled(List<string> targetAbilityNames)
+    {
+        foreach (var targetAbilityName in targetAbilityNames)
+        {
+            this.allActionList
+                .FirstOrDefault(a => a.abilityName == targetAbilityName &&
+                 a.character.char_role == CONST.CHARCTOR.Role.PLAYER &&
+                 (a.status == CONST.BATTLE_ACTION.STATUS.Waiting ||
+                 a.status == CONST.BATTLE_ACTION.STATUS.Excuting))
+                .status = CONST.BATTLE_ACTION.STATUS.Canceled;
+        }
+
     }
 
 

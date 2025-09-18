@@ -6,6 +6,7 @@ using UnityEngine;
 using CONST;
 
 [CreateAssetMenu(menuName = "CreateData/Create ItemData")]
+//[System.Serializable]
 public class BaseItemData : ScriptableObject
 {
     public string Name;

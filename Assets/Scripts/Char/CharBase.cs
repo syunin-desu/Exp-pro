@@ -1,10 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using System;
-using UnityEngine;
+using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework.Internal;
+using UnityEngine;
 
+public class CharBuffData
+{
+    public BuffData hadBuff;
+    public int currentPeriodCount;
+    public int expirePeriodCount;
+}
 
 //敵や、プレイヤーなどのキャラの派生元
 public class CharBase : MonoBehaviour
@@ -16,11 +20,12 @@ public class CharBase : MonoBehaviour
     //防御フラグ
     private bool action_defense = false;
     //キャラロール
-    public int char_role;
+    public CONST.CHARCTOR.Role char_role;
     // 1ターン中の行動回数
     // 行動回数の増減はパラメータを直接いじらず、この変数を返して実施すること
     public int countActionATurn;
 
+    public List<CharBuffData> hadBuffs = new List<CharBuffData>();
 
     //ターン終了時の処理
     public void resetTurnEnd_char_parameter()
@@ -39,14 +44,9 @@ public class CharBase : MonoBehaviour
     //ダメージを受ける
     public virtual void Damage(int damage)
     {
-        //ダメージ計算
-        // TODO ダメージ計算式を見直し
-        //防御アクションによるダメージ減少率を設定
-        float defenceRate = this.action_defense ? CONST.BATTLE_RATE.RATE_DEFENCE : CONST.BATTLE_RATE.RATE_DEFAULT_DEFENCE;
-        int result_damage = (int)Math.Ceiling(damage / defenceRate);
-        this.charParameters.currentHP -= result_damage;
+        this.charParameters.currentHP -= damage;
 
-        Debug.Log($"Damage ={result_damage}");
+        Debug.Log($"Damage ={damage}");
 
         if (this.charParameters.currentHP <= 0)
         {
@@ -108,6 +108,47 @@ public class CharBase : MonoBehaviour
         }
     }
 
+    public void SetBattleClassSkills()
+    {
+        var targetClassData = MasterData.instance.masterClassDataList
+            .FirstOrDefault(c => c.charClass == this.charParameters.charClass);
+
+        // パッシブスキルのバフをセット
+        var passiveBuff = MasterData.instance.masterBuffDataList
+            .FirstOrDefault(c => c.buffName == targetClassData.passiveAbilityName);
+        if (this.hadBuffs.FirstOrDefault(b => b.hadBuff.buffName == passiveBuff.buffName) is null)
+        {
+            this.SetBuff(passiveBuff);
+        }
+        // アビリティ、ウルトをセット
+        var targetClassSkill = MasterData.instance.masterAbilityList
+            .FirstOrDefault(c => c.Name == targetClassData.skillAbilityName);
+        if (this.charParameters.HavingAbility.FirstOrDefault(b => b.Name == targetClassSkill.Name) is null)
+        {
+            this.AddAbility(targetClassSkill);
+        }
+        var targetUltimateSkill = MasterData.instance.masterAbilityList
+            .FirstOrDefault(c => c.Name == targetClassData.UltimateAbilityName);
+        if (this.charParameters.HavingAbility.FirstOrDefault(b => b.Name == targetUltimateSkill.Name) is null)
+        {
+            this.AddAbility(targetUltimateSkill);
+        }
+
+    }
+
+    public void SetBuff(BuffData targetBuff)
+    {
+        this.hadBuffs.Add(new CharBuffData()
+        {
+            hadBuff = targetBuff,
+            currentPeriodCount = 0,
+            // 永続バフはバトルターン終了処理時に、解決処理を省略する想定
+            expirePeriodCount = targetBuff.effectPeriod_Category == CONST.CHARCTOR.EffectPeriod_Category.infinite
+                    ? 0 : targetBuff.effectPeriod,
+
+        });
+    }
+
     //バフのリセット
     public void resetBuff()
     {
@@ -137,7 +178,28 @@ public class CharBase : MonoBehaviour
     //パラメータセット
     public void SetParameter(CharParameter charParameter)
     {
-        this.charParameters = charParameter;
+        this.charParameters = new CharParameter()
+        {
+            Name = charParameter.Name,
+            currentHP = charParameter.currentHP,
+            currentMP = charParameter.currentMP,
+            maxHp = charParameter.maxHp,
+            maxMp = charParameter.maxMp,
+            STR = charParameter.STR,
+            DEF = charParameter.DEF,
+            SPEED = charParameter.SPEED,
+            MGC = charParameter.MGC,
+            INT = charParameter.INT,
+            KID = charParameter.KID,
+            ROLE = charParameter.ROLE,
+            countOfActions = charParameter.countOfActions,
+            charClass = charParameter.charClass,
+            equipDatas = charParameter.equipDatas,
+            BeforeUpdatedequipDatas = charParameter.BeforeUpdatedequipDatas,
+            HavingAbility = charParameter.HavingAbility,
+            WeakElement = charParameter.WeakElement,
+            StrongElement = charParameter.StrongElement,
+        };
 
         countActionATurn = this.charParameters.countOfActions;
 
@@ -165,9 +227,10 @@ public class CharBase : MonoBehaviour
         return this.charParameters.currentHP;
     }
 
-    public int GetMaxHp()
+    public int GetMaxHp(bool isBeforeUpdate = false)
     {
-        return this.charParameters.maxHp;
+        var maxHP = this.charParameters.maxHp + this.GetEquiCharParameter(CONST.CHARCTOR.ParameterCategory.MAXHP, isBeforeUpdate);
+        return maxHP >= CONST.CHARCTOR.MAXCHARPARAMETERVALUE_3 ? CONST.CHARCTOR.MAXCHARPARAMETERVALUE_3 : maxHP;
     }
 
     public int GetMp()
@@ -175,65 +238,66 @@ public class CharBase : MonoBehaviour
         return this.charParameters.currentMP;
     }
 
-    public int GetMaxMp()
+    public int GetMaxMp(bool isBeforeUpdate = false)
     {
-        return this.charParameters.maxMp;
+        var maxMP = this.charParameters.maxMp + this.GetEquiCharParameter(CONST.CHARCTOR.ParameterCategory.MAXMP, isBeforeUpdate);
+        return maxMP >= CONST.CHARCTOR.MAXCHARPARAMETERVALUE_3 ? CONST.CHARCTOR.MAXCHARPARAMETERVALUE_3 : maxMP;
     }
 
-    public int GetAttackParameter()
+    public int GetAttackParameter(bool isBeforeUpdate = false)
     {
-        var attack = this.GetEquiCharParameter(CONST.CHARCTOR.ParameterCategory.ATTACK);
+        var attack = this.GetEquiCharParameter(CONST.CHARCTOR.ParameterCategory.ATTACK, isBeforeUpdate);
         return attack >= CONST.CHARCTOR.MAXCHARPARAMETERVALUE_1 ? CONST.CHARCTOR.MAXCHARPARAMETERVALUE_1 : attack;
     }
 
-    public int GetDefenceParameter()
+    public int GetDefenceParameter(bool isBeforeUpdate = false)
     {
-        var defence = this.GetEquiCharParameter(CONST.CHARCTOR.ParameterCategory.DEFENCE);
+        var defence = this.GetEquiCharParameter(CONST.CHARCTOR.ParameterCategory.DEFENCE, isBeforeUpdate);
         return defence >= CONST.CHARCTOR.MAXCHARPARAMETERVALUE_1 ? CONST.CHARCTOR.MAXCHARPARAMETERVALUE_1 : defence;
     }
 
     //speed
-    public int GetSpeed()
+    public int GetSpeed(bool isBeforeUpdate = false)
     {
-        var spd = this.charParameters.SPEED + GetEquiCharParameter(CONST.CHARCTOR.ParameterCategory.SPD);
+        var spd = this.charParameters.SPEED + GetEquiCharParameter(CONST.CHARCTOR.ParameterCategory.SPD, isBeforeUpdate);
         return spd >= CONST.CHARCTOR.MAXCHARPARAMETERVALUE_2 ? CONST.CHARCTOR.MAXCHARPARAMETERVALUE_2 : spd;
     }
 
-    public int GetMagicPoser()
+    public int GetMagicPoser(bool isBeforeUpdate = false)
     {
-        var mgc = this.charParameters.SPEED + GetEquiCharParameter(CONST.CHARCTOR.ParameterCategory.MGC);
+        var mgc = this.charParameters.MGC + GetEquiCharParameter(CONST.CHARCTOR.ParameterCategory.MGC, isBeforeUpdate);
         return mgc >= CONST.CHARCTOR.MAXCHARPARAMETERVALUE_2 ? CONST.CHARCTOR.MAXCHARPARAMETERVALUE_2 : mgc;
     }
 
     // INT
-    public int GetInteli()
+    public int GetInteli(bool isBeforeUpdate = false)
     {
-        var inteligence = this.charParameters.SPEED + GetEquiCharParameter(CONST.CHARCTOR.ParameterCategory.INT);
+        var inteligence = this.charParameters.INT + GetEquiCharParameter(CONST.CHARCTOR.ParameterCategory.INT, isBeforeUpdate);
         return inteligence >= CONST.CHARCTOR.MAXCHARPARAMETERVALUE_2 ? CONST.CHARCTOR.MAXCHARPARAMETERVALUE_2 : inteligence;
     }
 
-    public int GetKindness()
+    public int GetKindness(bool isBeforeUpdate = false)
     {
-        var kid = this.charParameters.SPEED + GetEquiCharParameter(CONST.CHARCTOR.ParameterCategory.KID);
+        var kid = this.charParameters.KID + GetEquiCharParameter(CONST.CHARCTOR.ParameterCategory.KID, isBeforeUpdate);
         return kid >= CONST.CHARCTOR.MAXCHARPARAMETERVALUE_2 ? CONST.CHARCTOR.MAXCHARPARAMETERVALUE_2 : kid;
     }
 
     //strange
-    public int GetStrange()
+    public int GetStrange(bool isBeforeUpdate = false)
     {
-        var str = this.charParameters.SPEED + GetEquiCharParameter(CONST.CHARCTOR.ParameterCategory.STR);
+        var str = this.charParameters.STR + GetEquiCharParameter(CONST.CHARCTOR.ParameterCategory.STR, isBeforeUpdate);
         return str >= CONST.CHARCTOR.MAXCHARPARAMETERVALUE_2 ? CONST.CHARCTOR.MAXCHARPARAMETERVALUE_2 : str;
     }
 
-    public int GetDefence()
+    public int GetDefence(bool isBeforeUpdate = false)
     {
-        var def = this.charParameters.SPEED + GetEquiCharParameter(CONST.CHARCTOR.ParameterCategory.DEF);
+        var def = this.charParameters.DEF + GetEquiCharParameter(CONST.CHARCTOR.ParameterCategory.DEF);
         return def >= CONST.CHARCTOR.MAXCHARPARAMETERVALUE_2 ? CONST.CHARCTOR.MAXCHARPARAMETERVALUE_2 : def;
     }
 
-    private int GetEquiCharParameter(CONST.CHARCTOR.ParameterCategory parameterCategory)
+    private int GetEquiCharParameter(CONST.CHARCTOR.ParameterCategory parameterCategory, bool isBeforeUpdate = false)
     {
-        PlayerEquipData equip = this.charParameters.equipDatas;
+        PlayerEquipData equip = isBeforeUpdate ? this.charParameters.BeforeUpdatedequipDatas : this.charParameters.equipDatas;
         List<EquipBase> armedEquipList = new List<EquipBase>();
         armedEquipList.Add(equip.weaponData as EquipBase);
         armedEquipList.Add((EquipBase)equip.armedHead);
@@ -337,9 +401,24 @@ public class CharBase : MonoBehaviour
         return this.charParameters.equipDatas;
     }
 
+    public void UpdateBeforeUpdateEquip(PlayerEquipData targetPlayerEquips)
+    {
+        var target = new PlayerEquipData()
+        {
+            weaponData = targetPlayerEquips.weaponData,
+            armedBody = targetPlayerEquips.armedBody,
+            armedHead = targetPlayerEquips.armedHead,
+            armedAccessory_1 = targetPlayerEquips.armedAccessory_1,
+            armedAccessory_2 = targetPlayerEquips.armedAccessory_2,
+        };
+
+        this.charParameters.BeforeUpdatedequipDatas = target;
+    }
+
     public EquipBase UpdateEquip(CONST.ITEM.CATEGORY partsCategory,
         EquipBase targetEquip,
-        CONST.EQUIP.PARTS_CATEGORY currentSelectedArmedParts)
+        CONST.EQUIP.PARTS_CATEGORY currentSelectedArmedParts,
+        bool isBeforeUpdated)
     {
         if (partsCategory != targetEquip.category)
         {
@@ -350,30 +429,70 @@ public class CharBase : MonoBehaviour
         {
             case CONST.ITEM.CATEGORY.WEAPON_ITEM:
                 EquipBase equipedWepon = this.charParameters.equipDatas.weaponData;
-                this.charParameters.equipDatas.weaponData = targetEquip as WeaponData;
+                if (isBeforeUpdated)
+                {
+                    this.charParameters.BeforeUpdatedequipDatas.weaponData = targetEquip as WeaponData;
+                }
+                else
+                {
+                    this.charParameters.equipDatas.weaponData = targetEquip as WeaponData;
+                }
                 return equipedWepon;
 
             case CONST.ITEM.CATEGORY.HEAD_EQUIP_ITEM:
                 EquipBase equipedHead = this.charParameters.equipDatas.armedHead;
-                this.charParameters.equipDatas.armedHead = targetEquip as HeadData;
+                if (isBeforeUpdated)
+                {
+                    this.charParameters.BeforeUpdatedequipDatas.armedHead = targetEquip as HeadData;
+                }
+                else
+                {
+                    this.charParameters.equipDatas.armedHead = targetEquip as HeadData;
+                }
                 return equipedHead;
 
             case CONST.ITEM.CATEGORY.BODY_EQUIP_ITEM:
                 EquipBase equipedBody = this.charParameters.equipDatas.armedBody;
-                this.charParameters.equipDatas.armedBody = targetEquip as BodyData;
+                if (isBeforeUpdated)
+                {
+                    this.charParameters.BeforeUpdatedequipDatas.armedBody = targetEquip as BodyData;
+
+                }
+                else
+                {
+                    this.charParameters.equipDatas.armedBody = targetEquip as BodyData;
+                }
                 return equipedBody;
 
             case CONST.ITEM.CATEGORY.ACCESSORY_ITEM:
                 if (currentSelectedArmedParts == CONST.EQUIP.PARTS_CATEGORY.ACCESSORY1)
                 {
                     EquipBase equipedAccessory1 = this.charParameters.equipDatas.armedAccessory_1;
-                    this.charParameters.equipDatas.armedAccessory_1 = targetEquip as AccessoryData;
+                    if (isBeforeUpdated)
+                    {
+                        this.charParameters.BeforeUpdatedequipDatas.armedAccessory_1 = targetEquip as AccessoryData;
+
+                    }
+                    else
+                    {
+                        this.charParameters.equipDatas.armedAccessory_1 = targetEquip as AccessoryData;
+
+                    }
                     return equipedAccessory1;
                 }
                 else if (currentSelectedArmedParts == CONST.EQUIP.PARTS_CATEGORY.ACCESSORY2)
                 {
                     EquipBase equipedAccessory2 = this.charParameters.equipDatas.armedAccessory_2;
-                    this.charParameters.equipDatas.armedAccessory_2 = targetEquip as AccessoryData;
+                    if (isBeforeUpdated)
+                    {
+                        this.charParameters.BeforeUpdatedequipDatas.armedAccessory_2 = targetEquip as AccessoryData;
+
+                    }
+                    else
+                    {
+                        this.charParameters.equipDatas.armedAccessory_2 = targetEquip as AccessoryData;
+
+                    }
                     return equipedAccessory2;
                 }
                 else
@@ -411,5 +530,15 @@ public class CharBase : MonoBehaviour
     public CharParameter GetCharData()
     {
         return this.charParameters;
+    }
+
+    public void AddAbility(Ability_base targetAbility)
+    {
+        this.charParameters.HavingAbility.Add(targetAbility);
+    }
+
+    public bool GetActionDefence()
+    {
+        return this.action_defense;
     }
 }

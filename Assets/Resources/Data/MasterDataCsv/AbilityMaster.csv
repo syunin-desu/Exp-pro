@@ -1,0 +1,13 @@
+id,Categpry,Name,displayName,Level,Type,timingType,speed_rank,Range,requiredMp,Element,Power,executeActionList,requireAbilityForWhim,buffs,description
+AAA0001,Ability,Attack,Attack,0,Attack,Fast,0,Single,0,None,1,SolidSingleAttack,Attack,,Attack whis equipped weapon
+AAD0001,Default,Deffence,Deffence,0,UseItem,Fast,0,Single,0,None,0,Buff,Deffence,,
+ABB0002,Ability,Worrior_ult,Worrior_ult,0,Buff,Fast,0,Single,0,None,0,Buff,Worrior_ult,ClriticalUP_Worrior_ult-DamageUP_Worrior_ult,Do Worrior_ult
+AMA0101,Magic,Burn,Burn,1,Attack,Fast,3,Single,3,Fire,2,MagicSingleAttack,Burn,,spell fire magic
+AMA0102,Magic,Chill,Chill,1,Attack,Fast,2,Single,2,Ice,2,MagicSingleAttack,Chill,,spell ice magic
+AMA0103,Magic,Volt,Volt,1,Attack,Fast,2,Single,2,Thunder,2,MagicSingleAttack,Volt,,spell thunder magic
+AAA0101,SwordArts,HorizontalSlash,HorizontalSlash,1,Attack,Fast,0,Single,0,None,10,SolidSingleAttack,HorizontalSlash,,Slash Horizontary
+AMH0104,Magic,liquor,liquor,1,Heal,Normal,0,Single,10,None,50,Heal,liquor,,Heal my Energy
+AAA0102,SwordArts,VerticalSlash,VerticalSlash,1,Attack,Fast,0,Single,0,None,10,SolidSingleAttack,VerticalSlash,,Cut Verticaly
+ABB0001,Ability,Worrior_skill,Worrior_skill,1,Buff,Fast,0,Single,0,None,0,Buff,Worrior_skill,DamageUP_Worrior_skill,Do Worrior_skll
+AAA0201,SwordArts,CrossingSlash,CrossingSlash,2,Attack,Normal,1,Single,15,None,25,SolidSingleAttack,VerticalSlash-HorizontalSlash,,Slash like Crossing
+AAA0202,SwordArts,DoubleCut,DoubleCut,2,Attack,Normal,2,Single,15,None,30,SolidSingleAttack,VerticalSlash-VerticalSlash,,

@@ -1,7 +1,10 @@
 using CONST;
+using NUnit.Framework.Interfaces;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -19,8 +22,11 @@ public class QuestData : SerializedMonoBehaviour
     // 現在のフロア
     public int currentFloor;
 
+    // フロア名
+    public string currentFloorName;
+
     // 現在のフロアのカード状況
-    public List<CONST.QUEST.CardType> currentCardList;
+    public List<BaseCardProperty> currentCardList;
 
     // 選択可能なカード枚数
     public int canSelectCardNumber = 3;
@@ -40,24 +46,52 @@ public class QuestData : SerializedMonoBehaviour
         {
             Destroy(this.gameObject);
         }
+        //// mock実装のため後々削除
+        //currentCardList = new List<BaseCardProperty>()
+        //{
+        //    // Mock実装 Excel等で階層ごとのカードリストを設定しておき、
+        //    // 初めにランダムで並び変える
+        //    new BaseCardProperty()
+        //    {
+        //        cartType = CONST.QUEST.CardType.GetItem,
+        //        item = new List<BaseItemData>(){MasterData.instance.masterItemList.FirstOrDefault(e => e.Name == "BluePotion") },
+        //    },
+        //    new BaseCardProperty()
+        //    {
+        //        cartType = CONST.QUEST.CardType.EncountEnemy,
+        //        enemyData = MasterData.instance.masterEnemyDataList.FirstOrDefault(e => e.Name == "test"),
+        //    },
+        //    new BaseCardProperty()
+        //    {
+        //        cartType = CONST.QUEST.CardType.NextFloor,
+        //    },
+        //    new BaseCardProperty()
+        //    {
+        //        cartType = CONST.QUEST.CardType.EncountEnemy,
+        //        enemyData = MasterData.instance.masterEnemyDataList.FirstOrDefault(e => e.Name == "test"),
+        //    },
 
+        //};
+    }
+
+    private void Start()
+    {
         animateCardInitialize = true;
-        // mock実装のため後々削除
-        currentCardList = new List<CONST.QUEST.CardType>()
-        {
-            // Mock実装 Excel等で階層ごとのカードリストを設定しておき、
-            // 初めにランダムで並び変える
-            CONST.QUEST.CardType.EncountEnemy,
-            CONST.QUEST.CardType.EncountEnemy,
-            CONST.QUEST.CardType.EncountEnemy,
-            CONST.QUEST.CardType.EncountEnemy,
-            CONST.QUEST.CardType.EncountEnemy,
-            CONST.QUEST.CardType.EncountEnemy,
-            CONST.QUEST.CardType.EncountEnemy,
-            CONST.QUEST.CardType.EncountEnemy,
-            CONST.QUEST.CardType.EncountEnemy,
-            CONST.QUEST.CardType.EncountEnemy,
 
-        };
+        this.InitializeQuestStatus();
+    }
+
+    private void InitializeQuestStatus()
+    {
+        this.currentFloor = 1;
+        this.currentCardList = MasterData.instance.GetCardDatasForBaseCard(this.currentFloor);
+    }
+
+    public void UpdataLoadedData(SaveData loadData)
+    {
+        this.currentFloor = loadData.currentFloor;
+        this.currentFloorName = loadData.currentFloorName;
+        this.currentCardList = loadData.currentCardList;
+        this.canSelectCardNumber = loadData.canSelectCardNumber;
     }
 }

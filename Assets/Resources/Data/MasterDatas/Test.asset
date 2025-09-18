@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a7e0847e2cc15a4b931dcdcdf0d8946, type: 3}
+  m_Name: Test
+  m_EditorClassIdentifier: 
+  Name: test
+  currentHP: 200
+  currentMP: 99
+  maxHp: 200
+  maxMp: 99
+  STR: 5
+  DEF: 5
+  SPEED: 5
+  MagicPower: 0
+  INT: 0
+  Kindness: 0
+  ROLE: 2
+  countOfActions: 2
+  charClass: 0
+  HavingAbility:
+  - {fileID: 0}
+  weaponData: {fileID: 11400000, guid: 9a62b8ba5ab0e5b48b9247ed5aa20af3, type: 2}
+  armedHead: {fileID: 11400000, guid: 09336d147b12b834f80089a899f03fb5, type: 2}
+  armedBody: {fileID: 11400000, guid: d1cf729ed2face54cabce01fa6507178, type: 2}
+  armedAccessory_1: {fileID: 11400000, guid: 5460c76f80c4573498877605ddfa0d15, type: 2}
+  armedAccessory_2: {fileID: 11400000, guid: 5460c76f80c4573498877605ddfa0d15, type: 2}
+  WeakElement: 01000000
+  StrongElement: 00000000

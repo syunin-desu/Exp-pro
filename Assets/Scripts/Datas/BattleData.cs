@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +7,7 @@ using UnityEngine;
 /// battleデータ
 /// 出現する敵情報を保管し、battleシーン表示時に呼び出す
 /// </summary>
-public class BattleData : MonoBehaviour
+public class BattleData : SerializedMonoBehaviour
 {
     /// <summary>
     /// インスタンス
@@ -14,8 +15,8 @@ public class BattleData : MonoBehaviour
     public static BattleData instance;
 
     // 表示する敵リスト
-
-    // 
+    [SerializeField]
+    private CharData targetEnemy;
 
     // Start is called before the first frame update
     private void Awake()
@@ -29,5 +30,15 @@ public class BattleData : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+    }
+
+    public void UpdateBattleTargetEnemy(CharData targetEnemys)
+    {
+        this.targetEnemy = targetEnemys;
+    }
+
+    public CharData GetTargetEnemy()
+    {
+        return this.targetEnemy;
     }
 }

@@ -15,7 +15,7 @@ MonoBehaviour:
   id: AAD0001
   category: 0
   Name: Deffence
-  displayName: "\u9632\u5FA1"
+  displayName: Deffence
   Level: 0
   Type: 4
   timingType: 0
@@ -24,5 +24,7 @@ MonoBehaviour:
   requiredMp: 0
   Element: 3
   power: 0
-  executeActionList: 02000000
+  executeActionList: 04000000
+  requireAbilityForWhim: []
+  buffs: []
   description: 

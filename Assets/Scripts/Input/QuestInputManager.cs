@@ -7,6 +7,7 @@ public class QuestInputManager : MonoBehaviour, IInputAction
     [SerializeField]
     private QuestManager _questManager;
 
+
     /// <summary>
     /// TABƒL[‰Ÿ‰º
     /// </summary>

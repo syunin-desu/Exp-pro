@@ -13,16 +13,18 @@ MonoBehaviour:
   m_Name: Attack
   m_EditorClassIdentifier: 
   id: AAA0001
-  category: 0
+  category: 3
   Name: Attack
-  displayName: "\u305F\u305F\u304B\u3046"
+  displayName: Attack
   Level: 0
   Type: 0
   timingType: 0
-  speed_rank: 5
+  speed_rank: 0
   Range: 0
   requiredMp: 0
   Element: 3
   power: 1
   executeActionList: 00000000
-  description: "\u708E\u5C5E\u6027\u306E\u5358\u4F53\u9B54\u6CD5\u653B\u6483\u3092\u884C\u3046"
+  requireAbilityForWhim: []
+  buffs: []
+  description: Attack whis equipped weapon

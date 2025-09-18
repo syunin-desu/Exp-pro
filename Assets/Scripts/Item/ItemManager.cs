@@ -136,7 +136,12 @@ public class ItemManager : MonoBehaviour
 
     public EquipBase GetNoneEquip(CONST.ITEM.CATEGORY targetCategory)
     {
-        return this._masterequipList.FindAll(e => e.category == targetCategory).FirstOrDefault(e => e.name == "None");
+        return this._masterequipList.FindAll(e => e.category == targetCategory).FirstOrDefault(e => e.Name == "None");
+    }
+
+    public List<EquipBase> GetAllNoneEquip()
+    {
+        return this._masterequipList.FindAll(e => e.name == "None").ToList();
     }
 
     /// <summary>

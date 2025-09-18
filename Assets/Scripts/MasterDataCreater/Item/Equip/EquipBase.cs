@@ -23,11 +23,11 @@ public class EquipBase : BaseItemData
 
     //’Ç‰ÁŒø‰Ê
     [ValueDropdown("addBuff")]
-    public CONST.ITEM.ADDBUFF buff;
+    public List<CONST.ITEM.ADDBUFF> buff;
 
     // ’Ç‰Áƒfƒoƒt
     [ValueDropdown("addDebuff")]
-    public CONST.ITEM.ADDDEBUFF debuff;
+    public List<CONST.ITEM.ADDDEBUFF> debuff;
 
     public string description_equip;
 
@@ -54,8 +54,8 @@ public class EquipBase : BaseItemData
     private static List<CONST.UTILITY.Element> element = Enum.GetValues(typeof(CONST.UTILITY.Element))
                                                              .Cast<CONST.UTILITY.Element>()
                                                              .ToList();
-    private static List<CONST.ITEM.ADDDEBUFF> addBuff = Enum.GetValues(typeof(CONST.ITEM.ADDDEBUFF))
-                                                             .Cast<CONST.ITEM.ADDDEBUFF>()
+    private static List<CONST.ITEM.ADDBUFF> addBuff = Enum.GetValues(typeof(CONST.ITEM.ADDDEBUFF))
+                                                             .Cast<CONST.ITEM.ADDBUFF>()
                                                              .ToList();
     private static List<CONST.ITEM.ADDDEBUFF> addDebuff = Enum.GetValues(typeof(CONST.ITEM.ADDDEBUFF))
                                                              .Cast<CONST.ITEM.ADDDEBUFF>()

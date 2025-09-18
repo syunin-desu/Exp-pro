@@ -1,11 +1,20 @@
 using UnityEngine;
 
-public class ItemMenuHowToButtonClicked : MonoBehaviour
+public class ItemMenuHowToButtonClicked : MonoBehaviour, IButtonClicked
 {
     public ItemMenuManager imanager;
 
-    public void HowToButtonClicked()
+    public void OnClicked()
     {
-        imanager.SetUpItemSelectedMenu();
+        if (this.gameObject.GetComponent<SelectedStatus>().GetIsSelected())
+        {
+            imanager.SetUpItemSelectedMenu();
+
+        }
+        else
+        {
+            imanager.ResetHowButtonSelected(this.gameObject);
+
+        }
     }
 }

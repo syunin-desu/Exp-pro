@@ -13,16 +13,18 @@ MonoBehaviour:
   m_Name: EnergyDrinkNeo
   m_EditorClassIdentifier: 
   Name: EnergyDrinkNeo
-  displayName: "\u30A8\u30CD\u30EB\u30AE\u30FC\u30C9\u30EA\u30F3\u30AF\u30FB\u30CD\u30AA"
-  id: IH_0202
+  displayName: EnergyDrinkNeo
+  id: IH_0302
   Rarity: 3
   category: 0
+  PurchasePrice: 0
+  Sellingrice: 0
+  item_description: 
   Type: 3
-  Target_status: 0
+  Target_status: 1
   speed_rank: 0
   Range: 0
   Element: 3
-  value: 100
-  PurchasePrice: 0
-  Sellingrice: 0
-  description: "MP\u304C\u304B\u306A\u308A\u56DE\u5FA9\u3059\u308B\u3002\u65B0\u751F\u7248\u3067\u85AC\u611F\u306A\u304F\u304A\u3044\u3057\u3044\u3002"
+  value: 200
+  Usedbuff: 
+  Useddebuff: 

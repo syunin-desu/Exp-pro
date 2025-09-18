@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Test_Item_10
   m_EditorClassIdentifier: 
   Name: Test_Item_10
-  displayName: "\u30C6\u30B9\u30C8\u30A2\u30A4\u30C6\u30E0_10"
-  id: I_T_01_10
+  displayName: Test_Item_10
+  id: IT_0110
   Rarity: 0
-  category: 6
+  category: 0
   PurchasePrice: 0
   Sellingrice: 0
   item_description: 
@@ -24,5 +24,7 @@ MonoBehaviour:
   Target_status: 0
   speed_rank: 0
   Range: 0
-  Element: 0
+  Element: 3
   value: 100
+  Usedbuff: 
+  Useddebuff: 
